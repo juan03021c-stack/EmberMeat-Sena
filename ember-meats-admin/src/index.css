@@ -1,0 +1,40 @@
+:root { 
+  --ember-dark:   #1A0A0A;  /* sidebar */ 
+  --ember-red:    #7B1F1F;  /* acento principal, botones, precios */ 
+  --ember-cream:  #F5F3EE;  /* fondo del contenido */ 
+  --ember-border: #E8E4DC;  /* bordes suaves */ 
+} 
+ 
+body { 
+  background: var(--ember-cream); 
+  font-family: 'Inter', system-ui, sans-serif; 
+} 
+ 
+.table thead th { 
+  background: var(--ember-cream); 
+  font-size: 11px; 
+  text-transform: uppercase; 
+  letter-spacing: .05em; 
+  color: #888; 
+  font-weight: 500; 
+  border-bottom: 1px solid var(--ember-border); 
+} 
+.table tbody tr:hover { 
+  background: rgba(123, 31, 31, .03); 
+} 
+ 
+.card { 
+  border-radius: 12px !important; 
+  background: #FFFFFF; 
+} 
+ 
+.btn-ember { 
+  background: var(--ember-red); 
+  color: white; 
+  border: none; 
+  border-radius: 8px; 
+} 
+ 
+.btn-ember:hover { 
+  background: #6B1717; 
+  color: white; }
