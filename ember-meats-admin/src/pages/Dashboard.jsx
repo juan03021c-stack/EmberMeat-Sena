@@ -18,7 +18,7 @@ function StatCard({ icon, label, value, badge, alert }) {
                     )}
                     {alert && (
                         <span className='text-warning small'>
-                            <i className='bi bi-exclamation-triangle'></i> Action needed
+                            <i className='bi bi-exclamation-triangle'></i> se requiere acciones 
                         </span>
                     )}
                 </div>
