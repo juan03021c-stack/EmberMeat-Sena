@@ -1,0 +1,208 @@
+/* src/components/LoginEmberMeat.css */
+.ember-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #F9F7F4;
+}
+
+.ember-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.ember-logo-text {
+  font-size: 22px;
+  font-weight: 600;
+  color: #A0522D;
+}
+
+.ember-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E0DB;
+  border-radius: 12px;
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.ember-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.ember-subtitle {
+  font-size: 14px;
+  color: #6B6B6B;
+  margin: 0 0 24px 0;
+  line-height: 1.4;
+}
+
+.ember-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ember-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ember-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #A8A29E;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ember-input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1A1A1A;
+  background: #FFFFFF;
+  border: 1px solid #D6D0CA;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ember-input::placeholder {
+  color: #A8A29E;
+}
+
+.ember-input:focus {
+  border-color: #A0522D;
+  box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.15);
+}
+
+.ember-input-password {
+  padding-right: 42px;
+}
+
+.ember-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #A8A29E;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.ember-toggle-password:hover {
+  color: #1A1A1A;
+  background: #F2EFEB;
+}
+
+.ember-forgot {
+  align-self: flex-end;
+  font-size: 13px;
+  color: #A0522D;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.ember-forgot:hover {
+  opacity: 0.8;
+}
+
+.ember-btn-primary {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  color: #FFFFFF;
+  background: #A0522D;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ember-btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(160, 82, 45, 0.25);
+}
+
+.ember-btn-primary:active {
+  transform: translateY(0);
+}
+
+
+.ember-demo-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #A0522D;
+  margin: 0 0 10px 0;
+}
+
+.ember-demo-item {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #6B6B6B;
+}
+
+
+
+.ember-demo-creds {
+  color: #6B6B6B;
+}
+
+.ember-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.ember-divider-line {
+  flex: 1;
+  height: 1px;
+  background: #D6D0CA;
+}
+
+.ember-divider-text {
+  font-size: 13px;
+  color: #A8A29E;
+}
+
+.ember-register {
+  text-align: center;
+  font-size: 14px;
+  color: #6B6B6B;
+  margin: 0;
+}
+
+.ember-register-link {
+  color: #A0522D;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.ember-register-link:hover {
+  opacity: 0.8;
+}
