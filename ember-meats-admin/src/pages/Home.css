@@ -1,0 +1,905 @@
+/* ==============================
+   HOME GENERAL
+   ============================== */
+
+.home {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f7f5f0;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.home a {
+  text-decoration: none;
+}
+
+
+/* ==============================
+   NAVBAR
+   ============================== */
+
+.home-navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 75px;
+
+  padding: 0 6%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 10;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.75),
+    transparent
+  );
+}
+
+
+/* Logo */
+
+.home-logo {
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: Georgia, serif;
+
+  white-space: nowrap;
+}
+
+.home-logo span {
+  color: #f97316;
+}
+
+
+/* Menú */
+
+.home-menu {
+  display: flex;
+  gap: 35px;
+}
+
+.home-menu a {
+  color: #d6d6d6;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.home-menu a:hover {
+  color: white;
+}
+
+
+/* Botones derecha */
+
+.home-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.home-actions button {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.login-button {
+  background-color: #d35400;
+  color: white;
+
+  padding: 9px 17px;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+.login-button:hover {
+  background-color: #b94700;
+  color: white;
+}
+
+
+/* ==============================
+   HERO
+   ============================== */
+
+.hero {
+  position: relative;
+
+  min-height: 620px;
+
+  display: flex;
+  align-items: center;
+
+  background-size: cover;
+  background-position: center;
+
+  color: white;
+}
+
+
+/* Oscurecer imagen */
+
+.hero-overlay {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.85),
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.35)
+    );
+}
+
+
+/* Contenido */
+
+.hero-content {
+  position: relative;
+
+  z-index: 2;
+
+  width: 88%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding-top: 70px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 50px;
+}
+
+
+/* Texto */
+
+.hero-text {
+  width: 52%;
+}
+
+.hero-tag {
+  display: inline-block;
+
+  padding: 6px 12px;
+
+  border-radius: 5px;
+
+  background-color: rgba(211, 84, 0, 0.25);
+
+  border: 1px solid rgba(255, 140, 70, 0.4);
+
+  color: #ff9c59;
+
+  font-size: 10px;
+  font-weight: bold;
+
+  letter-spacing: 1px;
+}
+
+
+.hero-text h1 {
+  margin-top: 18px;
+  margin-bottom: 18px;
+
+  max-width: 620px;
+
+  font-family: Georgia, serif;
+
+  font-size: 48px;
+
+  line-height: 1.08;
+
+  font-weight: bold;
+}
+
+
+.hero-text p {
+  max-width: 560px;
+
+  color: #d2d2d2;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+
+/* Botones Hero */
+
+.hero-buttons {
+  display: flex;
+
+  gap: 14px;
+
+  margin-top: 28px;
+}
+
+.primary-button {
+  background-color: #d35400;
+
+  color: white;
+
+  padding: 12px 22px;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+.primary-button:hover {
+  background-color: #b94700;
+
+  color: white;
+}
+
+
+.secondary-button {
+  color: white;
+
+  border: 1px solid rgba(255,255,255,0.45);
+
+  padding: 11px 22px;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+.secondary-button:hover {
+  background-color: rgba(255,255,255,0.1);
+
+  color: white;
+}
+
+
+/* Imagen Hero */
+
+.hero-image-container {
+  width: 42%;
+
+  display: flex;
+
+  justify-content: flex-end;
+}
+
+.hero-image-container img {
+  width: 100%;
+  max-width: 400px;
+
+  height: 280px;
+
+  object-fit: cover;
+
+  border-radius: 22px;
+
+  border: 1px solid rgba(255,255,255,0.15);
+
+  box-shadow: 0 20px 45px rgba(0,0,0,0.55);
+}
+
+
+/* ==============================
+   BENEFICIOS
+   ============================== */
+
+.benefits {
+  width: 100%;
+
+  padding: 35px 8%;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 30px;
+
+  text-align: center;
+
+  background-color: #f0eee8;
+
+  border-bottom: 1px solid #ddd9d1;
+}
+
+
+.benefit {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+
+.benefit-icon {
+  font-size: 25px;
+
+  margin-bottom: 7px;
+}
+
+
+.benefit h3 {
+  margin: 5px 0;
+
+  font-size: 13px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+
+  font-weight: bold;
+}
+
+
+.benefit p {
+  max-width: 280px;
+
+  margin: 0;
+
+  color: #777;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* ==============================
+   PRODUCTOS
+   ============================== */
+
+.products {
+  padding: 75px 7%;
+
+  background-color: #faf9f6;
+}
+
+
+/* Título */
+
+.section-header {
+  text-align: center;
+
+  margin-bottom: 45px;
+}
+
+
+.section-header h2 {
+  margin: 0;
+
+  font-family: Georgia, serif;
+
+  font-size: 30px;
+
+  font-weight: bold;
+
+  color: #292929;
+}
+
+
+.section-header p {
+  margin-top: 8px;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+
+/* Grid */
+
+.products-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 22px;
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+}
+
+
+/* Tarjeta */
+
+.product-card {
+  background-color: white;
+
+  border: 1px solid #e2ded7;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+
+  transition: 0.25s;
+}
+
+
+.product-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+
+/* Imagen */
+
+.product-image {
+  width: 100%;
+
+  height: 180px;
+
+  overflow: hidden;
+
+  background-color: #ddd;
+}
+
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: 0.3s;
+}
+
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+
+/* Información */
+
+.product-info {
+  padding: 16px;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.product-info > span {
+  color: #d35400;
+
+  font-size: 9px;
+
+  font-weight: bold;
+
+  letter-spacing: 1.5px;
+}
+
+
+.product-info h3 {
+  margin: 7px 0 20px;
+
+  min-height: 35px;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  color: #333;
+}
+
+
+/* Precio + botón */
+
+.product-bottom {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+
+.product-bottom strong {
+  font-size: 15px;
+
+  color: #222;
+}
+
+
+.product-bottom button {
+  border: none;
+
+  background-color: #d35400;
+
+  color: white;
+
+  padding: 8px 11px;
+
+  border-radius: 7px;
+
+  font-size: 11px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+
+.product-bottom button:hover {
+  background-color: #b94700;
+}
+
+
+/* Botón catálogo */
+
+.catalog-button-container {
+  text-align: center;
+
+  margin-top: 45px;
+}
+
+
+.catalog-button {
+  background: transparent;
+
+  border: 2px solid #333;
+
+  color: #333;
+
+  padding: 10px 22px;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+
+.catalog-button:hover {
+  background-color: #333;
+
+  color: white;
+}
+
+
+/* ==============================
+   TRADICIÓN
+   ============================== */
+
+.tradition {
+  padding: 75px 8%;
+
+  background-color: #f0eee8;
+
+  border-top: 1px solid #ddd9d1;
+  border-bottom: 1px solid #ddd9d1;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+
+  gap: 60px;
+}
+
+
+.tradition-image img {
+  width: 100%;
+
+  height: 330px;
+
+  object-fit: cover;
+
+  border-radius: 15px;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+
+.tradition-content h2 {
+  margin-bottom: 20px;
+
+  font-family: Georgia, serif;
+
+  font-size: 30px;
+
+  line-height: 1.2;
+
+  color: #292929;
+}
+
+
+.tradition-content p {
+  color: #666;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+.tradition-content ul {
+  padding: 0;
+
+  margin-top: 20px;
+
+  list-style: none;
+}
+
+
+.tradition-content li {
+  margin-bottom: 11px;
+
+  color: #555;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+
+/* ==============================
+   CTA
+   ============================== */
+
+.cta {
+  padding: 60px 20px;
+
+  background-color: #c94f08;
+
+  color: white;
+
+  text-align: center;
+}
+
+
+.cta h2 {
+  margin-bottom: 12px;
+
+  font-family: Georgia, serif;
+
+  font-size: 30px;
+
+  font-weight: bold;
+}
+
+
+.cta p {
+  max-width: 500px;
+
+  margin: 0 auto;
+
+  color: #ffe3d2;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+.cta a {
+  display: inline-block;
+
+  margin-top: 22px;
+
+  padding: 12px 25px;
+
+  border-radius: 7px;
+
+  background-color: white;
+
+  color: #c94f08;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+
+.cta a:hover {
+  background-color: #f5f5f5;
+
+  color: #c94f08;
+}
+
+
+/* ==============================
+   FOOTER
+   ============================== */
+
+.footer {
+  padding: 40px 8% 20px;
+
+  background-color: #171717;
+
+  color: #aaa;
+
+  text-align: center;
+}
+
+
+.footer-logo {
+  margin-bottom: 10px;
+
+  color: white;
+
+  font-family: Georgia, serif;
+
+  font-size: 21px;
+
+  font-weight: bold;
+}
+
+
+.footer p {
+  margin-bottom: 25px;
+
+  color: #888;
+
+  font-size: 12px;
+}
+
+
+.footer span {
+  color: #666;
+
+  font-size: 10px;
+}
+
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+
+@media (max-width: 1000px) {
+
+  .home-menu {
+    gap: 18px;
+  }
+
+  .hero-content {
+    width: 90%;
+  }
+
+  .hero-text h1 {
+    font-size: 40px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 768px) {
+
+  .home-navbar {
+    padding: 0 5%;
+  }
+
+  .home-menu {
+    display: none;
+  }
+
+  .hero {
+    min-height: 850px;
+  }
+
+  .hero-content {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    padding-top: 100px;
+  }
+
+  .hero-text {
+    width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 38px;
+  }
+
+  .hero-image-container {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .hero-image-container img {
+    max-width: 500px;
+  }
+
+  .benefits {
+    grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+  .tradition {
+    grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .home-actions button {
+    display: none;
+  }
+
+  .login-button {
+    padding: 8px 12px;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+  }
+
+  .hero-text p {
+    font-size: 14px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .products {
+    padding: 55px 6%;
+  }
+
+  .tradition {
+    padding: 55px 6%;
+  }
+
+}
