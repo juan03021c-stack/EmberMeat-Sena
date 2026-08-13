@@ -1,94 +1,98 @@
-import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import '../assets/EmberMeat.css';
 
-export default function Login() {
+export default function LoginForm() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Login:', { email, password });
+  };
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-white flex items-center justify-center px-6">
-
-      <div className="w-full max-w-md">
-
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center items-center gap-2 text-2xl font-bold">
-            <span className="text-orange-500 text-3xl">🔥</span>
-            <span className="font-serif">EmberMeat</span>
-          </div>
-
-          <p className="text-neutral-400 text-sm mt-2">
-            Bienvenido de nuevo
-          </p>
-        </div>
-
-        {/* Tarjeta del Login */}
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
-
-          <h1 className="text-2xl font-bold text-center mb-2">
-            Iniciar sesión
-          </h1>
-
-          <p className="text-neutral-400 text-sm text-center mb-8">
-            Ingresa tus datos para continuar
-          </p>
-
-          {/* Correo */}
-          <div className="mb-5">
-            <label className="block text-sm font-medium text-neutral-300 mb-2">
-              Correo electrónico
-            </label>
-
-            <input
-              type="email"
-              placeholder="ejemplo@correo.com"
-              className="w-full bg-neutral-800 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-neutral-500 outline-none focus:border-orange-500 transition"
-            />
-          </div>
-
-          {/* Contraseña */}
-          <div className="mb-3">
-            <label className="block text-sm font-medium text-neutral-300 mb-2">
-              Contraseña
-            </label>
-
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full bg-neutral-800 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-neutral-500 outline-none focus:border-orange-500 transition"
-            />
-          </div>
-
-          {/* Recuperar contraseña */}
-          <div className="text-right mb-6">
-            <button className="text-orange-500 hover:text-orange-400 text-sm transition">
-              ¿Olvidaste tu contraseña?
-            </button>
-          </div>
-
-          {/* Botón */}
-          <button className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-lg transition shadow-lg">
-            Iniciar sesión
-          </button>
-
-          {/* Registro */}
-          <p className="text-center text-neutral-400 text-sm mt-6">
-            ¿No tienes una cuenta?{' '}
-            <button className="text-orange-500 hover:text-orange-400 font-medium transition">
-              Registrarse
-            </button>
-          </p>
-
-        </div>
-
-        {/* Regresar */}
-        <div className="text-center mt-6">
-          <a
-            href="/"
-            className="text-neutral-500 hover:text-white text-sm transition"
-          >
-            ← Volver al inicio
-          </a>
-        </div>
-
+    <div className="ember-login-container">
+      {/* LOGO */}  
+      <div className="ember-logo">
+        <span className="ember-logo-text">EmberMeat</span>
       </div>
 
+      <div className="ember-card">
+        <h1 className="ember-title">Iniciar sesión</h1>
+        <p className="ember-subtitle">Accede a tu cuenta EmberMeat</p>
+
+        <form className="ember-form" onSubmit={handleSubmit}>
+          {/* EMAIL */}
+          <div className="ember-input-group">
+            <Mail size={18} strokeWidth={1.8} className="ember-input-icon" />
+            <input
+              type="email"
+              className="ember-input"
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* PASSWORD */}
+          <div className="ember-input-group">
+            <Lock size={18} strokeWidth={1.8} className="ember-input-icon" />
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="ember-input ember-input-password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="ember-toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+            >
+              {showPassword ? (
+                <EyeOff size={18} strokeWidth={1.8} />
+              ) : (
+                <Eye size={18} strokeWidth={1.8} />
+              )}
+            </button>
+          </div>
+
+          <NavLink to="/recuperar" className="ember-forgot">
+            ¿Olvidaste tu contraseña?
+          </NavLink>
+
+          <NavLink to="/dashboard" type="submit" className="ember-btn-primary text-decoration-none text-center">
+            Ingresar
+          </NavLink>
+
+          {/* BOTÓN REGRESAR - estilo secundario */}
+          <NavLink
+            to="/home"
+            className="ember-btn-secondary text-decoration-none text-center"
+          >
+            Regresar al inicio
+          </NavLink>
+
+          <div className="ember-divider">
+            <span className="ember-divider-line"></span>
+            <span className="ember-divider-text">o</span>
+            <span className="ember-divider-line"></span>
+          </div>
+
+          <p className="ember-register">
+            ¿No tienes cuenta?{' '}
+            <NavLink to="/Registrarse" className="ember-register-link">
+              Regístrate
+            </NavLink>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

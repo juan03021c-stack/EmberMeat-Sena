@@ -13,7 +13,7 @@ export async function obtenerProductos() {
         return [];
     } catch (error) {
         console.error(error);
-        return [];
+        throw error;
     }
 }
 
@@ -171,14 +171,16 @@ export async function eliminarUsuarios(id) {
 
 
 export async function login(datos) {
-   
-        const respuesta = await fetch(`${URL_BASE}/Login/Login.php`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(datos),
-        })
-        return await respuesta.json();
-        
+
+    const respuesta = await fetch(`${URL_BASE}/Login/Login.php`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+    return await respuesta.json();
+
 }
+
+export default obtenerProductos;
