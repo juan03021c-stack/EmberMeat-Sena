@@ -10,24 +10,33 @@ const navItems = [
 
 export default function Sidebar() {
   return (
-    <div style={{ width: 200, background: '#000000', minHeight: '100vh' }}
-      //'#1A0A0A' rojo oscuro
-      className='d-flex flex-column'>
+    <div
+      style={{
+        width: 200,
+        background: '#FFFFFF',
+        minHeight: '100vh'
+      }}
+      className='d-flex flex-column'
+    >
+
       {/* Logo */}
       <div className='p-3 mb-2'>
-        <strong className='text-white'>EMBER MEATS</strong>
-        <div style={{ fontSize: 10, color: '#888' }}>ADMIN PANEL</div>
+        <strong className='text-ember-dark'>EMBER MEATS</strong>
+
+        <div style={{ fontSize: 10, color: '#888' }}>
+          ADMIN PANEL
+        </div>
       </div>
+
 
       {/* Nav links */}
       <nav className='flex-grow-1'>
+
         {navItems.map(item => (
-          <NavLink key={item.path}
-            // clave unique para cada enlace de navegación
+          <NavLink
+            key={item.path}
             to={item.path}
-            // a donde se dirige el enlace
             end={item.path === '/'}
-            // si el enlace está activo
             className={({ isActive }) =>
               'nav-link d-flex align-items-center gap-2 px-3 py-2 ' +
               (isActive
@@ -36,22 +45,34 @@ export default function Sidebar() {
             }
             style={({ isActive }) =>
               isActive ? { background: '#7B1F1F' } : {}
-            }>
+            }
+          >
             <i className={`bi ${item.icon}`}></i>
-            <span style={{ fontSize: 14 }}>{item.label}</span>
+
+            <span style={{ fontSize: 14 }}>
+              {item.label}
+            </span>
           </NavLink>
         ))}
+
       </nav>
 
-      {/* Footer */}
-      <div className='p-3 border-top' style={{ borderColor: '#333 !important' }}>
-        <NavLink to='/' className='nav-link text-secondary small'>
-          ← Volver a la Tiendoa
+
+      {/* SALIR */}
+      <div
+        style={{
+          padding: '15px 10px 35px 10px',
+          borderTop: '1px solid #AAAAAA'
+        }}
+      >
+        <NavLink
+          to='/home'
+          className='primary-button text-decoration-none'
+        >
+          ← Salir
         </NavLink>
-        <button className='btn btn-link nav-link text-secondary small p-0 mt-1'>
-          Salir
-        </button>
       </div>
+
     </div>
   )
 }

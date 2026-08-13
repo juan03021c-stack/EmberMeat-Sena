@@ -1,40 +1,83 @@
-:root { 
-  --ember-dark:   #1A0A0A;  /* sidebar */ 
-  --ember-red:    #7B1F1F;  /* acento principal, botones, precios */ 
-  --ember-cream:  #F5F3EE;  /* fondo del contenido */ 
-  --ember-border: #E8E4DC;  /* bordes suaves */ 
-} 
- 
-body { 
-  background: var(--ember-cream); 
-  font-family: 'Inter', system-ui, sans-serif; 
-} 
- 
-.table thead th { 
-  background: var(--ember-cream); 
-  font-size: 11px; 
-  text-transform: uppercase; 
-  letter-spacing: .05em; 
-  color: #888; 
-  font-weight: 500; 
-  border-bottom: 1px solid var(--ember-border); 
-} 
-.table tbody tr:hover { 
-  background: rgba(123, 31, 31, .03); 
-} 
- 
-.card { 
-  border-radius: 12px !important; 
-  background: #FFFFFF; 
-} 
- 
-.btn-ember { 
-  background: var(--ember-red); 
-  color: white; 
-  border: none; 
-  border-radius: 8px; 
-} 
- 
-.btn-ember:hover { 
-  background: #6B1717; 
-  color: white; }
+:root {
+  --ember-dark:    #1A0A0A;
+  --ember-red:     #7B1F1F;
+  --ember-red-dark: #6B1717;
+  --ember-cream:   #F5F3EE;
+  --ember-border:  #E8E4DC;
+  --ember-text:    #1A1A1A;
+  --ember-text-secondary: #6B6B6B;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--ember-cream);
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--ember-text);
+}
+
+/* Tablas */
+.table thead th {
+  background: transparent;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ember-text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--ember-border);
+  padding: 12px 16px;
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ember-border);
+}
+
+.table tbody tr:hover {
+  background: rgba(123, 31, 31, .04);
+}
+
+/* Cards */
+.card {
+  border-radius: 12px;
+  background: #FFFFFF;
+  border: 1px solid var(--ember-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Botones */
+.btn-ember {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--ember-red);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn-ember:hover {
+  background: var(--ember-red-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(123, 31, 31, 0.2);
+}
+
+.btn-ember:active {
+  transform: translateY(0);
+}
+
+/* Utilidades de texto */
+.text-ember-red    { color: var(--ember-red); }
+.bg-ember-cream    { background: var(--ember-cream); }
+.border-ember      { border-color: var(--ember-border); }

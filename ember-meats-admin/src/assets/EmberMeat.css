@@ -1,0 +1,1050 @@
+/* ============================================================
+   EMBERMEAT — SISTEMA DE DISEÑO COMPLETO
+   Variables + Reset + Componentes + Auth + Home + Responsive
+   ============================================================ */
+
+/* ---------- 1. VARIABLES ---------- */
+:root {
+  /* Marca */
+  --ember-red:          #7B1F1F;
+  --ember-red-dark:     #6B1717;
+  --ember-accent:       #A0522D;
+
+  /* Superficies */
+  --ember-cream:        #F5F3EE;
+  --ember-cream-dark:   #F0EEE8;
+  --ember-cream-light:  #FAF9F6;
+  --ember-white:        #FFFFFF;
+  --ember-dark-bg:      #171717;
+
+  /* Bordes */
+  --ember-border:       #E8E4DC;
+  --ember-border-light: #D6D0CA;
+  --ember-product-border:#E2DED7;
+
+  /* Texto */
+  --ember-text:         #1A1A1A;
+  --ember-text-secondary:#6B6B6B;
+  --ember-text-muted:   #A8A29E;
+  --ember-hero-text:    #D2D2D2;
+  --ember-cta-text:     #FFE3D2;
+  --ember-footer-text:  #AAAAAA;
+  --ember-footer-text-secondary:#888888;
+  --ember-footer-text-muted:#666666;
+
+  /* Sombras */
+  --ember-shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.04);
+  --ember-shadow-md:    0 4px 12px rgba(123, 31, 31, 0.2);
+  --ember-shadow-lg:    0 12px 25px rgba(0, 0, 0, 0.12);
+  --ember-shadow-xl:    0 20px 45px rgba(0, 0, 0, 0.55);
+  --ember-shadow-card:  0 4px 15px rgba(0, 0, 0, 0.06);
+
+  /* Misc */
+  --ember-focus-ring:   rgba(160, 82, 45, 0.15);
+  --ember-hover-bg:     #F2EFEB;
+  --ember-radius-sm:    7px;
+  --ember-radius-md:    10px;
+  --ember-radius-lg:    12px;
+  --ember-radius-xl:    14px;
+  --ember-radius-full:  22px;
+}
+
+/* ---------- 2. RESET BASE ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--ember-cream);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ember-text);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 3. UTILIDADES ---------- */
+.text-ember-red        { color: var(--ember-red); }
+.text-ember-accent     { color: var(--ember-accent); }
+.bg-ember-cream        { background: var(--ember-cream); }
+.bg-ember-cream-dark   { background: var(--ember-cream-dark); }
+.border-ember          { border-color: var(--ember-border); }
+
+/* ---------- 4. COMPONENTES COMPARTIDOS ---------- */
+
+/* Card */
+.card {
+  border-radius: var(--ember-radius-lg);
+  background: var(--ember-white);
+  border: 1px solid var(--ember-border);
+  box-shadow: var(--ember-shadow-sm);
+}
+
+/* Botón primario (dashboard / admin) */
+.btn-ember {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--ember-red);
+  color: var(--ember-white);
+  border: none;
+  border-radius: var(--ember-radius-sm);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn-ember:hover {
+  background: var(--ember-red-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--ember-shadow-md);
+}
+
+.btn-ember:active {
+  transform: translateY(0);
+}
+
+/* Tablas */
+.table thead th {
+  background: transparent;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ember-text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--ember-border);
+  padding: 12px 16px;
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ember-border);
+}
+
+.table tbody tr:hover {
+  background: rgba(123, 31, 31, 0.04);
+}
+
+/* ============================================================
+   AUTH — LOGIN & REGISTER
+   ============================================================ */
+
+.ember-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: var(--ember-cream);
+}
+
+.ember-logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 32px;
+}
+
+.ember-logo-text {
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--ember-red);
+}
+
+.ember-card {
+  background: var(--ember-white);
+  border: 1px solid var(--ember-border);
+  border-radius: var(--ember-radius-lg);
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--ember-shadow-sm);
+}
+
+.ember-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ember-text);
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.ember-subtitle {
+  font-size: 14px;
+  color: var(--ember-text-secondary);
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.ember-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ember-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ember-input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--ember-text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ember-input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--ember-text);
+  background: var(--ember-white);
+  border: 1px solid var(--ember-border-light);
+  border-radius: var(--ember-radius-md);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ember-input::placeholder {
+  color: var(--ember-text-muted);
+}
+
+.ember-input:focus {
+  border-color: var(--ember-accent);
+  box-shadow: 0 0 0 3px var(--ember-focus-ring);
+}
+
+.ember-input-password {
+  padding-right: 42px;
+}
+
+.ember-phone-prefix {
+  position: absolute;
+  left: 42px;
+  font-size: 15px;
+  color: var(--ember-text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ember-input-phone {
+  padding-left: 72px;
+}
+
+.ember-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ember-text-muted);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.ember-toggle-password:hover {
+  color: var(--ember-text);
+  background: var(--ember-hover-bg);
+}
+
+.ember-forgot {
+  align-self: flex-end;
+  font-size: 13px;
+  color: var(--ember-red);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.ember-forgot:hover {
+  opacity: 0.8;
+}
+
+.ember-btn-primary {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--ember-white);
+  background: var(--ember-red);
+  border: none;
+  border-radius: var(--ember-radius-md);
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ember-btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: var(--ember-shadow-md);
+}
+
+.ember-btn-primary:active {
+  transform: translateY(0);
+}
+
+.ember-btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--ember-accent);
+  background: transparent;
+  border: 1.5px solid var(--ember-accent);
+  border-radius: var(--ember-radius-md);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.ember-btn-secondary:hover {
+  background: var(--ember-accent);
+  color: var(--ember-white);
+}
+
+.ember-terms {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ember-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ember-terms input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ember-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ember-terms-link {
+  color: var(--ember-accent);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.ember-terms-link:hover {
+  opacity: 0.8;
+}
+
+.ember-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.ember-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--ember-border-light);
+}
+
+.ember-divider-text {
+  font-size: 13px;
+  color: var(--ember-text-muted);
+}
+
+.ember-register {
+  text-align: center;
+  font-size: 14px;
+  color: var(--ember-text-secondary);
+  margin: 0;
+}
+
+.ember-register-link {
+  color: var(--ember-red);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.ember-register-link:hover {
+  opacity: 0.8;
+}
+
+.ember-demo-users {
+  background: color-mix(in srgb, var(--ember-accent) 6%, var(--ember-cream));
+  border: 1px solid color-mix(in srgb, var(--ember-accent) 12%, var(--ember-border));
+  border-radius: var(--ember-radius-md);
+  padding: 16px;
+  margin-top: 4px;
+}
+
+.ember-demo-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ember-accent);
+  margin: 0 0 10px 0;
+}
+
+.ember-demo-item {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ember-text-secondary);
+}
+
+.ember-demo-role {
+  font-weight: 500;
+  color: var(--ember-text);
+}
+
+.ember-demo-creds {
+  color: var(--ember-text-secondary);
+}
+
+/* ============================================================
+   HOME — LANDING PAGE
+   ============================================================ */
+
+.home {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--ember-cream);
+  color: var(--ember-text);
+}
+
+.home a {
+  text-decoration: none;
+}
+
+/* ---------- NAVBAR ---------- */
+.home-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 75px;
+    padding: 0 6%;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    background: rgba(17, 17, 17, 0.95);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.home-logo {
+    position: absolute;
+    left: 6%;
+
+    color: var(--ember-white);
+    font-size: 22px;
+    font-weight: bold;
+    font-family: Georgia, serif;
+    white-space: nowrap;
+}
+
+.home-menu {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    gap: 35px;
+}
+
+.home-menu a {
+    color: #d6d6d6;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.home-menu a:hover {
+    color: var(--ember-white);
+}
+
+.home-register {
+    position: absolute;
+    right: 6%;
+
+    display: flex;
+    align-items: center;
+}
+
+.home-register a {
+    color: #d6d6d6;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+
+.home-register a:hover {
+    color: var(--ember-white);
+}
+.login-button {
+  background-color: var(--ember-red);
+  color: var(--ember-white);
+  padding: 9px 17px;
+  border-radius: var(--ember-radius-sm);
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.login-button:hover {
+  background-color: var(--ember-red-dark);
+}
+
+/* ---------- HERO ---------- */
+.hero {
+
+
+
+
+
+
+
+
+  
+    min-height: calc(85vh - 75px);
+    margin-top: 5px;          /* para que empiece debajo del navbar */
+    display: flex;
+    align-items: center;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    position: relative;
+    color: var(--ember-white);
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.85),
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.35)
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 88%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.hero-text {
+  width: 52%;
+}
+
+.hero-text h1 {
+  margin-top: 18px;
+  margin-bottom: 18px;
+  max-width: 620px;
+  font-family: Georgia, serif;
+  font-size: 48px;
+  line-height: 1.08;
+  font-weight: bold;
+}
+
+.hero-text p {
+  max-width: 560px;
+  color: var(--ember-hero-text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.primary-button {
+  background-color: var(--ember-red);
+  color: var(--ember-white);
+  padding: 12px 22px;
+  border-radius: var(--ember-radius-sm);
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.primary-button:hover {
+  background-color: var(--ember-red-dark);
+}
+
+.secondary-button {
+  color: var(--ember-white);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  padding: 11px 22px;
+  border-radius: var(--ember-radius-sm);
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.secondary-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hero-image-container {
+  width: 42%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-image-container img {
+  width: 100%;
+  max-width: 400px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: var(--ember-radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--ember-shadow-xl);
+}
+
+/* ---------- BENEFICIOS ---------- */
+.benefits {
+  width: 100%;
+  padding: 35px 8%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  text-align: center;
+  background-color: var(--ember-cream-dark);
+  border-bottom: 1px solid var(--ember-border);
+}
+
+.benefit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.benefit-icon {
+  color: var(--ember-red);
+  margin-bottom: 7px;
+}
+
+.benefit h3 {
+  margin: 5px 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: var(--ember-text);
+}
+
+.benefit p {
+  max-width: 280px;
+  margin: 0;
+  color: var(--ember-text-secondary);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ---------- PRODUCTOS ---------- */
+.products {
+  padding: 75px 7%;
+  background-color: var(--ember-cream-light);
+}
+
+.loading-message,
+.error-message,
+.empty-message {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--ember-text-secondary);
+  font-size: 14px;
+}
+
+.error-message {
+  color: var(--ember-red);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--ember-text);
+}
+
+.section-header p {
+  margin-top: 8px;
+  color: var(--ember-text-secondary);
+  font-size: 13px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background-color: var(--ember-white);
+  border: 1px solid var(--ember-product-border);
+  border-radius: var(--ember-radius-xl);
+  overflow: hidden;
+  box-shadow: var(--ember-shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--ember-shadow-lg);
+}
+
+.product-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.product-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-info > span {
+  color: var(--ember-red);
+  font-size: 9px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+.product-info h3 {
+  margin: 7px 0 20px;
+  min-height: 35px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-bottom strong {
+  font-size: 15px;
+  color: #222;
+}
+
+.product-bottom button {
+  border: none;
+  background-color: var(--ember-red);
+  color: var(--ember-white);
+  padding: 8px 11px;
+  border-radius: var(--ember-radius-sm);
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.product-bottom button:hover {
+  background-color: var(--ember-red-dark);
+}
+
+.catalog-button-container {
+  text-align: center;
+  margin-top: 45px;
+}
+
+.catalog-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 2px solid var(--ember-text);
+  color: var(--ember-text);
+  padding: 10px 22px;
+  border-radius: var(--ember-radius-sm);
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.catalog-button:hover {
+  background-color: var(--ember-text);
+  color: var(--ember-white);
+}
+
+/* ---------- TRADICIÓN ---------- */
+.tradition {
+  padding: 75px 8%;
+  background-color: var(--ember-cream-dark);
+  border-top: 1px solid var(--ember-border);
+  border-bottom: 1px solid var(--ember-border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 60px;
+}
+
+.tradition-image img {
+  width: 100%;
+  height: 330px;
+  object-fit: cover;
+  border-radius: var(--ember-radius-lg);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.tradition-content h2 {
+  margin-bottom: 20px;
+  font-family: Georgia, serif;
+  font-size: 30px;
+  line-height: 1.2;
+  color: var(--ember-text);
+}
+
+.tradition-content p {
+  color: var(--ember-text-secondary);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.tradition-content ul {
+  padding: 0;
+  margin-top: 20px;
+  list-style: none;
+}
+
+.tradition-content li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 11px;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ---------- CTA ---------- */
+.cta {
+  padding: 60px 20px;
+  background-color: var(--ember-red);
+  color: var(--ember-white);
+  text-align: center;
+}
+
+.cta h2 {
+  margin-bottom: 12px;
+  font-family: Georgia, serif;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.cta p {
+  max-width: 500px;
+  margin: 0 auto;
+  color: var(--ember-cta-text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.cta a {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 12px 25px;
+  border-radius: var(--ember-radius-sm);
+  background-color: var(--ember-white);
+  color: var(--ember-red);
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.cta a:hover {
+  background-color: var(--ember-cream);
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  padding: 40px 8% 20px;
+  background-color: var(--ember-dark-bg);
+  color: var(--ember-footer-text);
+  text-align: center;
+}
+
+.footer-logo {
+  margin-bottom: 10px;
+  color: var(--ember-white);
+  font-family: Georgia, serif;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.footer p {
+  margin-bottom: 25px;
+  color: var(--ember-footer-text-secondary);
+  font-size: 12px;
+}
+
+.footer span {
+  color: var(--ember-footer-text-muted);
+  font-size: 10px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1000px) {
+  .home-menu {
+    gap: 18px;
+  }
+
+  .hero-content {
+    width: 90%;
+  }
+
+  .hero-text h1 {
+    font-size: 40px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-navbar {
+    padding: 0 5%;
+  }
+
+  .home-menu {
+    display: none;
+  }
+
+  .hero {
+    min-height: 850px;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 100px;
+  }
+
+  .hero-text {
+    width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 38px;
+  }
+
+  .hero-image-container {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-image-container img {
+    max-width: 500px;
+  }
+
+  .benefits {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .tradition {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+}
+
+@media (max-width: 500px) {
+  .home-actions button {
+    display: none;
+  }
+
+  .login-button {
+    padding: 8px 12px;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+  }
+
+  .hero-text p {
+    font-size: 14px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .products {
+    padding: 55px 6%;
+  }
+
+  .tradition {
+    padding: 55px 6%;
+  }
+
+  .ember-card {
+    padding: 24px;
+  }
+
+  .ember-logo-text {
+    font-size: 32px;
+  }
+}
