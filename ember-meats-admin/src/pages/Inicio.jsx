@@ -73,10 +73,9 @@ export default function Home() {
             </p>
 
             <div className="hero-buttons">
-              <a href="#catalogo" className="primary-button">
+              <a href="#productos" className="primary-button">
                 Explorar catálogo
               </a>
-
               <a href="#nosotros" className="secondary-button">
                 Ver más
               </a>
@@ -136,7 +135,7 @@ export default function Home() {
       </section>
 
       {/* PRODUCTOS */}
-      <section id="catalogo" className="products">
+      <section id="productos" className="products">
         <div className="section-header">
           <h2>Productos destacados</h2>
           <p>
@@ -201,7 +200,7 @@ export default function Home() {
         )}
 
         <div className="catalog-button-container">
-          <a href="#catalogo" className="catalog-button">
+          <a href="#productos" className="catalog-button">
             Ver catálogo completo
             <ChevronRight size={18} strokeWidth={2} />
           </a>

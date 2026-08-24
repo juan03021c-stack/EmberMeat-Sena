@@ -18,10 +18,9 @@ export default function App() {
 
         <Route element={<AdminNavbarLayout />}>
           <Route path="/" element={<Inicio />} />
-          {/* <Route path="/Nosotros" element={<Nosotros/>} /> */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/Registrarse" element={<RegisterForm />} />
         </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/Registrarse" element={<RegisterForm />} />
 
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
