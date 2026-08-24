@@ -17,7 +17,8 @@ export default function App() {
       <Routes>
 
         <Route element={<AdminNavbarLayout />}>
-          <Route path="/home" element={<Inicio />} />
+          <Route path="/" element={<Inicio />} />
+          {/* <Route path="/Nosotros" element={<Nosotros/>} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/Registrarse" element={<RegisterForm />} />
         </Route>

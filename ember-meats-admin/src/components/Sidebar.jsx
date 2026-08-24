@@ -66,7 +66,7 @@ export default function Sidebar() {
         }}
       >
         <NavLink
-          to='/home'
+          to='/'
           className='primary-button text-decoration-none'
         >
           ← Salir

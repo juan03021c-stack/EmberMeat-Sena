@@ -1,16 +1,17 @@
 import '../assets/EmberMeat.css'
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { obtenerProductos, URL_BASE } from '../services/Api'
 import {
   Truck,
   ShieldCheck,
-  Flame,
   Plus,
   ChevronRight,
   Check,
-  ShoppingCart
+  ShoppingCart,
+  Flame
 } from 'lucide-react'
+
 
 export default function Home() {
   const [productos, setProductos] = useState([])
@@ -81,15 +82,21 @@ export default function Home() {
               </a>
             </div>
           </div>
+          {productos.length > 0 && (
+            <div className="hero-image-container">
 
-          <div className="hero-image-container">
-            <img
-              src="/imagess/producto.jpg"
-              alt="Producto EmberMeat"
-              onError={(e) => { e.currentTarget.src = '/imagess/producto.jpg' }}
-            />
-          </div>
+              <img
+                src={`${URL_BASE}/${productos[0].imagen_url}`}
+                alt={productos[0].nombre}
+                onError={(e) => {
+                  e.currentTarget.src = '/imagess/producto.jpg'
+                }}
+              />
+
+            </div>
+          )}
         </div>
+
       </section>
 
       {/* BENEFICIOS */}
@@ -257,13 +264,6 @@ export default function Home() {
           Crear cuenta ahora
         </NavLink>
       </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="footer-logo">EmberMeat</div>
-        <p>Embutidos artesanales de tradición antioqueña.</p>
-        <span>© 2026 EmberMeat. Todos los derechos reservados.</span>
-      </footer>
     </div>
   )
 }

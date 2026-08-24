@@ -1,7 +1,7 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink} from 'react-router-dom'
 
 const navItems = [
-    { path: '/home', label: 'Inicio', icon: 'bi-house' },
+    { path: '/', label: 'Inicio', icon: 'bi-house' },
     { path: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right' },
 ]
 
@@ -44,10 +44,18 @@ export default function NavbarHome() {
             <div className="home-register">
                 <NavLink
                     to="/Registrarse"
-                    className="nav-link d-flex align-items-center gap-2 px-3 py-2"
+                    className="link-navbar d-flex align-items-center gap-2 px-3 py-2"
                 >
                     <i className="bi bi-person-plus"></i>
                     <span>Registrarse</span>
+                </NavLink>
+
+                <NavLink
+                    to="/login"
+                    className="link-navbar d-flex align-items-center gap-2 px-3 py-2"
+                >
+                    <i className="bi bi-person-plus"></i>
+                    <span>Iniciar Sesión</span>
                 </NavLink>
             </div>
 
