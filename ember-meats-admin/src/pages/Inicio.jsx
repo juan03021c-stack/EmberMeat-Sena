@@ -1,16 +1,17 @@
 import '../assets/EmberMeat.css'
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { obtenerProductos, URL_BASE } from '../services/Api'
 import {
   Truck,
   ShieldCheck,
-  Flame,
   Plus,
   ChevronRight,
   Check,
-  ShoppingCart
+  ShoppingCart,
+  Flame
 } from 'lucide-react'
+
 
 export default function Home() {
   const [productos, setProductos] = useState([])
@@ -72,24 +73,29 @@ export default function Home() {
             </p>
 
             <div className="hero-buttons">
-              <a href="#catalogo" className="primary-button">
+              <a href="#productos" className="primary-button">
                 Explorar catálogo
               </a>
-
               <a href="#nosotros" className="secondary-button">
                 Ver más
               </a>
             </div>
           </div>
+          {productos.length > 0 && (
+            <div className="hero-image-container">
 
-          <div className="hero-image-container">
-            <img
-              src="/imagess/producto.jpg"
-              alt="Producto EmberMeat"
-              onError={(e) => { e.currentTarget.src = '/imagess/producto.jpg' }}
-            />
-          </div>
+              <img
+                src={`${URL_BASE}/${productos[0].imagen_url}`}
+                alt={productos[0].nombre}
+                onError={(e) => {
+                  e.currentTarget.src = '/imagess/producto.jpg'
+                }}
+              />
+
+            </div>
+          )}
         </div>
+
       </section>
 
       {/* BENEFICIOS */}
@@ -129,7 +135,7 @@ export default function Home() {
       </section>
 
       {/* PRODUCTOS */}
-      <section id="catalogo" className="products">
+      <section id="productos" className="products">
         <div className="section-header">
           <h2>Productos destacados</h2>
           <p>
@@ -194,7 +200,7 @@ export default function Home() {
         )}
 
         <div className="catalog-button-container">
-          <a href="#catalogo" className="catalog-button">
+          <a href="#productos" className="catalog-button">
             Ver catálogo completo
             <ChevronRight size={18} strokeWidth={2} />
           </a>
@@ -257,13 +263,6 @@ export default function Home() {
           Crear cuenta ahora
         </NavLink>
       </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="footer-logo">EmberMeat</div>
-        <p>Embutidos artesanales de tradición antioqueña.</p>
-        <span>© 2026 EmberMeat. Todos los derechos reservados.</span>
-      </footer>
     </div>
   )
 }

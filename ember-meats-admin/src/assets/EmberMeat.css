@@ -6,47 +6,50 @@
 /* ---------- 1. VARIABLES ---------- */
 :root {
   /* Marca */
-  --ember-red:          #7B1F1F;
-  --ember-red-dark:     #6B1717;
-  --ember-accent:       #A0522D;
+  --ember-red: #7B1F1F;
+  --ember-red-dark: #6B1717;
+  --ember-accent: #A0522D;
 
   /* Superficies */
-  --ember-cream:        #F5F3EE;
-  --ember-cream-dark:   #F0EEE8;
-  --ember-cream-light:  #FAF9F6;
-  --ember-white:        #FFFFFF;
-  --ember-dark-bg:      #171717;
+  --ember-cream: #F5F3EE;
+  --ember-cream-dark: #F0EEE8;
+  --ember-cream-light: #FAF9F6;
+  --ember-white: #FFFFFF;
+  --ember-dark-bg: #171717;
 
   /* Bordes */
-  --ember-border:       #E8E4DC;
+  --ember-border: #E8E4DC;
   --ember-border-light: #D6D0CA;
-  --ember-product-border:#E2DED7;
+  --ember-product-border: #E2DED7;
 
   /* Texto */
-  --ember-text:         #1A1A1A;
-  --ember-text-secondary:#6B6B6B;
-  --ember-text-muted:   #A8A29E;
-  --ember-hero-text:    #D2D2D2;
-  --ember-cta-text:     #FFE3D2;
-  --ember-footer-text:  #AAAAAA;
-  --ember-footer-text-secondary:#888888;
-  --ember-footer-text-muted:#666666;
+  --ember-text: #1A1A1A;
+  --ember-text-secondary: #6B6B6B;
+  --ember-text-muted: #A8A29E;
+  --ember-hero-text: #D2D2D2;
+  --ember-cta-text: #FFE3D2;
+  --ember-footer-text: #FFFFFF;
+  --ember-footer-text-secondary: #7B1F1F;
+  --ember-footer-text-muted: #FFFFFF;
 
   /* Sombras */
-  --ember-shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.04);
-  --ember-shadow-md:    0 4px 12px rgba(123, 31, 31, 0.2);
-  --ember-shadow-lg:    0 12px 25px rgba(0, 0, 0, 0.12);
-  --ember-shadow-xl:    0 20px 45px rgba(0, 0, 0, 0.55);
-  --ember-shadow-card:  0 4px 15px rgba(0, 0, 0, 0.06);
+  --ember-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --ember-shadow-md: 0 4px 12px rgba(123, 31, 31, 0.2);
+  --ember-shadow-lg: 0 12px 25px rgba(0, 0, 0, 0.12);
+  --ember-shadow-xl: 0 20px 45px rgba(0, 0, 0, 0.55);
+  --ember-shadow-card: 0 4px 15px rgba(0, 0, 0, 0.06);
 
   /* Misc */
-  --ember-focus-ring:   rgba(160, 82, 45, 0.15);
-  --ember-hover-bg:     #F2EFEB;
-  --ember-radius-sm:    7px;
-  --ember-radius-md:    10px;
-  --ember-radius-lg:    12px;
-  --ember-radius-xl:    14px;
-  --ember-radius-full:  22px;
+  --ember-focus-ring: rgba(160, 82, 45, 0.15);
+  --ember-hover-bg: #F2EFEB;
+  --ember-radius-sm: 7px;
+  --ember-radius-md: 10px;
+  --ember-radius-lg: 12px;
+  --ember-radius-xl: 14px;
+  --ember-radius-full: 22px;
+
+  /* Navbar home */
+  --navbar-height: 70px;
 }
 
 /* ---------- 2. RESET BASE ---------- */
@@ -65,11 +68,25 @@ body {
 }
 
 /* ---------- 3. UTILIDADES ---------- */
-.text-ember-red        { color: var(--ember-red); }
-.text-ember-accent     { color: var(--ember-accent); }
-.bg-ember-cream        { background: var(--ember-cream); }
-.bg-ember-cream-dark   { background: var(--ember-cream-dark); }
-.border-ember          { border-color: var(--ember-border); }
+.text-ember-red {
+  color: var(--ember-red);
+}
+
+.text-ember-accent {
+  color: var(--ember-accent);
+}
+
+.bg-ember-cream {
+  background: var(--ember-cream);
+}
+
+.bg-ember-cream-dark {
+  background: var(--ember-cream-dark);
+}
+
+.border-ember {
+  border-color: var(--ember-border);
+}
 
 /* ---------- 4. COMPONENTES COMPARTIDOS ---------- */
 
@@ -139,7 +156,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 93vh;
   padding: 24px;
   background: var(--ember-cream);
 }
@@ -209,14 +226,14 @@ body {
   font-family: inherit;
   color: var(--ember-text);
   background: var(--ember-white);
-  border: 1px solid var(--ember-border-light);
+  border: 1px solid var(--ember-accent);
   border-radius: var(--ember-radius-md);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ember-input::placeholder {
-  color: var(--ember-text-muted);
+  color: var(--ember-text);
 }
 
 .ember-input:focus {
@@ -305,9 +322,9 @@ body {
   font-size: 15px;
   font-weight: 500;
   font-family: inherit;
-  color: var(--ember-accent);
+  color: var(--ember-red);
   background: transparent;
-  border: 1.5px solid var(--ember-accent);
+  border: 1.5px solid var(--ember-red);
   border-radius: var(--ember-radius-md);
   cursor: pointer;
   text-align: center;
@@ -316,7 +333,7 @@ body {
 }
 
 .ember-btn-secondary:hover {
-  background: var(--ember-accent);
+  background: var(--ember-red);
   color: var(--ember-white);
 }
 
@@ -333,7 +350,7 @@ body {
 .ember-terms input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--ember-accent);
+  accent-color: var(--ember-red);
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -385,35 +402,8 @@ body {
   opacity: 0.8;
 }
 
-.ember-demo-users {
-  background: color-mix(in srgb, var(--ember-accent) 6%, var(--ember-cream));
-  border: 1px solid color-mix(in srgb, var(--ember-accent) 12%, var(--ember-border));
-  border-radius: var(--ember-radius-md);
-  padding: 16px;
-  margin-top: 4px;
-}
 
-.ember-demo-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ember-accent);
-  margin: 0 0 10px 0;
-}
 
-.ember-demo-item {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--ember-text-secondary);
-}
-
-.ember-demo-role {
-  font-weight: 500;
-  color: var(--ember-text);
-}
-
-.ember-demo-creds {
-  color: var(--ember-text-secondary);
-}
 
 /* ============================================================
    HOME — LANDING PAGE
@@ -432,68 +422,76 @@ body {
 
 /* ---------- NAVBAR ---------- */
 .home-navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 75px;
-    padding: 0 6%;
-    display: flex;
-    align-items: center;
-    z-index: 1000;
-    background: rgba(17, 17, 17, 0.95);
-    backdrop-filter: blur(6px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 75px;
+  padding: 0 6%;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.link-navbar {
+  color: #d6d6d6;
+  text-decoration: none;
+}
+.link-navbar:hover {
+  color: var(--ember-white);
 }
 
 .home-logo {
-    position: absolute;
-    left: 6%;
+  position: absolute;
+  left: 6%;
 
-    color: var(--ember-white);
-    font-size: 22px;
-    font-weight: bold;
-    font-family: Georgia, serif;
-    white-space: nowrap;
+  color: var(--ember-white);
+  font-size: 22px;
+  font-weight: bold;
+  font-family: Georgia, serif;
+  white-space: nowrap;
 }
 
 .home-menu {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 
-    display: flex;
-    gap: 35px;
+  display: flex;
+  gap: 35px;
 }
 
 .home-menu a {
-    color: #d6d6d6;
-    font-size: 14px;
-    transition: color 0.2s ease;
+  color: #d6d6d6;
+  font-size: 14px;
+  transition: color 0.2s ease;
 }
 
 .home-menu a:hover {
-    color: var(--ember-white);
+  color: var(--ember-white);
 }
 
 .home-register {
-    position: absolute;
-    right: 6%;
+  position: absolute;
+  right: 6%;
 
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .home-register a {
-    color: #d6d6d6;
-    font-size: 14px;
-    transition: color 0.2s ease;
+  color: #d6d6d6;
+  font-size: 14px;
+  transition: color 0.2s ease;
 }
 
 
 .home-register a:hover {
-    color: var(--ember-white);
+  color: var(--ember-white);
 }
+
 .login-button {
   background-color: var(--ember-red);
   color: var(--ember-white);
@@ -510,26 +508,18 @@ body {
 
 /* ---------- HERO ---------- */
 .hero {
+  min-height: calc(85vh - 75px);
+  margin-top: 5px;
+  /* para que empiece debajo del navbar */
+  display: flex;
+  align-items: center;
 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-
-
-
-
-
-
-  
-    min-height: calc(85vh - 75px);
-    margin-top: 5px;          /* para que empiece debajo del navbar */
-    display: flex;
-    align-items: center;
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    position: relative;
-    color: var(--ember-white);
+  position: relative;
+  color: var(--ember-white);
 }
 
 .hero-overlay {
@@ -538,12 +528,10 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.85),
-    rgba(0, 0, 0, 0.55),
-    rgba(0, 0, 0, 0.35)
-  );
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.85),
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.35));
 }
 
 .hero-content {
@@ -618,6 +606,7 @@ body {
   width: 42%;
   display: flex;
   justify-content: flex-end;
+  overflow: hidden;
 }
 
 .hero-image-container img {
@@ -625,6 +614,7 @@ body {
   max-width: 400px;
   height: 280px;
   object-fit: cover;
+  object-position: center;
   border-radius: var(--ember-radius-full);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: var(--ember-shadow-xl);
@@ -754,7 +744,7 @@ body {
   flex-direction: column;
 }
 
-.product-info > span {
+.product-info>span {
   color: var(--ember-red);
   font-size: 9px;
   font-weight: bold;
@@ -911,30 +901,26 @@ body {
 }
 
 /* ---------- FOOTER ---------- */
-.footer {
-  padding: 40px 8% 20px;
-  background-color: var(--ember-dark-bg);
-  color: var(--ember-footer-text);
-  text-align: center;
-}
-
 .footer-logo {
-  margin-bottom: 10px;
   color: var(--ember-white);
-  font-family: Georgia, serif;
-  font-size: 21px;
+  font-size: 30px;
   font-weight: bold;
+  font-family: Georgia, serif;
+  white-space: nowrap;
 }
 
-.footer p {
-  margin-bottom: 25px;
-  color: var(--ember-footer-text-secondary);
-  font-size: 12px;
+.footer-link {
+  color: var(--ember-footer-text);
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.footer span {
-  color: var(--ember-footer-text-muted);
-  font-size: 10px;
+.footer-link:hover {
+  color: var(--ember-footer-text-secondary)
+}
+
+.footer-bottom {
+  border-color: #374151 !important;
 }
 
 /* ============================================================
