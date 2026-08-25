@@ -1,26 +1,36 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { CarritoProvider } from './components/CarritoContext'
 import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import Orders from './pages/Orders'
 import Users from './pages/Users'
 import Inicio from './pages/Inicio'
+import ContentFooter from './components/footer/contentFooter'
 
 import RegisterForm from './pages/Registrase'
 import Login from './pages/Login'
+import Carrito from './pages/Carrito'
 import AdminLayout from './components/AdminLayout'
 import AdminNavbarLayout from './components/home/AdminNavbarLayout'
 
 export default function App() {
   return (
-    <Router>
+    <CarritoProvider>    <Router>
       <Routes>
 
         <Route element={<AdminNavbarLayout />}>
           <Route path="/" element={<Inicio />} />
+           <Route path="/carrito" element={<Carrito />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/Registrarse" element={<RegisterForm />} />
+      
+
+
+        <Route element={<ContentFooter />}>
+          <Route path="/Registrarse" element={<RegisterForm />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
+        
 
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -31,5 +41,7 @@ export default function App() {
       </Routes>
 
     </Router>
+  </CarritoProvider>
+
   )
 }

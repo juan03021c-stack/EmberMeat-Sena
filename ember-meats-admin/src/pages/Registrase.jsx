@@ -151,6 +151,12 @@ export default function RegisterForm() {
           <button type="submit" className="ember-btn-primary">
             Crear cuenta
           </button>
+          <NavLink
+            to="/"
+            className="ember-btn-primary text-decoration-none text-center"
+          >
+            Regresar al inicio
+          </NavLink>
 
           <div className="ember-divider">
             <span className="ember-divider-line"></span>

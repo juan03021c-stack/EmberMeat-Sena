@@ -1,6 +1,7 @@
 
 import { NavLink, useLocation } from 'react-router-dom'
 import { useState,useEffect } from 'react'
+import { useCarrito } from '../CarritoContext'
 
 const internalLinks = [
     { href: '#inicio', label: 'Inicio', icon: 'bi-house' },
@@ -12,11 +13,13 @@ const externalLinks = [
     { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid' },
     { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right' },
     { to: '/Registrarse', label: 'Registrarse', icon: 'bi-person-plus' },
+    { to: '/carrito', label: 'Carrito', icon: 'bi-cart3' }
 ]
 
 export default function NavbarHome() {
     const location = useLocation()
     const [activeHash, setActiveHash] = useState(location.hash || '#inicio')
+    const { cantidadTotal } = useCarrito()
 
     // Hace scroll suave cuando la URL tiene un hash (#nosotros, #productos)
     useEffect(() => {
@@ -69,30 +72,37 @@ export default function NavbarHome() {
 
             {/* LINKS EXTERNOS — NavLink (cambio de página) */}
             <div className="home-register">
-                {externalLinks.map((item) => (
-                    <NavLink
-                        key={item.to}
-                        to={item.to}
-                       className={({ isActive }) =>
-                            `nav-link d-flex align-items-center gap-2 px-3 py-2 ${
+                {externalLinks.map((item) => {
+                    const isCarrito = item.to === '/carrito';
+                    return (
+                        <NavLink
+                            key={item.to}
+                            to={item.to}
+                            className={({ isActive }) =>
+                                `nav-link d-flex align-items-center gap-2 px-3 py-2 ${
+                                    isActive
+                                        ? 'text-white rounded'
+                                        : 'text-secondary'
+                                }`
+                            }
+                            style={({ isActive }) =>
                                 isActive
-                                    ? 'text-white rounded'
-                                    : 'text-secondary'
-                            }`
-                        }
-                        style={({ isActive }) =>
-                            isActive
-                                ? { background: '#7B1F1F' }
-                                : {}
-                        }
-                    >
-                        <i className={`bi ${item.icon}`}></i>
-                        <span>{item.label}</span>
-                    </NavLink>
-                ))}
+                                    ? { background: '#7B1F1F' }
+                                    : {}
+                            }
+                        >
+                            <i className={`bi ${item.icon}`}></i>
+                            <span>{item.label}</span>
+                            {isCarrito && cantidadTotal > 0 && (
+                                <span className="badge bg-danger rounded-pill ms-1" style={{ fontSize: '0.75rem', padding: '0.25em 0.6em' }}>
+                                    {cantidadTotal}
+                                </span>
+                            )}
+                        </NavLink>
+                    );
+                })}
             </div>
 
         </nav>
     )
 }
-

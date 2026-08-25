@@ -71,13 +71,13 @@ export default function LoginForm() {
             Ingresar
           </NavLink>
 
-          {/* BOTÓN REGRESAR - estilo secundario */}
-          {/* <NavLink
+          {/* BOTÓN REGRESAR - estilo secundario  */}
+           <NavLink
             to="/"
-            className="ember-btn-secondary text-decoration-none text-center"
+            className="ember-btn-primary text-decoration-none text-center"
           >
             Regresar al inicio
-          </NavLink> */}
+          </NavLink>
 
           <div className="ember-divider">
             <span className="ember-divider-line"></span>
