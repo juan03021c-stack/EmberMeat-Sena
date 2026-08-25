@@ -1,19 +1,20 @@
 import '../assets/EmberMeat.css'
 import { useEffect, useState } from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, } from 'react-router-dom'
 import { obtenerProductos, URL_BASE } from '../services/Api'
+import { useCarrito } from '../components/CarritoContext'
 import {
   Truck,
   ShieldCheck,
   Plus,
   ChevronRight,
   Check,
-  ShoppingCart,
   Flame
 } from 'lucide-react'
 
 
 export default function Home() {
+  const { agregarAlCarrito } = useCarrito()
   const [productos, setProductos] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -51,7 +52,7 @@ export default function Home() {
     <div className="home">
       {/* HERO */}
       <section
-        id="inicio"
+
         className="hero"
         style={{
           backgroundImage: "url('/imagess/principal.jpeg')"
@@ -182,12 +183,19 @@ export default function Home() {
 
                   <div className="product-bottom">
                     <strong>
-                      ${Number(producto.precio).toLocaleString('es-CO')}
+                      ${Number(producto.precio).toLocaleString('es-us')}
                     </strong>
 
                     <button
                       className="btn-agregar"
-                      onClick={() => console.log('Agregar:', producto.id)}
+                      onClick={() =>
+                        agregarAlCarrito({
+                          ...producto,
+                          imagen: producto.imagen_url
+                            ? `${URL_BASE}/${producto.imagen_url}`
+                            : '/imagess/producto.jpg',
+                        })
+                      }
                     >
                       <Plus size={16} strokeWidth={2} />
                       Agregar

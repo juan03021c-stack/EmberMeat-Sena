@@ -54,19 +54,15 @@ export function CarritoProvider({ children }) {
 
   // Totales calculados
   const cantidadTotal = carrito.reduce((sum, item) => sum + item.cantidad, 0)
-
   const totalPrecio = carrito.reduce((sum, item) => {
     const precio =
       typeof item.precio === 'number'
         ? item.precio
-        : Number(
-            item.precio
-              .replace('$', '')
-              .replace(/\./g, '')
-              .replace(',', '.')
-          )
-    return sum + precio * item.cantidad
-  }, 0)
+        : Number(item.precio)
+
+          
+    return sum + (precio * item.cantidad)  
+}, 0)
 
   return (
     <CarritoContext.Provider

@@ -1,7 +1,7 @@
-import React from 'react'
-import './Carrito.css'
+import '../assets/EmberMeat.css'
 import { Link } from 'react-router-dom'
 import { useCarrito } from '../components/CarritoContext'
+import { ShoppingCart } from 'lucide-react'
 
 export default function Carrito() {
   const {
@@ -14,19 +14,20 @@ export default function Carrito() {
     totalPrecio,
   } = useCarrito()
 
-  const convertirPrecio = (precio) => {
-    if (typeof precio === 'number') return precio
-    return Number(
-      precio.replace('$', '').replace(/\./g, '').replace(',', '.')
-    )
-  }
+  // esta funcion convierte el precio de string a number pesos colombianos
+  // const convertirPrecio = (precio) => {
+  //   if (typeof precio === 'number') return precio
+  //   return Number(
+  //     precio.replace('$', '').replace(/\./g, '').replace(',', '.')
+  //   )
+  // }
 
   const handleComprar = () => {
     if (carrito.length === 0) return
     alert(
       `¡Gracias por tu compra en EmberMeat! 🛒\n\nTotal: $${totalPrecio.toLocaleString(
         'es-CO'
-      )}\n\nEn un proyecto real, aquí iría el checkout con Wompi.`
+      )}\n\n, aquí iría el checkout con Wompi.`
     )
     vaciarCarrito()
   }
@@ -34,18 +35,18 @@ export default function Carrito() {
   return (
     <div className="carrito-page">
       <div className="carrito-header">
-        <h1>🛒 Mi carrito</h1>
-        <Link to="/home" className="volver-link">
+        <h1><ShoppingCart size={32} strokeWidth={1.5} /> Mi carrito</h1>
+        <Link to="/" className="volver-link">
           ← Seguir comprando
         </Link>
       </div>
 
       {carrito.length === 0 ? (
         <div className="carrito-vacio">
-          <div className="carrito-vacio-icon">🛒</div>
+          <div className="carrito-vacio-icon"><ShoppingCart size={150} strokeWidth={1} /></div>
           <h2>Tu carrito está vacío</h2>
           <p>Agrega algunos productos artesanales para comenzar tu compra.</p>
-          <Link to="/home" className="volver-tienda">
+          <Link to="/" className="volver-tienda">
             Ver productos
           </Link>
         </div>
@@ -61,9 +62,8 @@ export default function Carrito() {
                 <div className="carrito-producto-info">
                   <h3>{producto.nombre}</h3>
                   <p className="precio-unitario">
-                    $
-                    {convertirPrecio(producto.precio).toLocaleString('es-CO')}{' '}
-                    c/u
+                    ${Number((producto.precio)).toLocaleString('es-US')}{' '}
+                    {/* convertirPrecio */}
                   </p>
 
                   <div className="cantidad-control">
@@ -81,8 +81,9 @@ export default function Carrito() {
                   <strong>
                     $
                     {(
-                      convertirPrecio(producto.precio) * producto.cantidad
-                    ).toLocaleString('es-CO')}
+                      (producto.precio) * producto.cantidad
+                    ).toLocaleString('es-Us')}
+                    {/* convertirPrecio */}
                   </strong>
                   <button
                     className="eliminar-producto"
@@ -105,7 +106,7 @@ export default function Carrito() {
 
             <div className="resumen-linea">
               <span>Subtotal</span>
-              <span>${totalPrecio.toLocaleString('es-CO')}</span>
+              <span>${(totalPrecio.toLocaleString('es-US'))}</span>
             </div>
 
             <div className="resumen-linea">
@@ -117,7 +118,9 @@ export default function Carrito() {
 
             <div className="resumen-total">
               <span>Total</span>
-              <strong>${totalPrecio.toLocaleString('es-CO')}</strong>
+              <strong>
+                ${totalPrecio.toLocaleString('es-US')}
+              </strong>
             </div>
 
             <button className="btn-comprar" onClick={handleComprar}>

@@ -283,7 +283,7 @@ export default function Products() {
                       </div>
                     </td>
                     <td>{producto.categoria_nombre || '-'}</td>
-                    <td>${Number(producto.precio || 0).toFixed(2)}</td>
+                    <td>${Number(producto.precio || 0).toLocaleString('es-us')}</td>
                     <td><InsigniaStock stock={Number(producto.stock)} /></td>
                     <td><InsigniaActivo activo={producto.activo} /></td>
                     <td className='text-end'>
