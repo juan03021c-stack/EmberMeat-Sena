@@ -13,6 +13,8 @@ import Login from './pages/Login'
 import Carrito from './pages/Carrito'
 import AdminLayout from './components/AdminLayout'
 import AdminNavbarLayout from './components/home/AdminNavbarLayout'
+import Catalogo from './pages/Catalogo'
+
 
 export default function App() {
   return (
@@ -22,7 +24,9 @@ export default function App() {
         <Route element={<AdminNavbarLayout />}>
           <Route path="/" element={<Inicio />} />
            <Route path="/carrito" element={<Carrito />} />
+           <Route path="/Catalogo" element={<Catalogo />} />
         </Route>
+           
       
 
 

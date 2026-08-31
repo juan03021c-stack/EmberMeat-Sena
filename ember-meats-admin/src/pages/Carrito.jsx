@@ -2,6 +2,7 @@ import '../assets/EmberMeat.css'
 import { Link } from 'react-router-dom'
 import { useCarrito } from '../components/CarritoContext'
 import { ShoppingCart } from 'lucide-react'
+import { URL_BASE } from '../services/Api'
 
 export default function Carrito() {
   const {
@@ -36,7 +37,7 @@ export default function Carrito() {
     <div className="carrito-page">
       <div className="carrito-header">
         <h1><ShoppingCart size={32} strokeWidth={1.5} /> Mi carrito</h1>
-        <Link to="/" className="volver-link">
+        <Link to="/Catalogo" className="volver-link">
           ← Seguir comprando
         </Link>
       </div>
@@ -46,7 +47,7 @@ export default function Carrito() {
           <div className="carrito-vacio-icon"><ShoppingCart size={150} strokeWidth={1} /></div>
           <h2>Tu carrito está vacío</h2>
           <p>Agrega algunos productos artesanales para comenzar tu compra.</p>
-          <Link to="/" className="volver-tienda">
+          <Link to="/Catalogo" className="volver-tienda">
             Ver productos
           </Link>
         </div>
@@ -56,7 +57,20 @@ export default function Carrito() {
             {carrito.map((producto) => (
               <div className="carrito-producto" key={producto.id}>
                 <div className="carrito-producto-imagen">
-                  <img src={producto.imagen} alt={producto.nombre} />
+                 {producto.imagen_url ? (
+                    <img
+                      src={`${URL_BASE}/${producto.imagen_url}`}
+                      alt={producto.nombre}
+                      onError={(e) => {
+                        e.currentTarget.src = '/imagess/producto.jpg'
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src="/imagess/producto.jpg"
+                      alt={producto.nombre}
+                    />
+                  )}
                 </div>
 
                 <div className="carrito-producto-info">

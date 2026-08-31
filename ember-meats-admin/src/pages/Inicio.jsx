@@ -74,9 +74,9 @@ export default function Home() {
             </p>
 
             <div className="hero-buttons">
-              <a href="#productos" className="primary-button">
+              <NavLink to="/Catalogo" className="primary-button">
                 Explorar catálogo
-              </a>
+              </NavLink>
               <a href="#nosotros" className="secondary-button">
                 Ver más
               </a>
@@ -179,25 +179,20 @@ export default function Home() {
                 </div>
 
                 <div className="product-info">
-                  <h3>{producto.nombre}</h3>
+                  <span>{producto.categoria_nombre}</span>
+                  <h2>{producto.nombre}</h2>
+                  <p>{producto.descripcion}</p>
+                  <small>Stock:{producto.stock}</small>
+                  <small>Presentacion:{producto.presentacion}</small>
 
                   <div className="product-bottom">
-                    <strong>
-                      ${Number(producto.precio).toLocaleString('es-us')}
-                    </strong>
+                    <strong>${Number(producto.precio).toLocaleString('es-US')}</strong>
 
                     <button
+                      type="button"
                       className="btn-agregar"
-                      onClick={() =>
-                        agregarAlCarrito({
-                          ...producto,
-                          imagen: producto.imagen_url
-                            ? `${URL_BASE}/${producto.imagen_url}`
-                            : '/imagess/producto.jpg',
-                        })
-                      }
+                      onClick={() => agregarAlCarrito(producto)}
                     >
-                      <Plus size={16} strokeWidth={2} />
                       Agregar
                     </button>
                   </div>
@@ -208,10 +203,10 @@ export default function Home() {
         )}
 
         <div className="catalog-button-container">
-          <a href="#productos" className="catalog-button">
+          < NavLink to="/Catalogo" className="catalog-button">
             Ver catálogo completo
             <ChevronRight size={18} strokeWidth={2} />
-          </a>
+          </NavLink>
         </div>
       </section>
 
@@ -267,7 +262,7 @@ export default function Home() {
           Únete a nuestra familia y recibe los mejores
           embutidos directo en la puerta de tu casa.
         </p>
-        <NavLink to="/login" className="cta-button">
+        <NavLink to="/Registrarse" className="cta-button">
           Crear cuenta ahora
         </NavLink>
       </section>
