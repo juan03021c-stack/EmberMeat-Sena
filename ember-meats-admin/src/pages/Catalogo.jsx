@@ -2,8 +2,9 @@ import React, { useMemo, useState, useEffect } from "react";
 import "../assets/EmberMeat.css";
 import { obtenerProductos, obtenerCategorias, URL_BASE } from '../services/Api';
 import { useCarrito } from '../components/CarritoContext';
+import { Search } from 'lucide-react';
 
-const PRECIO_MAX_DEFAULT = 500000;
+
 
 function formatoPrecio(valor) {
   return valor.toLocaleString("es-US", {
@@ -37,23 +38,24 @@ function ProductoCard({ producto }) {
             src="/imagess/producto.jpg"
             alt={producto.nombre}
           />
-        )}
-        {!disponible && (
+        )}if({!disponible && (
           <div className="sin-stock-overlay d-flex align-items-center justify-content-center">
-            <span>No disponible</span>
-          </div>
-        )}{sinStock && (
-          <div className="sin-stock-overlay d-flex align-items-center justify-content-center">
-            <span>Sin stock</span>
+            <span className="text-white">No disponible</span>
           </div>
         )}
+        {sinStock && (
+          <div className="sin-stock-overlay d-flex align-items-center justify-content-center">
+            <span className="text-white">Sin stock</span>
+          </div>
+        )})
+
       </div>
 
       <div className="product-info">
-        <span>{producto.categoria_nombre}</span>
+        <span className="fs-6" >{producto.categoria_nombre}</span>
         <h2>{producto.nombre}</h2>
         <p>{producto.descripcion}</p>
-        <small>Stock:{producto.stock}</small>
+        <span className="fs-6">Stock:{producto.stock}</span>
         <small>Presentacion:{producto.presentacion}</small>
 
         <div className="product-bottom">
@@ -62,10 +64,14 @@ function ProductoCard({ producto }) {
           <button
             type="button"
             className="btn-agregar"
-            disabled={!disponible}
+            disabled={sinStock || !disponible}
             onClick={() => agregarAlCarrito(producto)}
           >
-            {disponible ? "Agregar" : "Sin stock"}
+            {!disponible
+              ? "No disponible"
+              : sinStock
+                ? "Sin stock"
+                : "Agregar"}
           </button>
         </div>
       </div>
@@ -81,11 +87,9 @@ export default function Catalogo() {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [busqueda, setBusqueda] = useState("");
   const [categoriasSel, setCategoriasSel] = useState([]);
   const [disponibilidad, setDisponibilidad] = useState("todos");
-  const [precioMax, setPrecioMax] = useState(PRECIO_MAX_DEFAULT);
   const [orden, setOrden] = useState("relevancia");
 
   // Cargar productos y categorías desde la API
@@ -127,7 +131,7 @@ export default function Catalogo() {
     setBusqueda("");
     setCategoriasSel([]);
     setDisponibilidad("todos");
-    setPrecioMax(PRECIO_MAX_DEFAULT);
+
   };
 
   const productosFiltrados = useMemo(() => {
@@ -135,8 +139,7 @@ export default function Catalogo() {
       const coincideBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase());
       const coincideCategoria = categoriasSel.length === 0 || categoriasSel.includes(p.categoria_nombre);
       const coincideDisponibilidad = disponibilidad === "todos" || p.activo == 1 && p.stock >= 1;
-      const coincidePrecio = p.precio <= precioMax;
-      return coincideBusqueda && coincideCategoria && coincideDisponibilidad && coincidePrecio;
+      return coincideBusqueda && coincideCategoria && coincideDisponibilidad;
     });
 
     if (orden === "precio-asc") {
@@ -148,7 +151,7 @@ export default function Catalogo() {
     }
 
     return lista;
-  }, [busqueda, categoriasSel, disponibilidad, precioMax, orden, productos]);
+  }, [busqueda, categoriasSel, disponibilidad, orden, productos]);
 
   return (
     <div className="catalogo-page">
@@ -161,7 +164,7 @@ export default function Catalogo() {
 
         <div className="row g-4">
           {/* Sidebar filtros */}
-          <aside className="col-12 col-lg-3">
+          <aside className="col-12 col-lg-3 pt-5">
             <div className="card filtros-card border-0 shadow-sm sticky-lg-top" style={{ top: '20px' }}>
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-3">
@@ -174,7 +177,7 @@ export default function Catalogo() {
                 {/* Buscador */}
                 <div className="mb-4">
                   <div className="input-group">
-                    <span className="input-group-text bg-white border-end-0">🔍</span>
+                    <span className="input-group-text bg-white border-end-0"><Search /></span>
                     <input
                       type="search"
                       className="form-control border-start-0 ps-0"
@@ -236,24 +239,6 @@ export default function Catalogo() {
                       onChange={() => setDisponibilidad("disponibles")}
                     />
                     <label className="form-check-label" htmlFor="disp-solo">Solo disponibles</label>
-                  </div>
-                </div>
-
-                {/* Precio máximo */}
-                <div>
-                  <h3 className="filtro-subtitulo">Precio máximo</h3>
-                  <input
-                    type="range"
-                    className="form-range precio-range"
-                    min={0}
-                    max={PRECIO_MAX_DEFAULT}
-                    step={1000}
-                    value={precioMax}
-                    onChange={(e) => setPrecioMax(Number(e.target.value))}
-                  />
-                  <div className="d-flex justify-content-between small text-muted">
-                    <span>$0</span>
-                    <span>{formatoPrecio(precioMax)}</span>
                   </div>
                 </div>
               </div>

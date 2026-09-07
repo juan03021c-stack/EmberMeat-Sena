@@ -1,10 +1,34 @@
 import '../assets/EmberMeat.css'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCarrito } from '../components/CarritoContext'
-import { ShoppingCart } from 'lucide-react'
+import { ShoppingCart, Trash2, MinusCircle, PlusCircle } from 'lucide-react'
 import { URL_BASE } from '../services/Api'
+import RegisterForm from '../components/RegisterForm'
+import { crearPedido } from '../services/Api'
+
 
 export default function Carrito() {
+  const [mostrarModal, setMostrarModal] = useState(false)
+
+
+  /*--------------------almacena los datos del formulario, para despues hacer el envio al backend--------------------*/
+  const [formData, setFormData] = useState({
+    nombre: '',
+    email: '',
+    telefono: '',
+    direccion: '',
+    cedula: '',
+    metodoEnvio: ''
+  })
+
+  /*--------------------Estado de las variables--------------------*/
+  const [acepta, setAcepta] = useState(false)
+  const [cargando, setCargando] = useState(false)
+  const [error, setError] = useState(null)
+  const [mensajeExito, setMensajeExito] = useState('')
+
+  /*--------------------Obtiene los datos del carrito--------------------*/
   const {
     carrito,
     aumentarCantidad,
@@ -14,23 +38,91 @@ export default function Carrito() {
     cantidadTotal,
     totalPrecio,
   } = useCarrito()
+  /*--------------------funcion para limpiar el formulario--------------------*/
+  const limpiarFormulario = () => {
+    setFormData({
+      nombre: '',
+      email: '',
+      telefono: '',
+      direccion: '',
+      cedula: '',
+      metodoEnvio: ''
+    })
+    setAcepta(false)
+    setError(null)
+    setMensajeExito('')
+  }
+  /*--------------------funcion para mostrar el modal--------------------*/
+  const mostrarModalNueva = () => {
+    setMostrarModal(true)
+    limpiarFormulario()
+  }
 
-  // esta funcion convierte el precio de string a number pesos colombianos
-  // const convertirPrecio = (precio) => {
-  //   if (typeof precio === 'number') return precio
-  //   return Number(
-  //     precio.replace('$', '').replace(/\./g, '').replace(',', '.')
-  //   )
-  // }
+  /*--------------------funcion para enviar la informacion al backend--------------------*/
 
+  const enviarRegistro = async (e) => {
+    e.preventDefault()
+
+    if (!acepta) {
+      setError('Debes aceptar los términos y condiciones')
+      return
+    }
+
+    if (carrito.length === 0) {
+      setError('El carrito está vacío')
+      return
+    }
+
+    setCargando(true)
+    setError(null)
+    /*--------------------Convierte los datos del carrito a JSON--------------------*/
+    const productosPedido = carrito.map((p) => ({
+      id: p.id,
+      nombre: p.nombre,
+      cantidad: p.cantidad,
+      precio_unitario: Number(p.precio),
+      subtotal: Number(p.precio) * p.cantidad
+    }))
+    /*--------------------envia los datos al backend--------------------  
+   
+      aqui es donde se llama la funcion crearPedido y  los datos
+      que teniamos almacenados en la variable formData y en la variable productosPedido
+      se le pasa como parametro a la funcion crearPedido
+      
+    */
+    try {
+      const response = await crearPedido(formData, productosPedido)
+
+      if (response.success) {
+        setMensajeExito(response.message || '¡Pedido realizado con éxito!')
+        vaciarCarrito()
+        setTimeout(() => {
+          setMostrarModal(false)
+          limpiarFormulario()
+        }, 2500)
+      } else {
+        setError(response.message || 'Error al procesar el pedido')
+      }
+    } catch (err) {
+      setError(err.message || 'Error al procesar el pedido')
+    } finally {
+      setCargando(false)
+    }
+  }
+
+  /*--------------------funcion para comprar--------------------*/
   const handleComprar = () => {
-    if (carrito.length === 0) return
-    alert(
-      `¡Gracias por tu compra en EmberMeat! 🛒\n\nTotal: $${totalPrecio.toLocaleString(
-        'es-CO'
-      )}\n\n, aquí iría el checkout con Wompi.`
-    )
-    vaciarCarrito()
+    if (carrito.length === 0) {
+      return alert('Tu carrito está vacío')
+    } else {
+      mostrarModalNueva()
+    }
+  }
+  /*--------------------funcion para formatear el precio de los productos y que se muestre en formato de moneda--------------------*/
+  const formatearPrecio = (precio) => {
+    const num = typeof precio === 'number' ? precio : Number(precio)
+    if (isNaN(num)) return '0'
+    return num.toLocaleString('es-US')
   }
 
   return (
@@ -57,7 +149,7 @@ export default function Carrito() {
             {carrito.map((producto) => (
               <div className="carrito-producto" key={producto.id}>
                 <div className="carrito-producto-imagen">
-                 {producto.imagen_url ? (
+                  {producto.imagen_url ? (
                     <img
                       src={`${URL_BASE}/${producto.imagen_url}`}
                       alt={producto.nombre}
@@ -76,34 +168,29 @@ export default function Carrito() {
                 <div className="carrito-producto-info">
                   <h3>{producto.nombre}</h3>
                   <p className="precio-unitario">
-                    ${Number((producto.precio)).toLocaleString('es-US')}{' '}
-                    {/* convertirPrecio */}
+                    ${formatearPrecio(producto.precio)}
                   </p>
 
                   <div className="cantidad-control">
                     <button onClick={() => disminuirCantidad(producto.id)}>
-                      −
+                      <MinusCircle size={20} strokeWidth={1.5} />
                     </button>
                     <span>{producto.cantidad}</span>
                     <button onClick={() => aumentarCantidad(producto.id)}>
-                      +
+                      <PlusCircle size={20} strokeWidth={1.5} />
                     </button>
                   </div>
                 </div>
 
                 <div className="carrito-producto-total">
                   <strong>
-                    $
-                    {(
-                      (producto.precio) * producto.cantidad
-                    ).toLocaleString('es-Us')}
-                    {/* convertirPrecio */}
+                    ${formatearPrecio(Number(producto.precio) * producto.cantidad)}
                   </strong>
                   <button
                     className="eliminar-producto"
                     onClick={() => eliminarDelCarrito(producto.id)}
                   >
-                    🗑️ Eliminar
+                    <Trash2 size={20} strokeWidth={1.5} />
                   </button>
                 </div>
               </div>
@@ -120,7 +207,7 @@ export default function Carrito() {
 
             <div className="resumen-linea">
               <span>Subtotal</span>
-              <span>${(totalPrecio.toLocaleString('es-US'))}</span>
+              <span>${formatearPrecio(totalPrecio)}</span>
             </div>
 
             <div className="resumen-linea">
@@ -132,9 +219,7 @@ export default function Carrito() {
 
             <div className="resumen-total">
               <span>Total</span>
-              <strong>
-                ${totalPrecio.toLocaleString('es-US')}
-              </strong>
+              <strong>${formatearPrecio(totalPrecio)}</strong>
             </div>
 
             <button className="btn-comprar" onClick={handleComprar}>
@@ -145,8 +230,26 @@ export default function Carrito() {
               Vaciar carrito
             </button>
           </div>
+
+
         </div>
       )}
+      
+      {/* RegisterForm es un componente que se encarga de mostrar el formulario de registro
+        
+      */}
+      <RegisterForm
+        show={mostrarModal}
+        onClose={() => setMostrarModal(false)}
+        enviarFormulario={enviarRegistro}
+        loading={cargando}
+        error={error}
+        mensaje={mensajeExito}
+        form={formData}
+        setForm={setFormData}
+        aceptaTerminos={acepta}
+        setAceptaTerminos={setAcepta}
+      />
     </div>
   )
 }

@@ -8,7 +8,6 @@ import Users from './pages/Users'
 import Inicio from './pages/Inicio'
 import ContentFooter from './components/footer/contentFooter'
 
-import RegisterForm from './pages/Registrase'
 import Login from './pages/Login'
 import Carrito from './pages/Carrito'
 import AdminLayout from './components/AdminLayout'
@@ -26,12 +25,12 @@ export default function App() {
            <Route path="/carrito" element={<Carrito />} />
            <Route path="/Catalogo" element={<Catalogo />} />
         </Route>
+       
            
       
 
 
         <Route element={<ContentFooter />}>
-          <Route path="/Registrarse" element={<RegisterForm />} />
           <Route path="/login" element={<Login />} />
         </Route>
         

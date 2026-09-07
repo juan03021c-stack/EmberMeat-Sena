@@ -184,3 +184,41 @@ export async function login(datos) {
 }
 
 export default obtenerProductos;
+
+
+export async function crearPedido(datoCliente, productosPedido) {
+
+    try {
+        const respuesta = await fetch(`${URL_BASE}/Pedidos/Crear.php`, {
+            method: "POST",
+            /*estoy convirtiendo el objeto en json para enviar datos al backend*/
+            body: JSON.stringify({ datoCliente, productosPedido }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!respuesta.ok) {
+            throw new Error("Error al crear el pedido");
+        }
+        return await respuesta.json();
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: error.message };
+    }
+}
+
+
+export async function buscarClientePorCedula(cedula) {
+    try {
+        const respuesta = await fetch(
+            /**lo que estoy haciendo aqui es buscar un cliente por cedula 
+             cedula=${encodeURIComponent(cedula)} es para que el valor de la cedula
+            se pueda enviar correctamente al backend*/
+            `${URL_BASE}/Usuarios/BuscarPorCedula.php?cedula=${encodeURIComponent(cedula)}`
+        )
+        return await respuesta.json()
+    } catch (error) {
+        console.error(error)
+        return { success: false, message: error.message }
+    }
+}
