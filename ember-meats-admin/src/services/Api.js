@@ -1,4 +1,4 @@
-const URL_BASE = "http://localhost:8080/proyecto/backend";
+const URL_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/proyecto/backend";
 export { URL_BASE };
 
 export async function obtenerProductos() {
@@ -220,5 +220,52 @@ export async function buscarClientePorCedula(cedula) {
     } catch (error) {
         console.error(error)
         return { success: false, message: error.message }
+    }
+}
+
+export async function consultarTransaccionWompi(transaccionId) {
+    try {
+        const respuesta = await fetch(
+            `${URL_BASE}/Config/configWompi/ConsultarTransaccion.php?id=${encodeURIComponent(transaccionId)}`
+        );
+        if (!respuesta.ok) {
+            throw new Error("Error al consultar la transacción en Wompi");
+        }
+        return await respuesta.json();
+    } catch (error) {
+        console.error("Error al consultar transacción Wompi:", error);
+        return { success: false, message: error.message };
+    }
+}
+
+export async function consultarTransaccionPorReferencia(referencia) {
+    try {
+        const respuesta = await fetch(
+            `${URL_BASE}/Config/configWompi/ConsultarTransaccion.php?reference=${encodeURIComponent(referencia)}`
+        );
+        if (!respuesta.ok) {
+            throw new Error("Error al consultar la referencia en Wompi");
+        }
+        return await respuesta.json();
+    } catch (error) {
+        console.error("Error al consultar referencia Wompi:", error);
+        return { success: false, message: error.message };
+    }
+}
+
+export async function consultarEstadoPedido(numeroPedido, pedidoId = null) {
+    try {
+        const params = new URLSearchParams();
+        if (numeroPedido) params.append('numero_pedido', numeroPedido);
+        if (pedidoId) params.append('pedido_id', pedidoId);
+
+        const respuesta = await fetch(`${URL_BASE}/Pedidos/ConsultarEstado.php?${params.toString()}`);
+        if (!respuesta.ok) {
+            throw new Error("Error al consultar el estado del pedido");
+        }
+        return await respuesta.json();
+    } catch (error) {
+        console.error("Error al consultar estado del pedido:", error);
+        return { success: false, message: error.message };
     }
 }

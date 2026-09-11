@@ -21,7 +21,7 @@ export default function RegisterForm({
   mensaje,
   /** form es un objeto que contiene la informacion del formulario */
   form,
-  /** setForm es una funcion que actualiza el estado del formulario */
+  /** setForm es una funcion que sirve para modificar la informacion de los formulario */
   setForm,
   /** aceptaTerminos es un booleano que indica si el usuario acepta los terminos y condiciones */
   aceptaTerminos,
@@ -33,8 +33,7 @@ const [buscando, setBuscando] = useState(false);
 
  if (!show) return null;
 
-   /* la funcion handlechange se encarga de capturar los cambios 
-  en los campos del formulario y actualiza el estado del formulario*/
+   /* la funcion handlechange es la que captura lo que escribe el usuario.*/
 const handleChange = (e) => {
   const { name, value } = e.target;
   setForm((prev) => ({ ...prev, [name]: value }));
@@ -136,6 +135,7 @@ const handleCedulaBlur = async (e) => {
                   placeholder="Cédula"
                   value={form.cedula || ''}
                   onChange={handleChange}
+                  /* Se ejecuta cuando el usuario sale del campo.*/
                   onBlur={handleCedulaBlur}
                   disabled={buscando}
                   required
@@ -257,7 +257,7 @@ const handleCedulaBlur = async (e) => {
                 {loading ? (
                   <>
                     <Loader2 size={18} className="me-2 spin-animation" />
-                    Registrando...
+                    Procesado compra...
                   </>
                 ) : (
                   'Seguir con la compra'

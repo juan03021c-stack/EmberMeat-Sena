@@ -213,6 +213,15 @@ try {
         exit;
     }
 
+    if ($totalCalculado < 1500) {
+        $pdo->rollBack();
+        echo json_encode([
+            "success" => false,
+            "message" => "El monto total mínimo para compras con pasarela de pago Wompi es de $1.500 COP."
+        ]);
+        exit;
+    }
+
     /* --- Insertar en tabla `pedidos` ---*/
     $observacionEntrega = !empty($cedula) ? "Cédula: {$cedula}" : null;
     $direccionTexto = $modalidadEntrega === 'domicilio' ? $direccion : 'Recogida en tienda';
@@ -281,12 +290,38 @@ try {
 
     $pdo->commit();
 
+    /* --- Preparar datos de pago para Wompi con firma de integridad SHA256 --- */
+    $montoCentavos = (int)round($totalCalculado * 100);
+    $moneda = defined('WOMPI_CURRENCY') ? WOMPI_CURRENCY : 'COP';
+    $secretoIntegridad = defined('WOMPI_INTEGRITY_SECRET') ? WOMPI_INTEGRITY_SECRET : '';
+    
+    /* Fórmula Wompi: SHA256(referencia + montoEnCentavos + moneda + secretoIntegridad) */
+    $cadenaFirma = "{$numeroPedido}{$montoCentavos}{$moneda}{$secretoIntegridad}";
+    $firmaIntegridad = hash('sha256', $cadenaFirma);
+
+    $wompiData = [
+        'publicKey'     => defined('WOMPI_PUBLIC_KEY') ? WOMPI_PUBLIC_KEY : '',
+        'currency'      => $moneda,
+        'amountInCents' => $montoCentavos,
+        'reference'     => $numeroPedido,
+        'signature'     => [
+            'integrity' => $firmaIntegridad
+        ],
+        'customerData'  => [
+            'email'             => $correo,
+            'fullName'          => $nombre,
+            'phoneNumber'       => !empty($telefono) ? $telefono : null,
+            'phoneNumberPrefix' => '+57'
+        ]
+    ];
+
     echo json_encode([
         "success"        => true,
-        "message"        => "¡Pedido realizado con éxito!",
+        "message"        => "¡Pedido registrado! Preparando pasarela de pago...",
         "pedido_id"      => $pedidoId,
         "numero_pedido"  => $numeroPedido,
-        "total"          => $totalCalculado
+        "total"          => $totalCalculado,
+        "wompi"          => $wompiData
     ]);
 
 } catch (PDOException $e) {
