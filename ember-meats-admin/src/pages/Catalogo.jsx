@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
+import { NavLink } from 'react-router-dom';
 import "../assets/EmberMeat.css";
 import { obtenerProductos, obtenerCategorias, URL_BASE } from '../services/Api';
 import { useCarrito } from '../components/CarritoContext';
@@ -210,6 +211,7 @@ export default function Catalogo() {
                       );
                     })
                   )}
+                 
                 </div>
 
                 {/* Disponibilidad */}
@@ -237,6 +239,7 @@ export default function Catalogo() {
                     />
                     <label className="form-check-label" htmlFor="disp-solo">Solo disponibles</label>
                   </div>
+                 <NavLink to="/" className="btn btn-secondary me-2">Regresar al inicio</NavLink>
                 </div>
 
                 {/* Precio máximo */}
