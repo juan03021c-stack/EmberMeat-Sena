@@ -8,12 +8,12 @@ import Users from './pages/Users'
 import Inicio from './pages/Inicio'
 import ContentFooter from './components/footer/contentFooter'
 
-import RegisterForm from './pages/Registrase'
 import Login from './pages/Login'
 import Carrito from './pages/Carrito'
 import AdminLayout from './components/AdminLayout'
 import AdminNavbarLayout from './components/home/AdminNavbarLayout'
 import Catalogo from './pages/Catalogo'
+import RespuestaPago from './pages/RespuestaPago'
 
 
 export default function App() {
@@ -25,13 +25,14 @@ export default function App() {
           <Route path="/" element={<Inicio />} />
            <Route path="/carrito" element={<Carrito />} />
            <Route path="/Catalogo" element={<Catalogo />} />
+           <Route path="/respuesta-pago" element={<RespuestaPago />} />
         </Route>
+       
            
       
 
 
         <Route element={<ContentFooter />}>
-          <Route path="/Registrarse" element={<RegisterForm />} />
           <Route path="/login" element={<Login />} />
         </Route>
         
