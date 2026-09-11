@@ -26,13 +26,12 @@ function Avatar({ nombre }) {
     )
 }
 
-
 function RoleBadge({ rol }) {
     const role = (rol || '').toLowerCase()
 
     switch (role) {
         case 'administrador':
-        case 'admin' || 'repartidor' && 'vendedor':
+        case 'admin':
             return <span className='badge' style={{ background: '#6f42c1', color: 'white' }}>Admin</span>
         case 'cliente':
             return <span className='badge bg-primary bg-opacity-10 text-primary'>Cliente</span>
@@ -275,8 +274,8 @@ export default function Users() {
                                     </td>
                                     <td className='text-muted'>{u.correo}</td>
                                     <td>{u.telefono || '-'}</td>
-                                    <td className='text-secondary fw-bold'>
-                                         {u.rol_nombre || u.rol || 'cliente'} 
+                                    <td>
+                                        <RoleBadge rol={u.rol_nombre || u.rol || 'cliente'} />
                                     </td>
                                     <td><Active estado={u.activo} /></td>
                                     <td>

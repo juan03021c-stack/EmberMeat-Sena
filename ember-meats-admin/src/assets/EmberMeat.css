@@ -1542,21 +1542,3 @@ hr {
   color: #8c8478;
   opacity: 1;
 }
-
-/* ========== FIX: Precio y botón al fondo de la card (solo catálogo) ========== */
-
-.catalogo-page .product-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;          /* Ocupa toda la altura de la columna */
-}
-
-.catalogo-page .product-info {
-  display: flex;
-  flex-direction: column;
-  flex: 1;               /* Crece y empuja el bottom hacia abajo */
-}
-
-.catalogo-page .product-bottom {
-  margin-top: auto;      /* Se pega al fonde */
-}
