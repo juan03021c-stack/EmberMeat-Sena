@@ -34,7 +34,7 @@ export default function Ventas() {
     obtenerUsuarios().then(setVendedores).catch(() => setVendedores([]));
     cargarVentas();
   }, []);
-
+  
   function cargarVentas() {
     obtenerVentas().then(setVentas).catch(() => setVentas([]));
   }
@@ -47,7 +47,7 @@ export default function Ventas() {
     setCanalVenta("Punto de venta");
     setCarrito([]);
     setBusquedaProducto("");
-    setMetodoPago("Efectivo");
+    setMetodoPago("Transferencia");
     setDescuento(0);
     setModalAbierto(true);
   }
