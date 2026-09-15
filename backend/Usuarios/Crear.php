@@ -11,16 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once "../Config/Database.php";
 
-$nombre = trim($_POST['nombre'] ?? '');
-$correo = trim($_POST['correo'] ?? '');
+$nombre   = trim($_POST['nombre'] ?? '');
+$correo   = trim($_POST['correo'] ?? '');
+$cedula   = trim($_POST['cedula'] ?? '');       
 $telefono = trim($_POST['telefono'] ?? '');
-$rolId = $_POST['rol_id'] ?? '';
-$activo = isset($_POST['activo']) ? (((int)$_POST['activo']) === 0 ? 0 : 1) : 1;
+$rolId    = $_POST['rol_id'] ?? '';
+$activo   = isset($_POST['activo']) ? (((int)$_POST['activo']) === 0 ? 0 : 1) : 1;
 
 $password = trim($_POST['contrasena'] ?? '');
 $hashPassword = !empty($password)
     ? password_hash($password, PASSWORD_DEFAULT)
     : password_hash('Cambiar123!', PASSWORD_DEFAULT);
+
+// ─── VALIDACIONES ───
 
 if (empty($nombre) || empty($correo)) {
     echo json_encode([
@@ -30,6 +33,13 @@ if (empty($nombre) || empty($correo)) {
     exit;
 }
 
+if (empty($cedula)) {                              
+    echo json_encode([
+        "success" => false,
+        "message" => "La cédula es obligatoria"
+    ]);
+    exit;
+}
 
 if (strlen($nombre) > 255) {
     echo json_encode([
@@ -66,9 +76,9 @@ if ($rolId === '' || !is_numeric($rolId)) {
 $rolId = (int)$rolId;
 
 try {
-   
     $pdo->beginTransaction();
 
+    // Validar que el rol exista
     $checkRole = $pdo->prepare("SELECT id FROM roles WHERE id = :id");
     $checkRole->execute([':id' => $rolId]);
     if (!$checkRole->fetch(PDO::FETCH_ASSOC)) {
@@ -80,6 +90,7 @@ try {
         exit;
     }
 
+    // Validar que el correo no exista
     $checkCorreo = $pdo->prepare("SELECT id FROM usuarios WHERE correo = :correo LIMIT 1");
     $checkCorreo->execute([':correo' => $correo]);
     if ($checkCorreo->fetch(PDO::FETCH_ASSOC)) {
@@ -91,46 +102,45 @@ try {
         exit;
     }
 
+    // ← NUEVO: Validar que la cédula no exista
+    $checkCedula = $pdo->prepare("SELECT id FROM usuarios WHERE cedula = :cedula LIMIT 1");
+    $checkCedula->execute([':cedula' => $cedula]);
+    if ($checkCedula->fetch(PDO::FETCH_ASSOC)) {
+        $pdo->rollBack();
+        echo json_encode([
+            "success" => false,
+            "message" => "La cédula ya está registrada"
+        ]);
+        exit;
+    }
+
+    // Insertar con cédula incluida
     $stmt = $pdo->prepare(
-        "INSERT INTO usuarios (nombre, correo, telefono, rol_id, activo, contrasena_hash)
-         VALUES (:nombre, :correo, :telefono, :rol_id, :activo, :contrasena_hash)"
+        "INSERT INTO usuarios (nombre, correo, cedula, telefono, rol_id, activo, contrasena_hash)
+         VALUES (:nombre, :correo, :cedula, :telefono, :rol_id, :activo, :contrasena_hash)"
     );
 
     $stmt->execute([
-        ':nombre' => $nombre,
-        ':correo' => $correo,
-        ':telefono' => $telefono !== '' ? $telefono : null,
-        ':rol_id' => $rolId,
-        ':activo' => $activo,
+        ':nombre'          => $nombre,
+        ':correo'          => $correo,
+        ':cedula'          => $cedula,                 // ← NUEVO
+        ':telefono'        => $telefono !== '' ? $telefono : null,
+        ':rol_id'          => $rolId,
+        ':activo'          => $activo,
         ':contrasena_hash' => $hashPassword
     ]);
 
     $pdo->commit();
 
-   
-    /*
-    $nuevoId = $pdo->lastInsertId();
-    $usuarioStmt = $pdo->prepare(
-        "SELECT u.*, r.nombre AS rol_nombre
-         FROM usuarios u
-         INNER JOIN roles r ON u.rol_id = r.id
-         WHERE u.id = :id"
-    );
-    $usuarioStmt->execute([':id' => $nuevoId]);
-    $usuarioCreado = $usuarioStmt->fetch(PDO::FETCH_ASSOC);
-    */
-
     echo json_encode([
         "success" => true,
         "message" => "Usuario creado correctamente"
-        
     ]);
 
 } catch (PDOException $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
-
     echo json_encode([
         "success" => false,
         "message" => "Error al crear el usuario. Intente más tarde."
