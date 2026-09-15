@@ -150,11 +150,11 @@ export default function Orders() {
         <div className='p-4'>
             <div className='d-flex justify-content-between align-items-center mb-4'>
                 <div>
-                    <h4 className='fw-bold mb-1'>Ordenes</h4>
-                    <small className='text-muted'>{orders.length} Ordenes</small>
+                    <h3 className='fw-bold mb-1'>Gestion de pedidos</h3>
+                    <small className='text-muted'>{orders.length} pedidos</small>
                 </div>
                 <button className='btn btn-ember' type='button' onClick={abrirModalNuevo}>
-                    Crear Orden
+                    Crear pedido
                 </button>
             </div>
             <OrdenModal
@@ -171,8 +171,8 @@ export default function Orders() {
             />
             <div className='card border-0 p-3'>
                 {/* Filtro por estado */}
-                <select className='form-select w-auto mb-3'
-                    value={filter} onChange={e => setFilter(e.target.value)}>
+                <select className='form-select w-auto mb-3' value={filter} onChange={e => setFilter(e.target.value)}>
+
                     {STATUSES.map(s => (
                         <option key={s}>{s === 'ALL' ? 'ALL Statuses' : s}</option>
                     ))}
@@ -181,28 +181,20 @@ export default function Orders() {
                 <table className='table'>
                     <thead>
                         <tr>
-                            <th>Ordenes#</th><th>Clientes</th><th>Fecha</th>
-                            <th>Elementos</th><th>Total</th><th>Estado</th><th>Acciones</th>
+                            <th>#Pedido</th><th>Fecha</th><th>Cliente</th><th>Modalidad</th>
+                            <th>Total</th><th>Estado</th><th>Vendedor</th><th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filtered.map(o => (
+                        {orders.map(o => (
                             <tr key={o.id}>
                                 <td className='text-danger'>{o.id}</td>
-                                <td>{o.customer}</td>
                                 <td>{o.date}</td>
-                                <td>{o.items}</td>
+                                <td>{o.customer}</td>
+                                <td>{o.modality}</td>
                                 <td>{o.total}</td>
-                                <td>
-                                    <select className='form-select form-select-sm w-auto'
-                                        value={o.status}
-                                        onChange={e => updateStatus(o.id, e.target.value)}>
-                                        <Insignia status={o.status} />
-                                        {ORDER_STATUS_OPTIONS.map(s =>
-                                            <option key={s}>{s}</option>
-                                        )}
-                                    </select>
-                                </td>
+                                <td>{o.status}</td>
+                                <td>{o.seller}</td>
                                 <td >
                                     <button className='btn btn-sm btn-outline-secondary me-2' type='button' onClick={() => abrirModalEdicion(o)}>
                                         Editar
