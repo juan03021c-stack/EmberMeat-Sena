@@ -1,0 +1,428 @@
+/* ============================================================================
+   NUEVA VENTA MODAL — ESTILOS
+   ============================================================================
+   Archivo: src/components/NuevaVentaModal.css
+
+   Estos estilos son específicos del componente NuevaVentaModal.jsx.
+   Todos los nombres de clase empiezan con "nvm-" para evitar conflictos
+   con otros estilos del proyecto.
+
+   COLORES PRINCIPALES:
+   - Naranja EmberMeat: #c2410c (botones primarios, precios, total)
+   - Verde éxito:      #16a34a (botón confirmar, pasos completados)
+   - Gris bordes:      #e5e7eb (inputs, bordes de tarjetas)
+   - Gris texto:       #9ca3af (subtítulos, placeholders)
+   ============================================================================ */
+
+/* ────────────────────────────────────────────────────────────────────────────
+   OVERLAY (fondo oscuro detrás del modal)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-overlay {
+  position: fixed;           /* Fijo en la pantalla, no se mueve con el scroll */
+  inset: 0;                  /* Ocupa toda la pantalla: top, right, bottom, left = 0 */
+  background: rgba(0, 0, 0, 0.45); /* Negro semi-transparente (45% opacidad) */
+  display: flex;             /* Centra el modal con flexbox */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;             /* Por encima de todo lo demás */
+  padding: 1rem;               /* Margen en pantallas pequeñas */
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   MODAL (caja blanca central)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-modal {
+  background: #fff;          /* Fondo blanco */
+  border-radius: 16px;       /* Esquinas redondeadas */
+  width: 100%;               /* Ocupa todo el ancho disponible */
+  max-width: 520px;          /* Pero nunca más de 520px */
+  max-height: 90vh;          /* Nunca más del 90% de la altura de la pantalla */
+  display: flex;
+  flex-direction: column;      /* Header → Steps → Body → Footer en columna */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25); /* Sombra suave */
+  overflow: hidden;            /* Esconde lo que se salga de los bordes redondeados */
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   HEADER (título + botón cerrar)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 1.5rem 0.75rem;
+  border-bottom: 1px solid #f0f0f0; /* Línea separadora sutil */
+}
+
+.nvm-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Subtítulo: "Paso 1 de 3 — Cliente" */
+.nvm-subtitle {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Botón X para cerrar el modal */
+.nvm-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #9ca3af;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.nvm-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   STEPS / STEPPER (indicador de pasos 1→2→3)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Cada paso: círculo + texto */
+.nvm-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #9ca3af;            /* Color gris por defecto (inactivo) */
+}
+
+/* Paso activo (el paso actual) */
+.nvm-step.active {
+  color: #1f2937;
+  font-weight: 500;
+}
+
+/* Paso completado (los anteriores al actual) */
+.nvm-step.done {
+  color: #16a34a;            /* Verde = completado */
+}
+
+/* Círculo del número del paso */
+.nvm-step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e5e7eb;       /* Gris = inactivo */
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Círculo activo: naranja EmberMeat */
+.nvm-step.active .nvm-step-circle {
+  background: #c2410c;
+  color: #fff;
+}
+
+/* Círculo completado: verde */
+.nvm-step.done .nvm-step-circle {
+  background: #16a34a;
+  color: #fff;
+}
+
+/* Línea conectora entre pasos */
+.nvm-step-line {
+  flex: 1;
+  height: 2px;
+  background: #e5e7eb;       /* Gris = no recorrida */
+  max-width: 40px;
+  border-radius: 1px;
+}
+
+/* Línea recorrida: verde */
+.nvm-step-line.active {
+  background: #16a34a;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   BODY (contenido de cada paso)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;            /* Scroll si el contenido es muy largo */
+  flex: 1;                     /* Ocupa todo el espacio disponible */
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   FIELDS (grupos label + input/select)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-field {
+  margin-bottom: 1.25rem;
+}
+
+.nvm-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+/* Select e input comparten estilo base */
+.nvm-select,
+.nvm-input {
+  width: 100%;
+  padding: 0.65rem 0.875rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #1f2937;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+/* Focus: borde naranja + sombra suave */
+.nvm-select:focus,
+.nvm-input:focus {
+  border-color: #c2410c;
+  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.1);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   CANAL CARDS (Punto de venta / Domicilio)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-canal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 columnas iguales */
+  gap: 0.75rem;
+}
+
+.nvm-canal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #4b5563;
+  transition: all 0.15s;
+}
+
+/* Canal seleccionado: borde naranja + fondo cálido */
+.nvm-canal-card.selected {
+  border-color: #c2410c;
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   PAGO CARDS (Efectivo, Tarjeta, Nequi, Bancolombia)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-pago-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.nvm-pago-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #4b5563;
+  transition: all 0.15s;
+}
+
+/* Pago seleccionado: borde verde + fondo verde claro */
+.nvm-pago-card.selected {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+/* Punto de color que indica cada método de pago */
+.nvm-pago-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;              /* No se encoge */
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   RESUMEN MINI (subtotal en paso 2)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-resumen-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.nvm-resumen-mini strong {
+  color: #c2410c;            /* Naranja = precio */
+  font-size: 1rem;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   RESUMEN COMPLETO DEL PEDIDO (paso 3)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-resumen-pedido {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Título "Resumen del pedido" en mayúsculas pequeñas */
+.nvm-resumen-pedido h4 {
+  margin: 0 0 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Cada línea del resumen: Cliente: Juan Pérez */
+.nvm-resumen-linea {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Etiqueta a la izquierda (más clara) */
+.nvm-resumen-linea span:first-child {
+  color: #9ca3af;
+}
+
+/* Línea de descuento: verde */
+.nvm-resumen-linea.descuento {
+  color: #16a34a;
+}
+
+/* Línea del total: más grande, con borde superior */
+.nvm-resumen-linea.total {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  font-size: 1rem;
+}
+
+.nvm-resumen-linea.total strong {
+  color: #c2410c;            /* Naranja = total final */
+  font-size: 1.15rem;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   FOOTER (botones Atrás / Siguiente / Confirmar)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem 1.5rem;
+  gap: 0.75rem;
+}
+
+/* Botón Atrás (gris, borde suave) */
+.nvm-btn-atras {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #6b7280;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.nvm-btn-atras:hover {
+  background: #f3f4f6;
+}
+
+/* Botón Siguiente (naranja EmberMeat) */
+.nvm-btn-siguiente {
+  flex: 1;                     /* Ocupa todo el espacio restante */
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: #c2410c;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.nvm-btn-siguiente:hover:not(:disabled) {
+  background: #9a3412;         /* Naranja más oscuro al pasar el mouse */
+}
+
+/* Botón deshabilitado (cuando falta información) */
+.nvm-btn-siguiente:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Botón Confirmar venta (verde) */
+.nvm-btn-confirmar {
+  flex: 1;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.nvm-btn-confirmar:hover {
+  background: #15803d;         /* Verde más oscuro */
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   SCROLLBAR PERSONALIZADA (solo WebKit: Chrome, Safari, Edge)
+   ──────────────────────────────────────────────────────────────────────────── */
+.nvm-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.nvm-body::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}

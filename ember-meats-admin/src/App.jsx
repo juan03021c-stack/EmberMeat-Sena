@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { CarritoProvider } from './components/CarritoContext'
 import Dashboard from './pages/Dashboard'
@@ -14,6 +13,7 @@ import Carrito from './pages/Carrito'
 import AdminLayout from './components/AdminLayout'
 import AdminNavbarLayout from './components/home/AdminNavbarLayout'
 import Catalogo from './pages/Catalogo'
+import Ventas from './pages/Ventas'
 
 
 export default function App() {
@@ -41,6 +41,7 @@ export default function App() {
           <Route path="/productos" element={<Products />} />
           <Route path="/ordenes" element={<Orders />} />
           <Route path="/usuarios" element={<Users />} />
+          <Route path="/ventas" element={<Ventas />} />
         </Route>
       </Routes>
 

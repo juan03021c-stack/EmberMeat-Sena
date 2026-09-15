@@ -5,6 +5,7 @@ const navItems = [
   { path: '/productos', label: 'Productos', icon: 'bi-box-seam' },
   { path: '/ordenes', label: 'Ordenes', icon: 'bi-receipt' },
   { path: '/usuarios', label: 'Usuarios', icon: 'bi-people' },
+  { path: '/ventas', label: 'Ventas', icon: 'bi-cash-coin' },
   { path: '/reportes', label: 'Reportes', icon: 'bi-bar-chart' },
 ]
 
