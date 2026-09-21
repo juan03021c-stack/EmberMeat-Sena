@@ -11,9 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . "/../Database.php";
 
+/* Obtener el ID de la transacción o la referencia */
 $transactionId = $_GET['id'] ?? null;
 $referenceQuery = $_GET['reference'] ?? null;
 
+/* valida que se reciba el ID o la referencia */
 if (empty($transactionId) && empty($referenceQuery)) {
     echo json_encode([
         'success' => false,
@@ -22,14 +24,17 @@ if (empty($transactionId) && empty($referenceQuery)) {
     exit;
 }
 
-// Determinar el ambiente de Wompi (Sandbox vs Producción)
+/* Determinar el ambiente de Wompi (Sandbox vs Producción) 
+si la public key comienza con 'pub_test_' es sandbox, si no es producción */
 $isSandbox = strpos(WOMPI_PUBLIC_KEY, 'pub_test_') === 0;
 $baseUrl = $isSandbox ? 'https://sandbox.wompi.co/v1' : 'https://production.wompi.co/v1';
 
+/* Construir la URL para consultar la transacción */
 $url = !empty($transactionId)
     ? "{$baseUrl}/transactions/" . rawurlencode($transactionId)
     : "{$baseUrl}/transactions?reference=" . rawurlencode($referenceQuery);
 
+/* Realizar la solicitud a la API de Wompi */
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -37,13 +42,18 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer ' . (defined('WOMPI_PRIVATE_KEY') ? WOMPI_PRIVATE_KEY : WOMPI_PUBLIC_KEY),
     'Accept: application/json'
 ]);
+/* Establecer un tiempo máximo de espera */
 curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 
+/* Ejecutar la solicitud y capturar la respuesta */
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
+
+/* Cerrar la sesión de cURL */
 curl_close($ch);
 
+/* Validar si hubo un error en la solicitud */
 if ($curlError) {
     echo json_encode([
         'success' => false,
@@ -52,8 +62,10 @@ if ($curlError) {
     exit;
 }
 
+/* Decodificar la respuesta de Wompi */
 $data = json_decode($response, true);
 
+/* Validar si la respuesta fue exitosa */
 if ($httpCode !== 200 || !isset($data['data'])) {
     echo json_encode([
         'success' => false,
@@ -63,11 +75,13 @@ if ($httpCode !== 200 || !isset($data['data'])) {
     exit;
 }
 
+/* Procesar la respuesta de Wompi */
 $transaction = $data['data'];
 if (empty($transactionId)) {
     $transaction = is_array($transaction) && isset($transaction[0]) ? $transaction[0] : null;
 }
 
+/* Validar si la transacción existe */
 if (!$transaction || empty($transaction['id'])) {
     echo json_encode([
         'success' => false,
@@ -76,6 +90,8 @@ if (!$transaction || empty($transaction['id'])) {
     ]);
     exit;
 }
+
+/* Extracción de datos de la transacción */
 $referencia = $transaction['reference'] ?? '';
 $status = strtoupper($transaction['status'] ?? '');
 $metodoRaw = strtoupper($transaction['payment_method_type'] ?? 'PSE');
@@ -100,7 +116,7 @@ if ($status === 'APPROVED') {
     $estadoTransaccion = 'error';
 }
 
-// Mapeo para `metodo_pago` ('tarjeta_credito','tarjeta_debito','pse','efectivo','transferencia')
+/* Mapeo para `metodo_pago` ('tarjeta_credito','tarjeta_debito','pse','efectivo','transferencia') */
 $metodoPagoDb = 'pse';
 if (strpos($metodoRaw, 'CARD') !== false) {
     $metodoPagoDb = 'tarjeta_credito';
@@ -108,15 +124,17 @@ if (strpos($metodoRaw, 'CARD') !== false) {
     $metodoPagoDb = 'transferencia';
 }
 
-// Actualizar en base de datos si el pedido existe
+/* Actualizar en base de datos si el pedido existe */
 $baseDatosSincronizada = false;
 $errorBaseDatos = null;
 if (!empty($referencia)) {
     try {
+        /* Consultar el pedido local */
         $stmtBuscarPedido = $pdo->prepare("SELECT id FROM pedidos WHERE numero_pedido = :referencia LIMIT 1");
         $stmtBuscarPedido->execute([':referencia' => $referencia]);
         $pedidoRow = $stmtBuscarPedido->fetch(PDO::FETCH_ASSOC);
 
+        /* Actualizar estado del pedido */
         if ($pedidoRow) {
             $pedidoId = (int)$pedidoRow['id'];
             $stmtUpdatePedido = $pdo->prepare("UPDATE pedidos SET estado = :estado WHERE id = :id");
@@ -125,17 +143,20 @@ if (!empty($referencia)) {
                 ':id'     => $pedidoId
             ]);
 
-            // Actualizar o registrar en `transacciones`
+            /* verificar si existe el registro de la transacción */
             $stmtCheckTrans = $pdo->prepare("SELECT id FROM transacciones WHERE referencia = :ref OR wompi_transaction_id = :wid LIMIT 1");
             $stmtCheckTrans->execute([':ref' => $referencia, ':wid' => $transaction['id']]);
             $transRow = $stmtCheckTrans->fetch(PDO::FETCH_ASSOC);
 
+            /* si existe actualiza el registro*/
             if ($transRow) {
                 $stmtUpTrans = $pdo->prepare("
                     UPDATE transacciones 
                     SET wompi_transaction_id = :wid, estado = :estado, metodo_pago = :metodo, monto = :monto, moneda = 'COP'
                     WHERE id = :id
                 ");
+
+                /* Ejecutar la actualización */
                 $stmtUpTrans->execute([
                     ':wid'    => $transaction['id'],
                     ':estado' => $estadoTransaccion,
@@ -144,6 +165,7 @@ if (!empty($referencia)) {
                     ':id'     => $transRow['id']
                 ]);
                 $baseDatosSincronizada = true;
+            /* si no existe, creamos el registro nuevo*/
             } else {
                 $stmtInTrans = $pdo->prepare("
                     INSERT INTO transacciones (pedido_id, wompi_transaction_id, metodo_pago, monto, estado, referencia, moneda)
@@ -168,6 +190,7 @@ if (!empty($referencia)) {
     }
 }
 
+/* respuesta final al cliente,  esto devuele toda la informacion procesada al backend */
 echo json_encode([
     'success' => true,
     'data' => [
