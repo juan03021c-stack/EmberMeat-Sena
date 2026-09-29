@@ -264,7 +264,7 @@ export default function Products() {
                 </tr>
               ) : (
                 productosFiltrados.map((producto) => (
-                  <tr key={producto.id}>
+                  <tr key={producto.id }>
                     <td>
                       <div className='d-flex align-items-center gap-3'>
                         {producto.imagen_url ? (

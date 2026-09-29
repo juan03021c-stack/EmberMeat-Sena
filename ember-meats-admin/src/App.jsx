@@ -14,40 +14,46 @@ import AdminNavbarLayout from './components/home/AdminNavbarLayout'
 import Catalogo from './pages/Catalogo'
 import Ventas from './pages/Ventas'
 import RespuestaPago from './pages/RespuestaPago'
+import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
 
 export default function App() {
   return (
-    <CarritoProvider>    <Router>
-      <Routes>
+    <>
+      <Router>
+        <CarritoProvider>
+          <ScrollToTop />
 
-        <Route element={<AdminNavbarLayout />}>
-          <Route path="/" element={<Inicio />} />
-           <Route path="/carrito" element={<Carrito />} />
-           <Route path="/Catalogo" element={<Catalogo />} />
-           <Route path="/respuesta-pago" element={<RespuestaPago />} />
-        </Route>
-       
-           
-      
+          <Routes>
 
-
-        <Route element={<ContentFooter />}>
-          <Route path="/login" element={<Login />} />
-        </Route>
+            <Route element={<AdminNavbarLayout />}>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/carrito" element={<Carrito />} />
+            <Route path="/Catalogo" element={<Catalogo />} />
+            <Route path="/respuesta-pago" element={<RespuestaPago />} />
+          </Route>
+        
+            
         
 
-        <Route element={<AdminLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/productos" element={<Products />} />
-          <Route path="/ordenes" element={<Orders />} />
-          <Route path="/usuarios" element={<Users />} />
-          <Route path="/ventas" element={<Ventas />} />
-        </Route>
-      </Routes>
 
+          <Route element={<ContentFooter />}>
+            <Route path="/login" element={<Login />} />
+          </Route>
+          
+
+          <Route element={<AdminLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/productos" element={<Products />} />
+            <Route path="/ordenes" element={<Orders />} />
+            <Route path="/usuarios" element={<Users />} />
+            <Route path="/ventas" element={<Ventas />} />
+          </Route>
+        </Routes>
+
+        <ScrollToTop />
+      </CarritoProvider>
     </Router>
-  </CarritoProvider>
-
+</>
   )
 }

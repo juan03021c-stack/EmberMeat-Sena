@@ -883,7 +883,7 @@ body {
   max-width: 500px;
   margin: 0 auto;
   color: var(--ember-cta-text);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.6;
 }
 

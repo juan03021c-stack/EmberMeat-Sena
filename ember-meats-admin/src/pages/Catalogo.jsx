@@ -18,7 +18,7 @@ function formatoPrecio(valor) {
 // -----------------------------------------------------------------------
 // Card horizontal
 // -----------------------------------------------------------------------
-function ProductoCard({ producto }) {
+function ProductoCard({ producto}) {
   const { agregarAlCarrito } = useCarrito();
   const disponible = producto.activo == 1;
   const sinStock = producto.stock == 0;
@@ -90,7 +90,6 @@ export default function Catalogo() {
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [categoriasSel, setCategoriasSel] = useState([]);
-  const [disponibilidad, setDisponibilidad] = useState("todos");
   const [orden, setOrden] = useState("relevancia");
 
   // Cargar productos y categorías desde la API
@@ -131,16 +130,13 @@ export default function Catalogo() {
   const limpiarFiltros = () => {
     setBusqueda("");
     setCategoriasSel([]);
-    setDisponibilidad("todos");
-
   };
 
   const productosFiltrados = useMemo(() => {
     let lista = productos.filter((p) => {
       const coincideBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase());
       const coincideCategoria = categoriasSel.length === 0 || categoriasSel.includes(p.categoria_nombre);
-      const coincideDisponibilidad = disponibilidad === "todos" || p.activo == 1 && p.stock >= 1;
-      return coincideBusqueda && coincideCategoria && coincideDisponibilidad;
+      return coincideBusqueda && coincideCategoria;
     });
 
     if (orden === "precio-asc") {
@@ -152,7 +148,7 @@ export default function Catalogo() {
     }
 
     return lista;
-  }, [busqueda, categoriasSel, disponibilidad, orden, productos]);
+  }, [busqueda, categoriasSel, orden, productos]);
 
   return (
     <div className="catalogo-page">
@@ -216,32 +212,7 @@ export default function Catalogo() {
                   )}
                  
                 </div>
-
-                {/* Disponibilidad */}
                 <div className="mb-4">
-                  <h3 className="filtro-subtitulo">Disponibilidad</h3>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="disponibilidad"
-                      id="disp-todos"
-                      checked={disponibilidad === "todos"}
-                      onChange={() => setDisponibilidad("todos")}
-                    />
-                    <label className="form-check-label" htmlFor="disp-todos">Todos</label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="disponibilidad"
-                      id="disp-solo"
-                      checked={disponibilidad === "disponibles"}
-                      onChange={() => setDisponibilidad("disponibles")}
-                    />
-                    <label className="form-check-label" htmlFor="disp-solo">Solo disponibles</label>
-                  </div>
                  <NavLink to="/" className="btn btn-secondary me-2">Regresar al inicio</NavLink>
                 </div>
               </div>

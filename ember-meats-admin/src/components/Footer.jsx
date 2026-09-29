@@ -1,6 +1,6 @@
 // Solo importa los de lucide que SÍ funcionan
 import { MapPin, Phone, Mail, Flame } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 export default function Footer() {
     return (
@@ -14,7 +14,7 @@ export default function Footer() {
                                 EmberMeat
                             </span>
                         </div>
-                        <p className="fs-6 lh-base">
+                        <p className="fs-6 lh-base text-white">
                             Embutidos artesanales de Antioquia, elaborados con recetas tradicionales y materias primas de la más alta calidad.
                         </p>
                         <div className="d-flex gap-3 mt-4">
@@ -37,38 +37,35 @@ export default function Footer() {
 
                     {/* Links */}
                     <div className="col-12 col-md-4">
-                        <h4 className="text-white mb-4 fs-6 fw-medium">Links rápidos</h4>
+                        <h4 className="text-white mb-4 fs-6 fw-bold">Links rápidos</h4>
                         <ul className="list-unstyled fs-6">
                             <li className="mb-2">
-                                <Link to="/" className="footer-link">Inicio</Link>
+                                <NavLink to="" className="footer-link">Inicio</NavLink>
                             </li>
                             <li className="mb-2">
-                                <Link to="/catalogo" className="footer-link">Catálogo</Link>
+                                <NavLink to="/catalogo" className="footer-link">Catálogo</NavLink>
                             </li>
                             <li className="mb-2">
-                                <Link to="/registro" className="footer-link">Crear cuenta</Link>
-                            </li>
-                            <li className="mb-2">
-                                <Link to="/login" className="footer-link">Iniciar sesión</Link>
+                                <NavLink to="/login" className="footer-link">Iniciar sesión</NavLink>
                             </li>
                         </ul>
                     </div>
 
                     {/* Contact */}
                     <div className="col-12 col-md-4">
-                        <h4 className="text-white mb-4 fs-6 fw-medium">Contacto</h4>
+                        <h4 className="text-white mb-4 fs-6 fw-bold">Contacto</h4>
                         <ul className="list-unstyled fs-6">
                             <li className="d-flex align-items-center gap-2 mb-3">
                                 <MapPin size={16} />
-                                <span>Antioquia, Colombia</span>
+                                <span className="text-white">Antioquia, Colombia</span>
                             </li>
                             <li className="d-flex align-items-center gap-2 mb-3">
                                 <Phone size={16} />
-                                <span>+57 300 000 0000</span>
+                                <span className="text-white">+57 300 000 0000</span>
                             </li>
                             <li className="d-flex align-items-center gap-2 mb-3">
                                 <Mail size={16} />
-                                <span>hola@embermeat.co</span>
+                                <span className="text-white">hola@embermeat.co</span>
                             </li>
                         </ul>
                     </div>
@@ -77,7 +74,7 @@ export default function Footer() {
 
             <div className="border-top footer-bottom px-4 py-3 text-center">
                 <span style={{ fontSize: '0.75rem' }}>
-                    © 2025 EmberMeat · Embert Meat S.A.S · Todos los derechos reservados
+                    © 2026 EmberMeat · Embert Meat S.A.S · Todos los derechos reservados
                 </span>
             </div>
         </footer>

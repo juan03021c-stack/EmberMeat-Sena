@@ -51,8 +51,7 @@ export default function Home() {
   return (
     <div className="home">
       {/* HERO */}
-      <section
-
+      <section id="inicio"
         className="hero"
         style={{
           backgroundImage: "url('/imagess/principal.jpeg')"
@@ -258,12 +257,11 @@ export default function Home() {
       {/* LLAMADO A LA ACCIÓN */}
       <section className="cta">
         <h2>¿Listo para probar lo auténtico?</h2>
-        <p>
-          Únete a nuestra familia y recibe los mejores
-          embutidos directo en la puerta de tu casa.
+        <p className='fw-bold'>
+          Estas preparado para una experiencia llena de sabor y calidad?
         </p>
-        <NavLink to="/Registrarse" className="cta-button">
-          Crear cuenta ahora
+        <NavLink to="/Catalogo" className="cta-button">
+          Ver catalogo
         </NavLink>
       </section>
     </div>
