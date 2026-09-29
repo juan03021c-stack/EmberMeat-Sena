@@ -209,7 +209,7 @@ export default function Ventas() {
                     <td>{v.cliente}</td>
                     <td>{v.canal}</td>
                     <td>{v.metodo_pago}</td>
-                    <td>{v.productos ? v.productos.length : 0} items</td>
+                    <td>{v.productos ? v.productos.length : 0} Productos</td>
                     <td className="fw-semibold text-danger">
                       ${precioSeguro(v.total).toLocaleString()}
                     </td>
@@ -328,7 +328,7 @@ export default function Ventas() {
                             className={
                               "btn flex-grow-1 " +
                               (canalVenta === canal
-                                ? "btn-outline-danger border-2"
+                                ? "btn-danger"
                                 : "btn-outline-secondary")
                             }
                             onClick={() => setCanalVenta(canal)}
@@ -419,7 +419,7 @@ export default function Ventas() {
                                 className={
                                   "btn w-100 text-start " +
                                   (metodoPago === metodo
-                                    ? "btn-outline-success border-2"
+                                    ? "btn-success"
                                     : "btn-outline-secondary")
                                 }
                                 onClick={() => setMetodoPago(metodo)}
@@ -452,7 +452,7 @@ export default function Ventas() {
                         </div>
                         <div className="d-flex justify-content-between">
                           <span>Productos</span>
-                          <span>{carrito.length} items</span>
+                          <span>{carrito.length} Productos</span>
                         </div>
                         <div className="d-flex justify-content-between">
                           <span>Subtotal</span>

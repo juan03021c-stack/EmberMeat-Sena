@@ -1,4 +1,4 @@
-const URL_BASE = "http://localhost/clone/EmberMeat-Sena/backend";
+const URL_BASE = "http://localhost:8080/proyecto/backend";
 export { URL_BASE };
 
 export async function obtenerProductos() {
@@ -16,6 +16,7 @@ export async function obtenerProductos() {
         throw error;
     }
 }
+
 
 export async function obtenerUsuarios() {
     try {
@@ -53,6 +54,7 @@ export async function crearProducto(datosFormulario) {
         const respuesta = await fetch(`${URL_BASE}/Productos/Crear.php`, {
             method: "POST",
             body: datosFormulario,
+            
         });
         if (!respuesta.ok) {
             throw new Error("Error al crear el producto");
