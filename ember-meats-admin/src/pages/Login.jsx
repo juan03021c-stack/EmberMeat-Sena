@@ -84,13 +84,6 @@ export default function LoginForm() {
             <span className="ember-divider-text">o</span>
             <span className="ember-divider-line"></span>
           </div>
-
-          <p className="ember-register">
-            ¿No tienes cuenta?{' '}
-            <NavLink to="/Registrarse" className="ember-register-link">
-              Regístrate
-            </NavLink>
-          </p>
         </form>
       </div>
     </div>
