@@ -43,12 +43,24 @@ $correo = trim($cliente['email'] ?? $cliente['correo'] ?? '');
 $telefono = trim($cliente['telefono'] ?? '');
 $direccion = trim($cliente['direccion'] ?? '');
 $cedula = trim($cliente['cedula'] ?? '');
-$metodoEnvioRaw = trim($cliente['metodoEnvio'] ?? $cliente['metodo_envio'] ?? 'domicilio');
+$metodoEnvioRaw = trim(
+    $cliente['modalidad_entrega'] ?? 
+    $cliente['modalidad'] ?? 
+    $cliente['metodoEnvio'] ?? 
+    $cliente['metodo_envio'] ?? 
+    $_POST['modalidad_entrega'] ?? 
+    $_POST['metodo_envio'] ?? 
+    'domicilio'
+);
 
 /* --- Mapear modalidad de entrega en la base de datos ('domicilio', 'recogida_punto') ---*/
-$modalidadEntrega = ($metodoEnvioRaw === 'tienda' || $metodoEnvioRaw === 'recogida_punto')
-    ? 'recogida_punto'
-    : 'domicilio';
+$metodoEnvioLower = strtolower($metodoEnvioRaw);
+$modalidadEntrega = (
+    strpos($metodoEnvioLower, 'tienda') !== false || 
+    strpos($metodoEnvioLower, 'recogid') !== false || 
+    strpos($metodoEnvioLower, 'punto') !== false ||
+    strpos($metodoEnvioLower, 'recoger') !== false
+) ? 'recogida_punto' : 'domicilio';
 
 /* --- Validaciones básicas ---*/
 if (empty($nombre) || empty($correo)) {

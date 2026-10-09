@@ -1,7 +1,31 @@
 import { useEffect, useState } from "react";
-import { obtenerClientes, obtenerProductos, obtenerUsuarios, obtenerVentas, crearVenta } from "../services/Api";
+import { 
+  obtenerClientes, 
+  obtenerProductos, 
+  obtenerUsuarios, 
+  obtenerVentas, 
+  crearVenta,
+  URL_BASE } from "../services/Api";
 
 const PASOS = ["Cliente", "Productos", "Pago"];
+// funcion del avatar 
+function Avatar({ cliente }) {
+    const initials = (cliente || 'v')
+        .split(' ')
+        .filter(Boolean)
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+
+    return (
+        <div
+            className='rounded-circle d-flex align-items-center justify-content-center text-white fw-medium'
+            style={{ width: 36, height: 36, background: '#7B1F1F', fontSize: 13 }}
+        >
+            {initials}
+        </div>
+    )
+}
 
 // Convierte cualquier valor de precio a un número seguro (nunca NaN)
 function precioSeguro(valor) {
@@ -10,7 +34,7 @@ function precioSeguro(valor) {
 }
 
 export default function Ventas() {
-  const [clientes, setClientes] = useState([]);
+  const [d, setClientes] = useState([]);
   const [productos, setProductos] = useState([]);
   const [vendedores, setVendedores] = useState([]);
   const [ventas, setVentas] = useState([]);
@@ -154,7 +178,7 @@ export default function Ventas() {
         <div>
           <h2 className="mb-0">Ventas</h2>
           <small className="text-secondary">
-            {clientes.length} clientes registrados
+            {d.length} clientes registrados
           </small>
         </div>
         <button className="btn btn-danger" onClick={abrirModal}>
@@ -170,14 +194,33 @@ export default function Ventas() {
           <table className="table">
             <thead>
               <tr>
-                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Descripción</th>
+                <th>Stock</th>
                 <th>Precio</th>
               </tr>
             </thead>
             <tbody>
               {productos.map((p) => (
                 <tr key={p.id}>
-                  <td>{p.nombre}</td>
+                  <td> <div className='d-flex align-items-center gap-3'>
+                        {p.imagen_url ? (
+                          <img
+                            src={`${URL_BASE}/${p.imagen_url}`}
+                            style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8 }}
+                          />
+                        ) : (
+                          <div style={{ width: 48, height: 48, background: '#eee', borderRadius: 8 }} />
+                        )}
+                        <div>
+                          <div className='fw-semibold'>{p.nombre}</div>
+                          <div className='text-muted small'>{p.presentacion || '-'}</div>
+                        </div>
+                      </div></td>
+                 
+                  <td>{p.descripcion}</td>
+                  <td>{p.stock}</td>
+                 
                   <td>${precioSeguro(p.precio).toLocaleString()}</td>
                 </tr>
               ))}
@@ -193,20 +236,25 @@ export default function Ventas() {
         ) : (
           <div className="table-responsive">
             <table className="table table-hover align-middle">
-              <thead>
-                <tr>
-                  <th>Cliente</th>
-                  <th>Canal</th>
-                  <th>Método de pago</th>
-                  <th>Productos</th>
-                  <th>Total</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
+                  <thead>
+                    <tr>
+                      <th>Cliente</th>
+                      <th>Canal</th>
+                      <th>Método de pago</th>
+                      <th>Productos</th>
+                      <th>Total</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                 {ventas.map((v) => (
                   <tr key={v.id}>
-                    <td>{v.cliente}</td>
+                    <td>
+                        <div className='d-flex align-items-center gap-2'>
+                          <Avatar cliente={v.cliente} />
+                          <span>{v.cliente}</span>
+                        </div>
+                      </td>
                     <td>{v.canal}</td>
                     <td>{v.metodo_pago}</td>
                     <td>{v.productos ? v.productos.length : 0} Productos</td>

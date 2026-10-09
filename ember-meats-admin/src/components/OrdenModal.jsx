@@ -63,16 +63,32 @@ export default function OrdenModal({
                                     </div>
 
                                     <div className='col-md-6'>
-                                        <label className='form-label'>Estado</label>
+                                        <label className='form-label'>Modalidad de Entrega</label>
                                         <select
-                                            name='estado'
-                                            value={formulario.estado}
+                                            name='modalidad_entrega'
+                                            value={formulario.modalidad_entrega || 'domicilio'}
                                             onChange={cambiarCampo}
                                             className='form-select'
                                         >
-                                            {['Pending', 'Processing', 'Shipped', 'Delivered'].map(s =>
-                                                <option key={s}>{s}</option>
-                                            )}
+                                            <option value='domicilio'>🏠 Domicilio</option>
+                                            <option value='recogida_punto'>🏬 Recogida en punto</option>
+                                        </select>
+                                    </div>
+
+                                    <div className='col-md-6'>
+                                        <label className='form-label'>Estado</label>
+                                        <select
+                                            name='estado'
+                                            value={formulario.estado || 'pendiente'}
+                                            onChange={cambiarCampo}
+                                            className='form-select'
+                                        >
+                                            <option value='pendiente'>Pendiente</option>
+                                            <option value='en_preparacion'>En preparación</option>
+                                            <option value='listo_para_entrega'>Listo para entrega</option>
+                                            <option value='en_camino'>En camino</option>
+                                            <option value='entregado'>Entregado</option>
+                                            <option value='cancelado'>Cancelado</option>
                                         </select>
                                     </div>
                                 </div>
