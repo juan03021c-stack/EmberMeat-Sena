@@ -297,18 +297,12 @@ export default function Orders() {
                                                 </span>
                                             )}
                                         </td>
-                                        <td className='fw-bold'>
+                                        <td>
                                             ${Number(p.total || 0).toLocaleString('es-CO')}
                                         </td>
                                         <td className='small text-muted'>{p.created_at}</td>
                                         <td>
-                                            <span className={`badge ${
-                                                p.estado === 'entregado' ? 'bg-success' :
-                                                p.estado === 'en_camino' ? 'bg-primary' :
-                                                p.estado === 'listo_para_entrega' ? 'bg-info text-dark' :
-                                                p.estado === 'en_preparacion' ? 'bg-warning text-dark' :
-                                                p.estado === 'cancelado' ? 'bg-danger' : 'bg-secondary'
-                                            }`}>
+                                            <span>
                                                 {p.estado}
                                             </span>
                                         </td>
