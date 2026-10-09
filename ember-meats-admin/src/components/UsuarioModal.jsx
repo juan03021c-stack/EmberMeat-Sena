@@ -1,3 +1,5 @@
+
+
 export default function UsuarioModal({
     show,
     onClose,
@@ -45,6 +47,19 @@ export default function UsuarioModal({
                                         placeholder='Nombre del usuario'
                                     />
                                 </div>
+                                {/* CÉDULA */}
+                                <div className="col-md-6">
+                                <label className="form-label">Cédula</label>
+                                 <input
+                                    name="cedula"
+                                    type="text"
+                                    value={formulario.cedula || ''}
+                                    onChange={cambiarCampo}
+                                   className="form-control"
+                                   placeholder="Número de cédula"/>
+                                   </div>
+
+                               
 
                                 {/* CORREO */}
                                 <div className='col-md-6'>
@@ -119,12 +134,13 @@ export default function UsuarioModal({
                             </div>
 
                             <div className='mt-4 d-flex justify-content-end'>
+                                
                                 <button type='button' className='btn btn-secondary me-2' onClick={limpiarFormulario}>
-                                    Limpiar
+                                 Limpiar
                                 </button>
-                                <button type='submit' className='btn btn-primary' disabled={loading}>
-                                    {loading ? 'Guardando...' : 'Guardar'}
-                                </button>
+                               <button
+                                type="submit" className="btn" style={{ backgroundColor: '#7B1F1F', borderColor: '#7B1F1F', color: 'white' }} disabled={loading}>
+                                  {loading ? 'Guardando...' : 'Guardar'}</button>
                             </div>
                         </form>
                     </div>

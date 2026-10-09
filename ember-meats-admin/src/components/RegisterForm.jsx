@@ -226,8 +226,8 @@ const handleCedulaBlur = async (e) => {
                   required
                 >
                   <option value="" disabled>Seleccione un método de envío</option>
-                  <option value="domicilio">🏠 Domicilio</option>
-                  <option value="tienda">🏬 Recoger en tienda</option>
+                  <option value="domicilio"> Domicilio</option>
+                  <option value="tienda"> Recoger en tienda</option>
                 </select>
               </div>
 

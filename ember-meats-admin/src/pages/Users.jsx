@@ -59,6 +59,7 @@ function Active({ estado }) {
 }
 
 const estadoInicialFormulario = {
+    cedula: '',
     nombre: '',
     correo: '',
     telefono: '',
@@ -115,6 +116,7 @@ export default function Users() {
     const abrirModalEdicion = (usuario) => {
         setUsuarioEditando(usuario)
         setFormulario({
+            cedula: usuario.cedula || '',
             nombre: usuario.nombre || '',
             correo: usuario.correo || '',
             telefono: usuario.telefono || '',
@@ -156,6 +158,7 @@ export default function Users() {
 
         try {
             const datos = new FormData()
+            datos.append('cedula', formulario.cedula)
             datos.append('nombre', formulario.nombre)
             datos.append('correo', formulario.correo)
             datos.append('telefono', formulario.telefono)
@@ -213,7 +216,7 @@ export default function Users() {
             <div className='d-flex justify-content-between align-items-center mb-4'>
                 <h4 className='mb-0'>Usuarios</h4>
                 <button className='btn btn-ember' onClick={abrirModalNuevo}>
-                    + Nuevo usuario
+                     Nuevo usuario
                 </button>
             </div>
 
