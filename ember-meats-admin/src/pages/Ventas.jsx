@@ -300,7 +300,7 @@ export default function Ventas() {
                       <input
                         type="text"
                         className="form-control mb-3"
-                        placeholder="Ej. Juan Pérez"
+                        placeholder="Nombre del Cliente"
                         value={nombreCliente}
                         onChange={(e) => setNombreCliente(e.target.value)}
                       />
@@ -479,7 +479,7 @@ export default function Ventas() {
 
                     {paso < 3 ? (
                       <button className="btn btn-danger" onClick={irSiguiente}>
-                        Siguiente →
+                        Siguiente 
                       </button>
                     ) : (
                       <button

@@ -70,7 +70,21 @@ export default function OrdenModal({
                                             onChange={cambiarCampo}
                                             className='form-select'
                                         >
-                                            {['Pending', 'Processing', 'Shipped', 'Delivered'].map(s =>
+                                            {['Procesando', 'Pendiente', 'Enviado', 'Entregado'].map(s =>
+                                                <option key={s}>{s}</option>
+                                            )}
+                                        </select>
+                                    </div>
+
+                                     <div className='col-md-6'>
+                                        <label className='form-label'>Modalidad</label>
+                                        <select
+                                            name='estado'
+                                            value={formulario.Modalidad}
+                                            onChange={cambiarCampo}
+                                            className='form-select'
+                                        >
+                                            {['Precencial', 'Domicilio',].map(s =>
                                                 <option key={s}>{s}</option>
                                             )}
                                         </select>
@@ -78,10 +92,15 @@ export default function OrdenModal({
                                 </div>
 
                                 <div className='mt-4 d-flex justify-content-end'>
-                                    <button type='button' className='btn btn-secondary me-2' onClick={limpiarFormulario}>
-                                        Limpiar</button>
-                                    <button type='submit' className='btn btn-primary' disabled={loading}>
-                                        {loading ? 'Guardando...' : 'Guardar'}
+                                   <button
+                                     type="button"
+                                    className="btn me-2" style={{ backgroundColor: '#7B1F1F', borderColor: '#7B1F1F', color: 'white' }}
+                                 onClick={limpiarFormulario}>Limpiar</button>
+
+                                    <button
+                                     type="button"
+                                    className="btn me-2" style={{ backgroundColor: '#7B1F1F', borderColor: '#7B1F1F', color: 'white' }}
+                                 onClick={limpiarFormulario}>{loading ? 'Guardando...' : 'Guardar'}
                                     </button>
                                 </div>
                             </form>

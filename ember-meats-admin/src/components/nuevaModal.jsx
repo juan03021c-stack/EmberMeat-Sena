@@ -304,7 +304,7 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
               onClick={() => setPaso(paso + 1)}
               disabled={!puedeAvanzar()}
             >
-              Siguiente →
+              Siguiente 
             </button>
           ) : (
             /* Botón "Confirmar venta" — aparece solo en paso 3 */
