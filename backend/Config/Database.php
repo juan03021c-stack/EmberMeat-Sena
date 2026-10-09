@@ -2,7 +2,7 @@
 
 // conexion de la base de datos
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'embermeat3');
+define('DB_NAME', 'embertmeat3');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 

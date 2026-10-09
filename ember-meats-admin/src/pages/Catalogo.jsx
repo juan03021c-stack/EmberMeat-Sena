@@ -18,7 +18,7 @@ function formatoPrecio(valor) {
 // -----------------------------------------------------------------------
 // Card horizontal
 // -----------------------------------------------------------------------
-function ProductoCard({ producto}) {
+function ProductoCard({ producto }) {
   const { agregarAlCarrito } = useCarrito();
   const disponible = producto.activo == 1;
   const sinStock = producto.stock == 0;
@@ -210,10 +210,10 @@ export default function Catalogo() {
                       );
                     })
                   )}
-                 
+
                 </div>
                 <div className="mb-4">
-                 <NavLink to="/" className="btn btn-secondary me-2">Regresar al inicio</NavLink>
+                  <NavLink to="/" className="btn btn-secondary me-2">Regresar al inicio</NavLink>
                 </div>
               </div>
             </div>

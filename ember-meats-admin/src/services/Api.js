@@ -48,6 +48,20 @@ export async function obtenerCategorias() {
         return [];
     }
 }
+export async function obtenerPedidos() {
+    try {
+        const respuesta = await fetch(`${URL_BASE}/Pedidos/Listar.php`);
+        if (!respuesta.ok) {
+            throw new Error("Error al obtener los pedidos");
+        }
+        const datos = await respuesta.json();
+        if (datos && Array.isArray(datos.pedidos)) return datos.pedidos;
+        return [];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
 
 export async function crearProducto(datosFormulario) {
     try {
