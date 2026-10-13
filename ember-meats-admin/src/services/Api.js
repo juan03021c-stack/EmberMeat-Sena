@@ -63,6 +63,21 @@ export async function obtenerPedidos() {
     }
 }
 
+export async function obtenerProductosDestacados() {
+    try {
+        const respuesta = await fetch(`${URL_BASE}/Productos/ProductosDestacados.php`);
+        if (!respuesta.ok) {
+            throw new Error("Error al obtener los productos destacados");
+        }
+        const datos = await respuesta.json();
+        if (datos && Array.isArray(datos.productos)) return datos.productos;
+        return [];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
 export async function crearProducto(datosFormulario) {
     try {
         const respuesta = await fetch(`${URL_BASE}/Productos/Crear.php`, {

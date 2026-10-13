@@ -1,20 +1,18 @@
 import '../assets/EmberMeat.css'
 import { useEffect, useState } from 'react'
-import { NavLink, } from 'react-router-dom'
-import { obtenerProductos, URL_BASE } from '../services/Api'
+import { NavLink } from 'react-router-dom'
+import { obtenerProductosDestacados, URL_BASE } from '../services/Api'
 import { useCarrito } from '../components/CarritoContext'
 import {
   Truck,
   ShieldCheck,
-  Plus,
   ChevronRight,
   Check,
   Flame
 } from 'lucide-react'
 
-
 export default function Home() {
-  const { agregarAlCarrito } = useCarrito()
+  const { agregarAlCarrito, carrito } = useCarrito()
   const [productos, setProductos] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -27,13 +25,15 @@ export default function Home() {
         setLoading(true)
         setError(null)
 
-        const data = await obtenerProductos()
+        const data = await obtenerProductosDestacados()
         if (!cancelado) {
-          setProductos(data)
+          setProductos(data || [])
         }
-      } catch (err) {
+      } catch {
         if (!cancelado) {
-          setError('Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.')
+          setError(
+            'Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.'
+          )
         }
       } finally {
         if (!cancelado) {
@@ -48,10 +48,18 @@ export default function Home() {
     }
   }, [])
 
+  // Filtrar productos que tienen stock y están disponibles
+  const disponibles = productos.filter(
+    (p) =>
+      Number(p.stock) > 0 &&
+      Number(p.activo ?? p.disponible) === 1
+  )
+
   return (
     <div className="home">
       {/* HERO */}
-      <section id="inicio"
+      <section
+        id="inicio"
         className="hero"
         style={{
           backgroundImage: "url('/imagess/principal.jpeg')"
@@ -81,21 +89,24 @@ export default function Home() {
               </a>
             </div>
           </div>
+
           {productos.length > 0 && (
             <div className="hero-image-container">
-
               <img
-                src={`${URL_BASE}/${productos[0].imagen_url}`}
-                alt={productos[0].nombre}
+                src={
+                  productos[0].imagen_url
+                    ? `${URL_BASE}/${productos[0].imagen_url}`
+                    : '/imagess/producto.jpg'
+                }
+                alt={productos[0].nombre || 'Producto destacado'}
                 onError={(e) => {
+                  e.currentTarget.onerror = null
                   e.currentTarget.src = '/imagess/producto.jpg'
                 }}
               />
-
             </div>
           )}
         </div>
-
       </section>
 
       {/* BENEFICIOS */}
@@ -152,57 +163,68 @@ export default function Home() {
           <p className="error-message">{error}</p>
         )}
 
-        {!loading && !error && productos.length === 0 && (
+        {!loading && !error && disponibles.length === 0 && (
           <p className="empty-message">No hay productos disponibles.</p>
         )}
 
-        {!loading && !error && productos.length > 0 && (
+        {!loading && !error && disponibles.length > 0 && (
           <div className="products-grid">
-            {productos.slice(0, 4).map((producto) => (
-              <div className="product-card" key={producto.id ?? producto.nombre}>
-                <div className="product-image">
-                  {producto.imagen_url ? (
+            {disponibles.slice(0, 4).map((p) => {
+              const enCarrito =
+                carrito.find((item) => String(item.id) === String(p.id))
+                  ?.cantidad || 0
+
+              const stockReal = Math.max(0, Number(p.stock))
+              const stockRestante = Math.max(0, stockReal - enCarrito)
+              const agotadoParaEsteUsuario = stockRestante === 0
+
+              return (
+                <div className="product-card" key={p.id}>
+                  <div className="product-image">
                     <img
-                      src={`${URL_BASE}/${producto.imagen_url}`}
-                      alt={producto.nombre}
+                      src={
+                        p.imagen_url
+                          ? `${URL_BASE}/${p.imagen_url}`
+                          : '/imagess/producto.jpg'
+                      }
+                      alt={p.nombre || 'Producto EmberMeat'}
                       onError={(e) => {
+                        e.currentTarget.onerror = null
                         e.currentTarget.src = '/imagess/producto.jpg'
                       }}
                     />
-                  ) : (
-                    <img
-                      src="/imagess/producto.jpg"
-                      alt={producto.nombre}
-                    />
-                  )}
-                </div>
+                  </div>
 
-                <div className="product-info">
-                  <span>{producto.categoria_nombre}</span>
-                  <h2>{producto.nombre}</h2>
-                  <p>{producto.descripcion}</p>
-                  <small>Stock:{producto.stock}</small>
-                  <small>Presentacion:{producto.presentacion}</small>
+                  <div className="product-info">
+                    <span>{p.categoria_nombre}</span>
+                    <h2>{p.nombre}</h2>
+                    <p>{p.descripcion}</p>
 
-                  <div className="product-bottom">
-                    <strong>${Number(producto.precio).toLocaleString('es-US')}</strong>
+                    <small>Stock: {stockRestante}</small>
+                    <small>Presentación: {p.presentacion}</small>
 
-                    <button
-                      type="button"
-                      className="btn-agregar"
-                      onClick={() => agregarAlCarrito(producto)}
-                    >
-                      Agregar
-                    </button>
+                    <div className="product-bottom">
+                      <strong>
+                        ${(Number(p.precio) || 0).toLocaleString('es-CO')}
+                      </strong>
+                      <button
+                        type="button"
+                        className="btn-agregar"
+                        disabled={agotadoParaEsteUsuario}
+                        onClick={() => agregarAlCarrito(p)}
+                      >
+                        {agotadoParaEsteUsuario ? 'Máx. en carrito' : 'Agregar'}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 
         <div className="catalog-button-container">
-          < NavLink to="/Catalogo" className="catalog-button">
+          <NavLink to="/Catalogo" className="catalog-button">
             Ver catálogo completo
             <ChevronRight size={18} strokeWidth={2} />
           </NavLink>
@@ -257,11 +279,11 @@ export default function Home() {
       {/* LLAMADO A LA ACCIÓN */}
       <section className="cta">
         <h2>¿Listo para probar lo auténtico?</h2>
-        <p className='fw-bold'>
-          Estas preparado para una experiencia llena de sabor y calidad?
+        <p className="fw-bold">
+          ¿Estás preparado para una experiencia llena de sabor y calidad?
         </p>
         <NavLink to="/Catalogo" className="cta-button">
-          Ver catalogo
+          Ver catálogo
         </NavLink>
       </section>
     </div>
