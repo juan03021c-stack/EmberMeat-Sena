@@ -52,12 +52,27 @@ export default function Ventas() {
   const [metodoPago, setMetodoPago] = useState("Efectivo");
   const [descuento, setDescuento] = useState(0);
 
-  useEffect(() => {
-    obtenerClientes().then(setClientes).catch(() => setClientes([]));
-    obtenerProductos().then(setProductos).catch(() => setProductos([]));
-    obtenerUsuarios().then(setVendedores).catch(() => setVendedores([]));
+ useEffect(() => {
+    obtenerClientes()
+        .then(setClientes)
+        .catch(() => setClientes([]));
+
+    obtenerProductos()
+        .then(setProductos)
+        .catch(() => setProductos([]));
+
+    obtenerUsuarios()
+        .then(data => {
+            const vendedoresFiltrados = data.filter(
+                usuario => usuario.rol_nombre?.toLowerCase() === "vendedor"
+            );
+
+            setVendedores(vendedoresFiltrados);
+        })
+        .catch(() => setVendedores([]));
+
     cargarVentas();
-  }, []);
+}, []);
   
   function cargarVentas() {
     obtenerVentas().then(setVentas).catch(() => setVentas([]));

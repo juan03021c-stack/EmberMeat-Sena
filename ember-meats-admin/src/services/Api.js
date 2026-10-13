@@ -202,7 +202,7 @@ export async function login(datos) {
  */
 export async function obtenerClientes() {
     try {
-        const respuesta = await fetch(`${URL_BASE}/Usuarios/Listar.php`);
+      const respuesta = await fetch(`${URL_BASE}/Usuarios/Listar.php?rol=vendedor`);
         if (!respuesta.ok) {
             throw new Error("Error al obtener los clientes");
         }
