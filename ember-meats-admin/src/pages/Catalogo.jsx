@@ -6,22 +6,20 @@ import { useCarrito } from '../components/CarritoContext';
 import { Search } from 'lucide-react';
 
 
-
-function formatoPrecio(valor) {
-  return valor.toLocaleString("es-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
-}
-
 // -----------------------------------------------------------------------
 // Card horizontal
 // -----------------------------------------------------------------------
 function ProductoCard({ producto }) {
-  const { agregarAlCarrito } = useCarrito();
-  const disponible = producto.activo == 1;
-  const sinStock = producto.stock == 0;
+  const { agregarAlCarrito, carrito } = useCarrito();
+  const disponible = Number(producto.activo) === 1;
+
+  const enCarrito =
+    carrito.find((item) => String(item.id) === String(producto.id))?.cantidad || 0;
+
+  const stockReal = Math.max(0, Number(producto.stock));
+  const stockRestante = Math.max(0, stockReal - enCarrito);
+  const sinStock = stockReal === 0;
+  const agotadoParaEsteUsuario = stockRestante === 0;
 
   return (
     <div className="product-card">
@@ -35,29 +33,27 @@ function ProductoCard({ producto }) {
             }}
           />
         ) : (
-          <img
-            src="/imagess/producto.jpg"
-            alt={producto.nombre}
-          />
-        )}if({!disponible && (
+          <img src="/imagess/producto.jpg" alt={producto.nombre} />
+        )}
+
+        {!disponible && (
           <div className="sin-stock-overlay d-flex align-items-center justify-content-center">
             <span className="text-white">No disponible</span>
           </div>
         )}
-        {sinStock && (
+        {disponible && sinStock && (
           <div className="sin-stock-overlay d-flex align-items-center justify-content-center">
             <span className="text-white">Sin stock</span>
           </div>
-        )})
-
+        )}
       </div>
 
       <div className="product-info">
-        <span className="fs-6" >{producto.categoria_nombre}</span>
+        <span className="fs-6">{producto.categoria_nombre}</span>
         <h2>{producto.nombre}</h2>
         <p>{producto.descripcion}</p>
-        <span className="fs-6">Stock:{producto.stock}</span>
-        <small>Presentacion:{producto.presentacion}</small>
+        <span className="fs-6">Stock: {stockRestante}</span>
+        <small>Presentación: {producto.presentacion}</small>
 
         <div className="product-bottom">
           <strong>${Number(producto.precio).toLocaleString('es-US')}</strong>
@@ -65,14 +61,16 @@ function ProductoCard({ producto }) {
           <button
             type="button"
             className="btn-agregar"
-            disabled={sinStock || !disponible}
+            disabled={!disponible || sinStock || agotadoParaEsteUsuario}
             onClick={() => agregarAlCarrito(producto)}
           >
             {!disponible
               ? "No disponible"
               : sinStock
                 ? "Sin stock"
-                : "Agregar"}
+                : agotadoParaEsteUsuario
+                  ? "No hay mas productos"
+                  : "Agregar al carrito"}
           </button>
         </div>
       </div>
@@ -121,6 +119,7 @@ export default function Catalogo() {
     return () => { cancelado = true; };
   }, []);
 
+  /** para seleccionar o deseleccionar categorías */
   const toggleCategoria = (cat) => {
     setCategoriasSel((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
@@ -134,9 +133,29 @@ export default function Catalogo() {
 
   const productosFiltrados = useMemo(() => {
     let lista = productos.filter((p) => {
-      const coincideBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase());
-      const coincideCategoria = categoriasSel.length === 0 || categoriasSel.includes(p.categoria_nombre);
-      return coincideBusqueda && coincideCategoria;
+      // Verificar que el producto esté activo
+      const disponible = Number(p.activo) === 1;
+
+      // Verificar que tenga existencias
+      const tieneStock = Number(p.stock) > 0;
+
+      // Buscar por nombre
+      const coincideBusqueda = (p.nombre ?? "")
+        .toLowerCase()
+        .includes(busqueda.toLowerCase());
+
+      // Filtrar por categoría
+      const coincideCategoria =
+        categoriasSel.length === 0 ||
+        categoriasSel.includes(p.categoria_nombre);
+
+      // Mostrar solo productos activos, con stock y que coincidan
+      return (
+        disponible &&
+        tieneStock &&
+        coincideBusqueda &&
+        coincideCategoria
+      );
     });
 
     if (orden === "precio-asc") {
@@ -144,7 +163,9 @@ export default function Catalogo() {
     } else if (orden === "precio-desc") {
       lista = [...lista].sort((a, b) => b.precio - a.precio);
     } else if (orden === "nombre") {
-      lista = [...lista].sort((a, b) => a.nombre.localeCompare(b.nombre));
+      lista = [...lista].sort((a, b) =>
+        a.nombre.localeCompare(b.nombre)
+      );
     }
 
     return lista;
@@ -210,8 +231,8 @@ export default function Catalogo() {
                       );
                     })
                   )}
-
                 </div>
+
                 <div className="mb-4">
                   <NavLink to="/" className="btn btn-secondary me-2">Regresar al inicio</NavLink>
                 </div>
@@ -224,7 +245,9 @@ export default function Catalogo() {
             {/* Barra superior */}
             <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
               <p className="mb-0 text-muted">
-                {loading ? 'Cargando productos...' : `${productosFiltrados.length} producto${productosFiltrados.length !== 1 ? 's' : ''} encontrado${productosFiltrados.length !== 1 ? 's' : ''}`}
+                {loading
+                  ? 'Cargando productos...'
+                  : `${productosFiltrados.length} producto${productosFiltrados.length !== 1 ? 's' : ''} encontrado${productosFiltrados.length !== 1 ? 's' : ''}`}
               </p>
               <select
                 className="form-select form-select-sm w-auto"
