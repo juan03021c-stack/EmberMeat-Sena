@@ -25,7 +25,7 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
   useEffect(() => {
     // Traemos la lista de clientes desde el backend
     obtenerClientes()
-      .then(setClientes)           // Guardamos en el estado
+     .then(data => setClientes(data.filter(c => c.rol_nombre === 'vendedor')))          // Guardamos en el estado
       .catch(() => setClientes([])) // Si falla, array vacío (no se rompe)
 
     // Traemos la lista de productos desde el backend
