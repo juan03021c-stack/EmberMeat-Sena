@@ -198,7 +198,7 @@ export default function Orders() {
             {/* Spinner de carga inicial */}
             {loading && !mostrarModal && (
                 <div className='text-center py-3 text-muted'>
-                    <span className='spinner-border spinner-border-sm me-2' />
+                    <span className='spinner-border spinner-border-sm text-ember-red me-2' />
                     Cargando pedidos...
                 </div>
             )}
@@ -216,27 +216,27 @@ export default function Orders() {
                 mensaje={mensaje}
             />
 
-            <div className='card border-0 p-3 shadow-sm'>
+            <div className='card p-3'>
                 {/* Filtros de pestañas por Modalidad y Barra de búsqueda */}
                 <div className='row g-2 mb-3 align-items-center'>
                     <div className='col-md-7 d-flex gap-2 flex-wrap'>
                         <button
                             type='button'
-                            className={`btn btn-sm ${filtroModalidad === 'todas' ? 'btn-dark' : 'btn-outline-secondary'}`}
+                            className={`btn btn-sm ${filtroModalidad === 'todas' ? 'btn-ember text-white' : 'btn-outline-secondary'}`}
                             onClick={() => setFiltroModalidad('todas')}
                         >
                             Todas {pedidos.length}
                         </button>
                         <button
                             type='button'
-                            className={`btn btn-sm ${filtroModalidad === 'recogida_punto' ? 'btn-info text-dark fw-bold' : 'btn-outline-info text-dark'}`}
+                            className={`btn btn-sm ${filtroModalidad === 'recogida_punto' ? 'btn-ember text-white' : 'btn-outline-secondary'}`}
                             onClick={() => setFiltroModalidad('recogida_punto')}
                         >
                             Recogida en punto {totalRecogidas}
                         </button>
                         <button
                             type='button'
-                            className={`btn btn-sm ${filtroModalidad === 'domicilio' ? 'btn-secondary text-white' : 'btn-outline-secondary'}`}
+                            className={`btn btn-sm ${filtroModalidad === 'domicilio' ? 'btn-ember text-white' : 'btn-outline-secondary'}`}
                             onClick={() => setFiltroModalidad('domicilio')}
                         >
                              Domicilio {totalDomicilios}
@@ -255,7 +255,7 @@ export default function Orders() {
 
                 <div className='table-responsive'>
                     <table className='table table-hover align-middle'>
-                        <thead className='table-light'>
+                        <thead>
                             <tr>
                                 <th>#Pedido</th>
                                 <th>Cliente</th>
@@ -277,7 +277,7 @@ export default function Orders() {
                             ) : (
                                 pedidosFiltrados.map((p) => (
                                     <tr key={p.id}>
-                                        <td className='text-danger fw-semibold'>{p.numero_pedido}</td>
+                                        <td className='text-ember-red fw-semibold'>{p.numero_pedido}</td>
                                         <td>{p.cliente || <span className='text-muted'>Sin cliente</span>}</td>
                                         <td>
                                             {p.modalidad_entrega === 'recogida_punto' ? (

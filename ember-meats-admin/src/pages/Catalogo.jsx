@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import "../assets/EmberMeat.css";
 import { obtenerProductos, obtenerCategorias, URL_BASE } from '../services/Api';
@@ -187,7 +187,7 @@ export default function Catalogo() {
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h2 className="filtros-titulo mb-0">Filtros</h2>
-                  <button type="button" className="btn btn-link btn-sm p-0 limpiar-filtros" onClick={limpiarFiltros}>
+                  <button type="button" className="btn btn-link btn-sm text-decoration-none text-white p-1 limpiar-filtros" onClick={limpiarFiltros}>
                     Limpiar filtros
                   </button>
                 </div>

@@ -202,18 +202,19 @@ export default function Products() {
     <div className='p-4'>
       <div className='d-flex justify-content-between align-items-center mb-4'>
         <div>
-          <h4 className='fw-bold mb-1'>Product</h4>
-          <small className='text-muted'>{productos.length} Product</small>
+          <h4 className='fw-bold mb-1'>Productos</h4>
+          <small className='text-muted'>{productos.length} productos</small>
         </div>
         <button className='btn btn-ember' onClick={abrirModalNuevo}>
-          New product
+          <i className='bi bi-plus-lg me-1'></i>
+          Nuevo producto
         </button>
       </div>
 
       {/* Spinner de carga inicial */}
       {loading && !mostrarModal && (
         <div className='text-center py-4 text-muted'>
-          <span className='spinner-border spinner-border-sm me-2' />
+          <span className='spinner-border spinner-border-sm text-ember-red me-2' />
           Cargando productos...
         </div>
       )}
@@ -242,7 +243,7 @@ export default function Products() {
         />
       </div>
 
-      <div className='card border-0 p-3'>
+      <div className='card p-3'>
         <div className='table-responsive'>
           <table className='table table-hover align-middle'>
             <thead>
@@ -271,10 +272,10 @@ export default function Products() {
                           <img
                             src={`${URL_BASE}/${producto.imagen_url}`}
                             alt={producto.nombre}
-                            style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8 }}
+                            style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 'var(--ember-radius-sm)' }}
                           />
                         ) : (
-                          <div style={{ width: 48, height: 48, background: '#eee', borderRadius: 8 }} />
+                          <div style={{ width: 48, height: 48, background: 'var(--ember-product-placeholder-bg)', borderRadius: 'var(--ember-radius-sm)' }} />
                         )}
                         <div>
                           <div className='fw-semibold'>{producto.nombre}</div>
@@ -283,7 +284,7 @@ export default function Products() {
                       </div>
                     </td>
                     <td>{producto.categoria_nombre || '-'}</td>
-                    <td>${Number(producto.precio || 0).toLocaleString('es-us')}</td>
+                    <td className='fw-medium'>${Number(producto.precio || 0).toLocaleString('es-CO')}</td>
                     <td><InsigniaStock stock={Number(producto.stock)} /></td>
                     <td><InsigniaActivo activo={producto.activo} /></td>
                     <td className='text-end'>

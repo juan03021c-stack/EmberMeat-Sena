@@ -55,7 +55,7 @@ export default function NavbarHome() {
             isActive ? 'text-white rounded' : 'text-secondary'
         }`
 
-    const activeStyle = { background: '#7B1F1F' }
+    const activeStyle = { background: 'var(--ember-red)' }
 
     return (
         <nav className="home-navbar">
@@ -98,8 +98,13 @@ export default function NavbarHome() {
                             <span>{item.label}</span>
                             {isCarrito && cantidadTotal > 0 && (
                                 <span
-                                    className="badge bg-danger rounded-pill ms-1"
-                                    style={{ fontSize: '0.75rem', padding: '0.25em 0.6em' }}
+                                    className="badge rounded-pill ms-1"
+                                    style={{
+                                        background: 'var(--ember-red)',
+                                        color: 'var(--ember-white)',
+                                        fontSize: 'var(--text-micro)',
+                                        padding: '0.25em 0.6em'
+                                    }}
                                 >
                                     {cantidadTotal}
                                 </span>

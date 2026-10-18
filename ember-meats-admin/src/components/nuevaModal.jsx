@@ -1,7 +1,8 @@
 
+import { useState, useEffect } from 'react'
 import { obtenerClientes, obtenerProductos, crearVenta } from '../services/Api'
+import './../assets/EmberMeat.css'
 
-import './NuevaVentaModal.css'
 
 
 export default function NuevaVentaModal({ onClose, onVentaCreada }) {
@@ -9,11 +10,11 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
 
   const [paso, setPaso] = useState(1)
 
- 
+
   const [clientes, setClientes] = useState([])
   const [productos, setProductos] = useState([])
 
- 
+
   const [clienteId, setClienteId] = useState('')      // ID del cliente seleccionado
   const [productoId, setProductoId] = useState('')  // ID del producto seleccionado
   const [cantidad, setCantidad] = useState(1)       // Cantidad de unidades
@@ -25,7 +26,7 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
   useEffect(() => {
     // Traemos la lista de clientes desde el backend
     obtenerClientes()
-     .then(data => setClientes(data.filter(c => c.rol_nombre === 'vendedor')))          // Guardamos en el estado
+      .then(data => setClientes(data.filter(c => c.rol_nombre === 'vendedor')))          // Guardamos en el estado
       .catch(() => setClientes([])) // Si falla, array vacío (no se rompe)
 
     // Traemos la lista de productos desde el backend
@@ -34,7 +35,7 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
       .catch(() => setProductos([]))
   }, []) // [] = solo una vez al montar
 
- 
+
   const productoSeleccionado = productos.find(p => p.id == productoId)
   const subtotal = productoSeleccionado ? productoSeleccionado.precio * cantidad : 0
   const total = Math.max(0, subtotal - descuento)
@@ -48,7 +49,7 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
 
 
   const handleConfirmar = async () => {
-    setGuardando(true) 
+    setGuardando(true)
 
     // Armamos el payload que espera el backend PHP
     const venta = {
@@ -63,19 +64,19 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
       const respuesta = await crearVenta(venta)
 
       if (respuesta.success) {
-     
+
         alert('¡Venta guardada exitosamente!')
         onVentaCreada?.() // Notificamos a la página padre (para recargar lista)
         onClose()          // Cerramos el modal
       } else {
-      
+
         alert('Error al guardar la venta')
       }
     } catch (err) {
-     
+
       alert('Error de conexión con el servidor')
     } finally {
-      setGuardando(false) 
+      setGuardando(false)
     }
   }
 
@@ -299,17 +300,17 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
           {/* Botón "Siguiente" — aparece en paso 1 y 2 */}
           {/* Se deshabilita si el usuario no ha llenado los campos obligatorios */}
           {paso < 3 ? (
-            <button 
-              className="nvm-btn-siguiente" 
+            <button
+              className="nvm-btn-siguiente"
               onClick={() => setPaso(paso + 1)}
               disabled={!puedeAvanzar()}
             >
-              Siguiente 
+              Siguiente
             </button>
           ) : (
             /* Botón "Confirmar venta" — aparece solo en paso 3 */
-            <button 
-              className="nvm-btn-confirmar" 
+            <button
+              className="nvm-btn-confirmar"
               onClick={handleConfirmar}
               disabled={guardando}
             >
