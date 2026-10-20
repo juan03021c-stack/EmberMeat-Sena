@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 export default function Footer() {
     return (
-        <footer className='footer-container' style={{ backgroundColor: '#1A1A18', color: '#9ca3af' }}>
+        <footer className='footer-container' style={{ backgroundColor: 'var(--ember-dark-bg)', color: 'var(--ember-text-muted)' }}>
             <div className="container py-5">
                 <div className="row g-5">
                     {/* Brand */}

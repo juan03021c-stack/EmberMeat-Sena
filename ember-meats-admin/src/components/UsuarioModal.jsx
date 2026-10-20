@@ -16,13 +16,13 @@ export default function UsuarioModal({
     if (!show) return null
 
     return (
-        <div className='modal fade show d-block' tabIndex='-1' role='dialog' style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className='modal fade show d-block' tabIndex='-1' role='dialog' style={{ backgroundColor: 'var(--ember-overlay-mid)' }}>
             <div className='modal-dialog modal-lg modal-dialog-centered' role='document'>
-                <div className='modal-content'>
+                <div className='modal-content card border-0 shadow-lg'>
 
                     {/* HEADER */}
                     <div className='modal-header'>
-                        <h5 className='modal-title'>
+                        <h5 className='modal-title fw-bold text-ember-dark'>
                             {usuarioEditando ? 'Editar usuario' : 'Nuevo usuario'}
                         </h5>
                         <button type='button' className='btn-close' onClick={onClose} aria-label='Cerrar' />
@@ -134,13 +134,16 @@ export default function UsuarioModal({
                             </div>
 
                             <div className='mt-4 d-flex justify-content-end'>
-                                
-                                <button type='button' className='btn btn-secondary me-2' onClick={limpiarFormulario}>
-                                 Limpiar
+                                <button type='button' className='btn btn-outline-secondary me-2' onClick={limpiarFormulario}>
+                                    Limpiar
                                 </button>
-                               <button
-                                type="submit" className="btn" style={{ backgroundColor: '#7B1F1F', borderColor: '#7B1F1F', color: 'white' }} disabled={loading}>
-                                  {loading ? 'Guardando...' : 'Guardar'}</button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-ember"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Guardando...' : 'Guardar'}
+                                </button>
                             </div>
                         </form>
                     </div>

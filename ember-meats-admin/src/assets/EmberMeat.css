@@ -1,55 +1,90 @@
-/* ============================================================
-   EMBERMEAT — SISTEMA DE DISEÑO COMPLETO
-   Variables + Reset + Componentes + Auth + Home + Responsive
-   ============================================================ */
 
-/* ---------- 1. VARIABLES ---------- */
+
+/* ---------- 1. TOKENS GLOBALES ---------- */
 :root {
-  /* Marca */
+  /* ── Marca ── */
   --ember-red: #7B1F1F;
   --ember-red-dark: #6B1717;
   --ember-accent: #A0522D;
+  --ember-accent-hover: #8A4419;
 
-  /* Superficies */
+  /* ── Superficies ── */
   --ember-cream: #F5F3EE;
   --ember-cream-dark: #F0EEE8;
   --ember-cream-light: #FAF9F6;
   --ember-white: #FFFFFF;
   --ember-dark-bg: #171717;
 
-  /* Bordes */
+  /* ── Bordes ── */
   --ember-border: #E8E4DC;
   --ember-border-light: #D6D0CA;
   --ember-product-border: #E2DED7;
 
-  /* Texto */
+  /* ── Texto ── */
   --ember-text: #1A1A1A;
   --ember-text-secondary: #6B6B6B;
   --ember-text-muted: #A8A29E;
   --ember-hero-text: #D2D2D2;
+  --ember-hero-text-bright: #FFFFFF;
   --ember-cta-text: #FFE3D2;
   --ember-footer-text: #FFFFFF;
   --ember-footer-text-secondary: #7B1F1F;
-  --ember-footer-text-muted: #FFFFFF;
 
-  /* Sombras */
+  /* ── Superposiciones (overlays) ── */
+  --ember-overlay-dark: rgba(0, 0, 0, 0.85);
+  --ember-overlay-mid: rgba(0, 0, 0, 0.55);
+  --ember-overlay-light: rgba(0, 0, 0, 0.35);
+  --ember-overlay-hero: linear-gradient(90deg,
+      var(--ember-overlay-dark),
+      var(--ember-overlay-mid),
+      var(--ember-overlay-light));
+  --ember-overlay-navbar: rgba(17, 17, 17, 0.95);
+  --ember-overlay-stock: rgba(20, 16, 13, 0.55);
+  --ember-overlay-hero-image: rgba(255, 255, 255, 0.15);
+  --ember-overlay-secondary-btn: rgba(255, 255, 255, 0.45);
+  --ember-overlay-secondary-btn-hover: rgba(255, 255, 255, 0.10);
+  --ember-hover-bg: #F2EFEB;
+  --ember-hover-table-row: rgba(123, 31, 31, 0.04);
+  --ember-product-placeholder-bg: #D9D2C6;
+
+  /* ── Sombras ── */
   --ember-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
   --ember-shadow-md: 0 4px 12px rgba(123, 31, 31, 0.2);
   --ember-shadow-lg: 0 12px 25px rgba(0, 0, 0, 0.12);
   --ember-shadow-xl: 0 20px 45px rgba(0, 0, 0, 0.55);
   --ember-shadow-card: 0 4px 15px rgba(0, 0, 0, 0.06);
 
-  /* Misc */
+  /* ── Misc ── */
   --ember-focus-ring: rgba(160, 82, 45, 0.15);
-  --ember-hover-bg: #F2EFEB;
   --ember-radius-sm: 7px;
   --ember-radius-md: 10px;
   --ember-radius-lg: 12px;
   --ember-radius-xl: 14px;
   --ember-radius-full: 22px;
+  --ember-radius-toggle: 6px;
 
-  /* Navbar home */
+  /* ── Navbar ── */
   --navbar-height: 70px;
+
+  /* ── Tipografía (nuevo) ── */
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-catalogue: 'Playfair Display', Georgia, serif;
+
+  /* ── Escala tipográfica (en rem para accesibilidad) ── */
+  --text-hero: 3rem;       /* 48px */
+  --text-h2: 1.875rem;     /* 30px */
+  --text-h3-product: 1.125rem; /* 18px (corregido desde 13px) */
+  --text-body: 1rem;       /* 16px */
+  --text-body-sm: 0.875rem;/* 14px */
+  --text-caption: 0.75rem; /* 12px (mínimo WCAG) */
+  --text-micro: 0.75rem;   /* 12px mínimo (antes 9px y 11px prohibidos) */
+
+  /* ── Pesos ── */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
 }
 
 /* ---------- 2. RESET BASE ---------- */
@@ -61,36 +96,63 @@
 
 body {
   background: var(--ember-cream);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
   color: var(--ember-text);
   margin: 0;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- 3. UTILIDADES ---------- */
-.text-ember-red {
-  color: var(--ember-red);
+/* ---------- 3. FOCUS VISIBLE (accesibilidad keyboard) ---------- */
+:focus-visible {
+  outline: 2px solid var(--ember-accent);
+  outline-offset: 2px;
 }
 
-.text-ember-accent {
-  color: var(--ember-accent);
+.ember-input:focus-visible,
+.btn:focus-visible,
+.btn-ember:focus-visible,
+.ember-btn-primary:focus-visible,
+.btn-agregar:focus-visible,
+.login-button:focus-visible,
+.primary-button:focus-visible,
+.volver-tienda:focus-visible,
+.btn-comprar:focus-visible {
+  outline: 2px solid var(--ember-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px var(--ember-focus-ring);
 }
 
-.bg-ember-cream {
-  background: var(--ember-cream);
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--ember-accent) !important;
+  box-shadow: 0 0 0 3px var(--ember-focus-ring) !important;
 }
 
-.bg-ember-cream-dark {
-  background: var(--ember-cream-dark);
+/* ---------- 4. UTILIDADES ---------- */
+.text-ember-red { color: var(--ember-red) !important; }
+.text-ember-accent { color: var(--ember-accent) !important; }
+.text-ember-dark { color: var(--ember-text) !important; }
+.text-ember-secondary { color: var(--ember-text-secondary) !important; }
+.text-ember-muted { color: var(--ember-text-muted) !important; }
+.bg-ember-red { background-color: var(--ember-red) !important; color: var(--ember-white) !important; }
+.bg-ember-cream { background: var(--ember-cream) !important; }
+.bg-ember-cream-dark { background: var(--ember-cream-dark) !important; }
+.bg-ember-cream-light { background: var(--ember-cream-light) !important; }
+.bg-ember-white { background-color: var(--ember-white) !important; }
+.border-ember { border-color: var(--ember-border) !important; }
+
+/* Animación de carga */
+@keyframes ember-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.border-ember {
-  border-color: var(--ember-border);
+.spin-animation {
+  animation: ember-spin 1s linear infinite;
+  display: inline-block;
 }
 
-/* ---------- 4. COMPONENTES COMPARTIDOS ---------- */
-
-/* Card */
+/* ---------- 5. COMPONENTES COMPARTIDOS ---------- */
 .card {
   border-radius: var(--ember-radius-lg);
   background: var(--ember-white);
@@ -98,42 +160,14 @@ body {
   box-shadow: var(--ember-shadow-sm);
 }
 
-/* Botón primario (dashboard / admin) */
-.btn-ember {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background: var(--ember-red);
-  color: var(--ember-white);
-  border: none;
-  border-radius: var(--ember-radius-sm);
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-}
-
-.btn-ember:hover {
-  background: var(--ember-red-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--ember-shadow-md);
-}
-
-.btn-ember:active {
-  transform: translateY(0);
-}
-
 /* Tablas */
 .table thead th {
   background: transparent;
-  font-size: 11px;
+  font-size: var(--text-caption);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--ember-text-secondary);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   border-bottom: 1px solid var(--ember-border);
   padding: 12px 16px;
 }
@@ -144,13 +178,75 @@ body {
 }
 
 .table tbody tr:hover {
-  background: rgba(123, 31, 31, 0.04);
+  background: var(--ember-hover-table-row);
+}
+
+/* ── Sistema unificado de botones (reemplaza 6 variantes sueltas) ──
+   Uso:
+     <button class="btn btn--primary">…</button>
+     <button class="btn btn--secondary">…</button>
+     <button class="btn btn--ghost">…</button>
+   Las clases legacy (btn-ember, ember-btn-primary, primary-button,
+   login-button, btn-comprar, btn-agregar) se mantienen como alias
+   para no romper el HTML existente; usar .btn en código nuevo.
+*/
+.btn,
+.btn-ember {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--ember-red);
+  color: var(--ember-white);
+  border: none;
+  border-radius: var(--ember-radius-sm);
+  padding: 10px 20px;
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease,
+              box-shadow 0.2s ease;
+}
+
+.btn:hover,
+.btn-ember:hover {
+  background: var(--ember-red-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--ember-shadow-md);
+}
+
+.btn:active,
+.btn-ember:active {
+  transform: translateY(0);
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--ember-red);
+  border: 1.5px solid var(--ember-red);
+}
+
+.btn--secondary:hover {
+  background: var(--ember-red);
+  color: var(--ember-white);
+  box-shadow: var(--ember-shadow-md);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ember-text);
+  border: 2px solid var(--ember-text);
+}
+
+.btn--ghost:hover {
+  background: var(--ember-text);
+  color: var(--ember-white);
 }
 
 /* ============================================================
    AUTH — LOGIN & REGISTER
    ============================================================ */
-
 .ember-login-container {
   display: flex;
   flex-direction: column;
@@ -170,8 +266,9 @@ body {
 
 .ember-logo-text {
   font-size: 40px;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   color: var(--ember-red);
+  font-family: var(--font-display);
 }
 
 .ember-card {
@@ -186,17 +283,19 @@ body {
 
 .ember-title {
   font-size: 24px;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   color: var(--ember-text);
   margin: 0 0 8px 0;
   line-height: 1.2;
+  font-family: var(--font-ui);
 }
 
 .ember-subtitle {
-  font-size: 14px;
+  font-size: var(--text-body-sm);
   color: var(--ember-text-secondary);
   margin: 0 0 24px 0;
   line-height: 1.5;
+  font-family: var(--font-ui);
 }
 
 .ember-form {
@@ -223,17 +322,22 @@ body {
   width: 100%;
   padding: 12px 14px 12px 42px;
   font-size: 15px;
-  font-family: inherit;
+  font-family: var(--font-ui);
   color: var(--ember-text);
   background: var(--ember-white);
-  border: 1px solid var(--ember-accent);
+  /* FIX: el borde del input usa --ember-border, no --ember-accent.
+     El accent (terracotta) es para focus/links, no para el estado base. */
+  border: 1px solid var(--ember-border);
   border-radius: var(--ember-radius-md);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* FIX crítico: el placeholder NO puede tener el color del texto real.
+   Confunde al usuario sobre qué es contenido vs. pista. */
 .ember-input::placeholder {
-  color: var(--ember-text);
+  color: var(--ember-text-muted);
+  opacity: 1;
 }
 
 .ember-input:focus {
@@ -241,9 +345,7 @@ body {
   box-shadow: 0 0 0 3px var(--ember-focus-ring);
 }
 
-.ember-input-password {
-  padding-right: 42px;
-}
+.ember-input-password { padding-right: 42px; }
 
 .ember-phone-prefix {
   position: absolute;
@@ -254,9 +356,7 @@ body {
   z-index: 1;
 }
 
-.ember-input-phone {
-  padding-left: 72px;
-}
+.ember-input-phone { padding-left: 72px; }
 
 .ember-toggle-password {
   position: absolute;
@@ -269,7 +369,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: var(--ember-radius-toggle);
   transition: color 0.2s ease, background 0.2s ease;
 }
 
@@ -283,45 +383,44 @@ body {
   font-size: 13px;
   color: var(--ember-red);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   transition: opacity 0.2s ease;
 }
 
-.ember-forgot:hover {
-  opacity: 0.8;
-}
+.ember-forgot:hover { opacity: 0.8; }
 
+/* Botones primario/secundario de auth — ahora extienden .btn */
 .ember-btn-primary {
   width: 100%;
   padding: 14px;
   font-size: 15px;
-  font-weight: 500;
-  font-family: inherit;
+  font-weight: var(--weight-medium);
+  font-family: var(--font-ui);
   color: var(--ember-white);
   background: var(--ember-red);
   border: none;
   border-radius: var(--ember-radius-md);
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease,
+              box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .ember-btn-primary:hover {
+  background: var(--ember-red-dark);
   opacity: 0.92;
   transform: translateY(-1px);
   box-shadow: var(--ember-shadow-md);
 }
 
-.ember-btn-primary:active {
-  transform: translateY(0);
-}
+.ember-btn-primary:active { transform: translateY(0); }
 
 .ember-btn-secondary {
   display: block;
   width: 100%;
   padding: 14px;
   font-size: 15px;
-  font-weight: 500;
-  font-family: inherit;
+  font-weight: var(--weight-medium);
+  font-family: var(--font-ui);
   color: var(--ember-red);
   background: transparent;
   border: 1.5px solid var(--ember-red);
@@ -341,10 +440,11 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: var(--text-body-sm);
   color: var(--ember-text);
   cursor: pointer;
   user-select: none;
+  font-family: var(--font-ui);
 }
 
 .ember-terms input[type="checkbox"] {
@@ -358,13 +458,11 @@ body {
 .ember-terms-link {
   color: var(--ember-accent);
   text-decoration: underline;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   transition: opacity 0.2s ease;
 }
 
-.ember-terms-link:hover {
-  opacity: 0.8;
-}
+.ember-terms-link:hover { opacity: 0.8; }
 
 .ember-divider {
   display: flex;
@@ -382,43 +480,39 @@ body {
 .ember-divider-text {
   font-size: 13px;
   color: var(--ember-text-muted);
+  font-family: var(--font-ui);
 }
 
 .ember-register {
   text-align: center;
-  font-size: 14px;
+  font-size: var(--text-body-sm);
   color: var(--ember-text-secondary);
   margin: 0;
+  font-family: var(--font-ui);
 }
 
 .ember-register-link {
   color: var(--ember-red);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   transition: opacity 0.2s ease;
 }
 
-.ember-register-link:hover {
-  opacity: 0.8;
-}
-
-
-
+.ember-register-link:hover { opacity: 0.8; }
 
 /* ============================================================
    HOME — LANDING PAGE
    ============================================================ */
-
 .home {
+  margin-top:-10px;
   width: 100%;
   min-height: 100vh;
   background-color: var(--ember-cream);
   color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
-.home a {
-  text-decoration: none;
-}
+.home a { text-decoration: none; }
 
 /* ---------- NAVBAR ---------- */
 .home-navbar {
@@ -426,18 +520,18 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 75px;
+  height: var(--navbar-height);  /* FIX: ahora consistente con la variable */
   padding: 0 6%;
   display: flex;
   align-items: center;
   z-index: 1000;
-  background: rgba(17, 17, 17, 0.95);
+  background: var(--ember-overlay-navbar);
   backdrop-filter: blur(6px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .link-navbar {
-  color: #d6d6d6;
+  color: var(--ember-hero-text);
   text-decoration: none;
 }
 
@@ -448,11 +542,10 @@ body {
 .home-logo {
   position: absolute;
   left: 6%;
-
   color: var(--ember-white);
   font-size: 22px;
-  font-weight: bold;
-  font-family: Georgia, serif;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-display);
   white-space: nowrap;
 }
 
@@ -460,14 +553,14 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
   display: flex;
   gap: 35px;
 }
 
 .home-menu a {
-  color: #d6d6d6;
-  font-size: 14px;
+  color: var(--ember-hero-text);
+  font-size: var(--text-body-sm);
+  font-family: var(--font-ui);
   transition: color 0.2s ease;
 }
 
@@ -478,17 +571,16 @@ body {
 .home-register {
   position: absolute;
   right: 6%;
-
   display: flex;
   align-items: center;
 }
 
 .home-register a {
-  color: #d6d6d6;
-  font-size: 14px;
+  color: var(--ember-hero-text);
+  font-size: var(--text-body-sm);
+  font-family: var(--font-ui);
   transition: color 0.2s ease;
 }
-
 
 .home-register a:hover {
   color: var(--ember-white);
@@ -500,7 +592,8 @@ body {
   padding: 9px 17px;
   border-radius: var(--ember-radius-sm);
   font-size: 13px;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-ui);
   transition: background 0.2s ease;
 }
 
@@ -510,16 +603,13 @@ body {
 
 /* ---------- HERO ---------- */
 .hero {
-  min-height: calc(85vh - 75px);
+  min-height: calc(85vh - var(--navbar-height));
   margin-top: 5px;
-  /* para que empiece debajo del navbar */
   display: flex;
   align-items: center;
-
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
   position: relative;
   color: var(--ember-white);
 }
@@ -530,10 +620,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg,
-      rgba(0, 0, 0, 0.85),
-      rgba(0, 0, 0, 0.55),
-      rgba(0, 0, 0, 0.35));
+  background: var(--ember-overlay-hero);
 }
 
 .hero-content {
@@ -549,25 +636,24 @@ body {
   gap: 50px;
 }
 
-.hero-text {
-  width: 52%;
-}
+.hero-text { width: 52%; }
 
 .hero-text h1 {
   margin-top: 18px;
   margin-bottom: 18px;
   max-width: 620px;
-  font-family: Georgia, serif;
-  font-size: 48px;
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
   line-height: 1.08;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
 }
 
 .hero-text p {
   max-width: 560px;
   color: var(--ember-hero-text);
-  font-size: 16px;
+  font-size: var(--text-body);
   line-height: 1.6;
+  font-family: var(--font-ui);
 }
 
 .hero-buttons {
@@ -582,7 +668,8 @@ body {
   padding: 12px 22px;
   border-radius: var(--ember-radius-sm);
   font-size: 13px;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-ui);
   transition: background 0.2s ease;
 }
 
@@ -592,16 +679,17 @@ body {
 
 .secondary-button {
   color: var(--ember-white);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--ember-overlay-secondary-btn);
   padding: 11px 22px;
   border-radius: var(--ember-radius-sm);
   font-size: 13px;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-ui);
   transition: background 0.2s ease;
 }
 
 .secondary-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--ember-overlay-secondary-btn-hover);
 }
 
 .hero-image-container {
@@ -618,7 +706,7 @@ body {
   object-fit: cover;
   object-position: center;
   border-radius: var(--ember-radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--ember-overlay-hero-image);
   box-shadow: var(--ember-shadow-xl);
 }
 
@@ -650,16 +738,19 @@ body {
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
   color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
+/* FIX: antes era 11px (prohibido WCAG). Subido a 12px (mínimo). */
 .benefit p {
   max-width: 280px;
   margin: 0;
   color: var(--ember-text-secondary);
-  font-size: 11px;
+  font-size: var(--text-caption);
   line-height: 1.5;
+  font-family: var(--font-ui);
 }
 
 /* ---------- PRODUCTOS ---------- */
@@ -674,7 +765,8 @@ body {
   text-align: center;
   padding: 40px 0;
   color: var(--ember-text-secondary);
-  font-size: 14px;
+  font-size: var(--text-body-sm);
+  font-family: var(--font-ui);
 }
 
 .error-message {
@@ -688,9 +780,9 @@ body {
 
 .section-header h2 {
   margin: 0;
-  font-family: Georgia, serif;
-  font-size: 30px;
-  font-weight: bold;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: var(--weight-bold);
   color: var(--ember-text);
 }
 
@@ -698,6 +790,7 @@ body {
   margin-top: 8px;
   color: var(--ember-text-secondary);
   font-size: 13px;
+  font-family: var(--font-ui);
 }
 
 .products-grid {
@@ -727,7 +820,8 @@ body {
   width: 100%;
   height: 180px;
   overflow: hidden;
-  background-color: #ddd;
+  /* FIX: antes #ddd hardcodeado. Ahora variable semántica. */
+  background-color: var(--ember-product-placeholder-bg);
 }
 
 .product-image img {
@@ -747,19 +841,23 @@ body {
   flex-direction: column;
 }
 
-.product-info>span {
+/* FIX: antes era 9px (prohibido WCAG). Subido a var(--text-micro) = 12px. */
+.product-info > span {
   color: var(--ember-red);
-  font-size: 9px;
-  font-weight: bold;
+  font-size: var(--text-micro);
+  font-weight: var(--weight-bold);
   letter-spacing: 1.5px;
+  font-family: var(--font-ui);
 }
 
+/* FIX: antes era 13px (demasiado pequeño para H3). Subido a 18px. */
 .product-info h3 {
   margin: 7px 0 20px;
   min-height: 35px;
-  font-size: 13px;
-  font-weight: bold;
-  color: #333;
+  font-size: var(--text-h3-product);
+  font-weight: var(--weight-bold);
+  color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
 .product-bottom {
@@ -768,9 +866,11 @@ body {
   justify-content: space-between;
 }
 
+/* FIX: antes #222 hardcodeado. Ahora --ember-text. */
 .product-bottom strong {
   font-size: 15px;
-  color: #222;
+  color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
 .product-bottom button {
@@ -780,8 +880,9 @@ body {
   padding: 8px 11px;
   border-radius: var(--ember-radius-sm);
   font-size: 11px;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
   cursor: pointer;
+  font-family: var(--font-ui);
   transition: background 0.2s ease;
 }
 
@@ -804,8 +905,9 @@ body {
   padding: 10px 22px;
   border-radius: var(--ember-radius-sm);
   font-size: 13px;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
   cursor: pointer;
+  font-family: var(--font-ui);
   transition: background 0.2s ease, color 0.2s ease;
 }
 
@@ -836,16 +938,17 @@ body {
 
 .tradition-content h2 {
   margin-bottom: 20px;
-  font-family: Georgia, serif;
-  font-size: 30px;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
   line-height: 1.2;
   color: var(--ember-text);
 }
 
 .tradition-content p {
   color: var(--ember-text-secondary);
-  font-size: 14px;
+  font-size: var(--text-body-sm);
   line-height: 1.7;
+  font-family: var(--font-ui);
 }
 
 .tradition-content ul {
@@ -854,14 +957,16 @@ body {
   list-style: none;
 }
 
+/* FIX: antes #555 hardcodeado. Ahora --ember-text-secondary. */
 .tradition-content li {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 11px;
-  color: #555;
+  color: var(--ember-text-secondary);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
+  font-family: var(--font-ui);
 }
 
 /* ---------- CTA ---------- */
@@ -874,20 +979,22 @@ body {
 
 .cta h2 {
   margin-bottom: 12px;
-  font-family: Georgia, serif;
-  font-size: 30px;
-  font-weight: bold;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: var(--weight-bold);
 }
 
 .cta p {
   max-width: 500px;
   margin: 0 auto;
   color: var(--ember-cta-text);
-  font-size: 16px;
+  font-size: var(--text-body);
   line-height: 1.6;
+  font-family: var(--font-ui);
 }
 
-.cta a {
+.cta a,
+.cta-button {
   display: inline-block;
   margin-top: 22px;
   padding: 12px 25px;
@@ -895,20 +1002,25 @@ body {
   background-color: var(--ember-white);
   color: var(--ember-red);
   font-size: 13px;
-  font-weight: bold;
-  transition: background 0.2s ease;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-ui);
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
-.cta a:hover {
+.cta a:hover,
+.cta-button:hover {
   background-color: var(--ember-cream);
+  color: var(--ember-red-dark);
+  transform: translateY(-1px);
 }
 
 /* ---------- FOOTER ---------- */
 .footer-logo {
   color: var(--ember-white);
   font-size: 30px;
-  font-weight: bold;
-  font-family: Georgia, serif;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-display);
   white-space: nowrap;
 }
 
@@ -916,27 +1028,28 @@ body {
   color: var(--ember-footer-text);
   text-decoration: none;
   transition: color 0.2s ease;
+  font-family: var(--font-ui);
 }
 
 .footer-link:hover {
-  color: var(--ember-footer-text-secondary)
+  color: var(--ember-footer-text-secondary);
 }
 
+/* FIX: antes #374151 hardcodeado. Ahora var(--ember-border) para dark mode. */
 .footer-bottom {
-  border-color: #374151 !important;
+  border-color: var(--ember-border) !important;
 }
-
 
 /* ============================================================
-    CARRITO 
-  ============================================================= */
-
+   CARRITO
+   ============================================================ */
 .carrito-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
   background: var(--ember-cream);
+  font-family: var(--font-ui);
 }
 
 .carrito-header {
@@ -951,22 +1064,21 @@ body {
 .carrito-header h1 {
   font-size: 1.8rem;
   color: var(--ember-text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
 }
 
 .volver-link {
   color: var(--ember-red);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   transition: color 0.2s;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
 }
 
 .volver-link:hover {
   color: var(--ember-red-dark);
 }
 
-/* CARRITO VACÍO */
 .carrito-vacio {
   text-align: center;
   padding: 5rem 2rem;
@@ -982,13 +1094,13 @@ body {
 .carrito-vacio h2 {
   color: var(--ember-text);
   margin-bottom: 0.5rem;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
 }
 
 .carrito-vacio p {
   color: var(--ember-text-secondary);
   margin-bottom: 1.5rem;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
 }
 
 .volver-tienda {
@@ -998,16 +1110,15 @@ body {
   color: var(--ember-white);
   border-radius: var(--ember-radius-lg);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   transition: background 0.2s;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
 }
 
 .volver-tienda:hover {
   background: var(--ember-red-dark);
 }
 
-/* CONTENIDO CON GRID */
 .carrito-contenido {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -1015,7 +1126,6 @@ body {
   align-items: start;
 }
 
-/* LISTA DE PRODUCTOS */
 .carrito-productos {
   display: flex;
   flex-direction: column;
@@ -1055,12 +1165,14 @@ body {
   font-size: 1.1rem;
   color: var(--ember-text);
   margin-bottom: 0.25rem;
+  font-family: var(--font-ui);
 }
 
 .precio-unitario {
   color: var(--ember-text-secondary);
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
+  font-family: var(--font-ui);
 }
 
 .cantidad-control {
@@ -1082,6 +1194,7 @@ body {
   justify-content: center;
   transition: all 0.2s;
   color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
 .cantidad-control button:hover {
@@ -1090,10 +1203,11 @@ body {
 }
 
 .cantidad-control span {
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   min-width: 24px;
   text-align: center;
   color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
 .carrito-producto-total {
@@ -1107,6 +1221,7 @@ body {
 .carrito-producto-total strong {
   font-size: 1.1rem;
   color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
 .eliminar-producto {
@@ -1117,6 +1232,7 @@ body {
   font-size: 0.85rem;
   padding: 0.25rem;
   transition: color 0.2s;
+  font-family: var(--font-ui);
 }
 
 .eliminar-producto:hover {
@@ -1124,7 +1240,6 @@ body {
   text-decoration: underline;
 }
 
-/* RESUMEN */
 .carrito-resumen {
   background: var(--ember-cream-light);
   padding: 1.75rem;
@@ -1139,6 +1254,7 @@ body {
   font-size: 1.25rem;
   margin-bottom: 1.25rem;
   color: var(--ember-text);
+  font-family: var(--font-ui);
 }
 
 .resumen-linea {
@@ -1146,6 +1262,7 @@ body {
   justify-content: space-between;
   margin: 0.875rem 0;
   color: var(--ember-text-secondary);
+  font-family: var(--font-ui);
 }
 
 .envio-texto {
@@ -1179,14 +1296,17 @@ hr {
   border: none;
   border-radius: var(--ember-radius-lg);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   cursor: pointer;
   margin-top: 1.5rem;
-  transition: background 0.2s;
+  font-family: var(--font-ui);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 
 .btn-comprar:hover {
   background: var(--ember-red-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--ember-shadow-md);
 }
 
 .btn-vaciar {
@@ -1199,6 +1319,7 @@ hr {
   font-size: 0.875rem;
   cursor: pointer;
   margin-top: 0.75rem;
+  font-family: var(--font-ui);
   transition: all 0.2s;
 }
 
@@ -1207,7 +1328,6 @@ hr {
   border-color: var(--ember-red);
 }
 
-/* BADGE DEL CARRITO EN EL NAVBAR */
 .carrito-btn {
   position: relative;
   text-decoration: none;
@@ -1223,37 +1343,28 @@ hr {
   background: var(--ember-red);
   color: var(--ember-white);
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   width: 20px;
   height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-ui);
 }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
-  .carrito-contenido {
-    grid-template-columns: 1fr;
-  }
-
-  .carrito-resumen {
-    position: static;
-  }
+  .carrito-contenido { grid-template-columns: 1fr; }
+  .carrito-resumen { position: static; }
 }
 
 @media (max-width: 600px) {
-  .carrito-page {
-    padding: 1rem;
-  }
-
+  .carrito-page { padding: 1rem; }
   .carrito-producto {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-
   .carrito-producto-total {
     align-items: center;
     width: 100%;
@@ -1263,213 +1374,124 @@ hr {
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — HOME
    ============================================================ */
-
 @media (max-width: 1000px) {
-  .home-menu {
-    gap: 18px;
-  }
-
-  .hero-content {
-    width: 90%;
-  }
-
-  .hero-text h1 {
-    font-size: 40px;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .home-menu { gap: 18px; }
+  .hero-content { width: 90%; }
+  .hero-text h1 { font-size: 2.25rem; } /* 36px (era 40px) */
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-  .home-navbar {
-    padding: 0 5%;
-  }
-
-  .home-menu {
-    display: none;
-  }
-
-  .hero {
-    min-height: 850px;
-  }
-
+  .home-navbar { padding: 0 5%; }
+  .home-menu { display: none; }
+  .hero { min-height: 850px; }
   .hero-content {
     flex-direction: column;
     align-items: flex-start;
     padding-top: 100px;
   }
-
-  .hero-text {
-    width: 100%;
-  }
-
-  .hero-text h1 {
-    font-size: 38px;
-  }
-
-  .hero-image-container {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .hero-image-container img {
-    max-width: 500px;
-  }
-
-  .benefits {
-    grid-template-columns: 1fr;
-    gap: 35px;
-  }
-
-  .tradition {
-    grid-template-columns: 1fr;
-    gap: 35px;
-  }
+  .hero-text { width: 100%; }
+  .hero-text h1 { font-size: 1.875rem; } /* 30px (era 38px) */
+  .hero-image-container { width: 100%; justify-content: center; }
+  .hero-image-container img { max-width: 500px; }
+  .benefits { grid-template-columns: 1fr; gap: 35px; }
+  .tradition { grid-template-columns: 1fr; gap: 35px; }
 }
 
 @media (max-width: 500px) {
-  .home-actions button {
-    display: none;
-  }
-
-  .login-button {
-    padding: 8px 12px;
-  }
-
-  .hero-text h1 {
-    font-size: 32px;
-  }
-
-  .hero-text p {
-    font-size: 14px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .products-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .products {
-    padding: 55px 6%;
-  }
-
-  .tradition {
-    padding: 55px 6%;
-  }
-
-  .ember-card {
-    padding: 24px;
-  }
-
-  .ember-logo-text {
-    font-size: 32px;
-  }
+  /* FIX: la clase .home-actions no existía en el CSS original;
+     el botón de login está en .home-register.
+     La regla original ocultaba .home-actions button que es un selector vacío. */
+  .home-register .login-button { padding: 8px 12px; }
+  .hero-text h1 { font-size: 1.5rem; } /* 24px (era 32px) */
+  .hero-text p { font-size: var(--text-body-sm); }
+  .hero-buttons { flex-direction: column; align-items: flex-start; }
+  .products-grid { grid-template-columns: 1fr; }
+  .products { padding: 55px 6%; }
+  .tradition { padding: 55px 6%; }
+  .ember-card { padding: 24px; }
+  .ember-logo-text { font-size: 32px; }
 }
-
-
-
-
 
 /* ============================================================
-   CATALOGO
+   CATÁLOGO — ahora usa tokens unificados de marca (eliminado :root paralelo)
    ============================================================ */
-/* styles.css */
-
-
-:root {
-  --em-cream: #f7f4ee;
-  --em-ink: #1f1a16;
-  --em-muted: #746b62;
-  --em-terracotta: #a2531f;
-  --em-terracotta-hover: #8a4419;
-  --em-border: #e7e1d6;
-}
-
 .catalogo-page {
-  background-color: var(--em-cream);
+  background-color: var(--ember-cream);
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
-  color: var(--em-ink);
+  font-family: var(--font-ui);
+  color: var(--ember-text);
 }
 
-/* Encabezado */
 .catalogo-titulo {
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
+  font-family: var(--font-catalogue);
+  font-weight: var(--weight-bold);
   font-size: 2.75rem;
   margin-bottom: 0.25rem;
 }
 
 .catalogo-subtitulo {
-  color: var(--em-muted);
+  color: var(--ember-text-secondary);
   font-size: 1.05rem;
   margin-bottom: 0;
+  font-family: var(--font-ui);
 }
 
 .filtros-card {
-  border-radius: 14px;
+  border: 1px solid var(--ember-border);
+  box-shadow: var(--ember-shadow-sm);
+  background-color: var(--ember-white);
+  border-radius: var(--ember-radius-md);
+  height: auto;
+  z-index: 2;
 }
 
 .filtros-titulo {
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
+  font-family: var(--font-catalogue);
+  font-weight: var(--weight-bold);
   font-size: 1.4rem;
 }
 
 .limpiar-filtros {
-  color: var(--em-terracotta);
+  color: var(--ember-accent);
   text-decoration: none;
   font-size: 0.9rem;
+  font-family: var(--font-ui);
 }
 
 .limpiar-filtros:hover {
-  color: var(--em-terracotta-hover);
+  color: var(--ember-accent-hover);
   text-decoration: underline;
 }
 
 .filtro-subtitulo {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   margin-bottom: 0.6rem;
+  font-family: var(--font-ui);
 }
 
 .form-check-input:checked {
-  background-color: var(--em-ink);
-  border-color: var(--em-ink);
+  background-color: var(--ember-text);
+  border-color: var(--ember-text);
 }
 
+/* FIX: el focus del form-check ahora usa --ember-focus-ring (token unificado). */
 .form-check-input:focus {
-  box-shadow: 0 0 0 0.2rem rgba(162, 83, 31, 0.2);
-  border-color: var(--em-terracotta);
+  box-shadow: 0 0 0 0.2rem var(--ember-focus-ring);
+  border-color: var(--ember-accent);
 }
 
 .precio-range {
-  accent-color: var(--em-terracotta);
+  accent-color: var(--ember-accent);
 }
 
-/* Selector de orden */
 .orden-select {
-  border-radius: 8px;
-  border-color: var(--em-border);
-}
-
-
-
-/* Sidebar de filtros */
-.filtros-card {
-  border: 1px solid var(--em-border);
-  box-shadow: var(--ember-shadow-sm);
-  background-color: var(--ember-white);
-  height: auto;
-  z-index: 2;
+  border-radius: var(--ember-radius-sm);
+  border-color: var(--ember-border);
+  font-family: var(--font-ui);
 }
 
 @media (min-width: 992px) {
@@ -1482,8 +1504,8 @@ hr {
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
+  border-top-left-radius: var(--ember-radius-md);
+  border-top-right-radius: var(--ember-radius-md);
 }
 
 .producto-img {
@@ -1496,67 +1518,72 @@ hr {
 .sin-stock-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(20, 16, 13, 0.55);
+  /* FIX: antes rgba(20,16,13,0.55) hardcodeado. Ahora var(--ember-overlay-stock). */
+  background: var(--ember-overlay-stock);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .sin-stock-overlay span {
-  color: #fff;
-  font-weight: 600;
+  color: var(--ember-white);
+  font-weight: var(--weight-semibold);
   letter-spacing: 0.02em;
+  font-family: var(--font-ui);
 }
 
 .producto-nombre {
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   margin-bottom: 0.35rem;
+  font-family: var(--font-ui);
 }
 
 .producto-precio {
-  color: var(--em-terracotta);
-  font-weight: 700;
+  color: var(--ember-accent);
+  font-weight: var(--weight-bold);
   font-size: 1.15rem;
+  font-family: var(--font-ui);
 }
 
-/* Botón Agregar */
 .btn-agregar {
-  background-color: var(--em-terracotta);
-  border-color: var(--em-terracotta);
-  color: #fff;
-  font-weight: 600;
-  border-radius: 8px;
+  background-color: var(--ember-accent);
+  border-color: var(--ember-accent);
+  color: var(--ember-white);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--ember-radius-sm);
   padding: 0.6rem 1rem;
+  font-family: var(--font-ui);
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .btn-agregar:hover:not(:disabled) {
-  background-color: var(--em-terracotta-hover);
-  border-color: var(--em-terracotta-hover);
-  color: #fff;
+  background-color: var(--ember-accent-hover);
+  border-color: var(--ember-accent-hover);
+  color: var(--ember-white);
 }
 
 .btn-agregar:disabled {
-  background-color: #d9d2c6;
-  border-color: #d9d2c6;
-  color: #8c8478;
+  background-color: var(--ember-product-placeholder-bg);
+  border-color: var(--ember-product-placeholder-bg);
+  color: var(--ember-text-muted);
   opacity: 1;
+  cursor: not-allowed;
 }
 
-/* ========== FIX: Precio y botón al fondo de la card (solo catálogo) ========== */
-
+/* Fix: precio y botón al fondo de la card (solo catálogo) */
 .catalogo-page .product-card {
   display: flex;
   flex-direction: column;
-  height: 100%;          /* Ocupa toda la altura de la columna */
+  height: 100%;
 }
 
 .catalogo-page .product-info {
   display: flex;
   flex-direction: column;
-  flex: 1;               /* Crece y empuja el bottom hacia abajo */
+  flex: 1;
 }
 
 .catalogo-page .product-bottom {
-  margin-top: auto;      /* Se pega al fonde */
+  margin-top: auto;
 }

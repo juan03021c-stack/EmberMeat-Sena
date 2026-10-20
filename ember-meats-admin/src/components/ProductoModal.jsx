@@ -14,11 +14,11 @@ export default function ProductoModal({
     if (!show) return null
 
     return (
-        <div className='modal fade show d-block' tabIndex='-1' role='dialog' style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className='modal fade show d-block' tabIndex='-1' role='dialog' style={{ backgroundColor: 'var(--ember-overlay-mid)' }}>
             <div className='modal-dialog modal-lg modal-dialog-centered' role='document'>
-                <div className='modal-content'>
+                <div className='modal-content card border-0 shadow-lg'>
                     <div className='modal-header'>
-                        <h5 className='modal-title'>{productoEditando ? 'Editar producto' : 'Nuevo producto'}</h5>
+                        <h5 className='modal-title fw-bold text-ember-dark'>{productoEditando ? 'Editar producto' : 'Nuevo producto'}</h5>
                         <button type='button' className='btn-close' onClick={onClose} aria-label='Cerrar' />
                     </div>
 

@@ -19,7 +19,7 @@ function Avatar({ nombre }) {
     return (
         <div
             className='rounded-circle d-flex align-items-center justify-content-center text-white fw-medium'
-            style={{ width: 36, height: 36, background: '#7B1F1F', fontSize: 13 }}
+            style={{ width: 36, height: 36, background: 'var(--ember-red)', fontSize: 'var(--text-body-sm)' }}
         >
             {initials}
         </div>
@@ -248,9 +248,10 @@ export default function Users() {
                 roles={roles}
             />
 
-            <div className='card border-0 p-3'>
-                <table className='table'>
-                    <thead className='table-header-custom'>
+            <div className='card p-3'>
+                <div className='table-responsive'>
+                    <table className='table table-hover align-middle'>
+                        <thead>
                         <tr>
                             <th>Usuario</th>
                             <th>Email</th>
@@ -301,6 +302,7 @@ export default function Users() {
                         )}
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     )

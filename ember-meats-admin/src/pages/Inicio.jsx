@@ -213,7 +213,7 @@ export default function Home() {
                         disabled={agotadoParaEsteUsuario}
                         onClick={() => agregarAlCarrito(p)}
                       >
-                        {agotadoParaEsteUsuario ? 'Máx. en carrito' : 'Agregar'}
+                        {agotadoParaEsteUsuario ? 'No disponible' : 'Agregar'}
                       </button>
                     </div>
                   </div>

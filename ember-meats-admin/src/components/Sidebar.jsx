@@ -14,8 +14,9 @@ export default function Sidebar() {
     <div
       style={{
         width: 200,
-        background: '#FFFFFF',
-        minHeight: '100vh'
+        background: 'var(--ember-white)',
+        minHeight: '100vh',
+        borderRight: '1px solid var(--ember-border)'
       }}
       className='d-flex flex-column'
     >
@@ -24,7 +25,7 @@ export default function Sidebar() {
       <div className='p-3 mb-2'>
         <strong className='text-ember-dark'>EMBER MEATS</strong>
 
-        <div style={{ fontSize: 10, color: '#888' }}>
+        <div style={{ fontSize: 'var(--text-micro)', color: 'var(--ember-text-muted)' }}>
           ADMIN PANEL
         </div>
       </div>
@@ -45,12 +46,12 @@ export default function Sidebar() {
                 : 'text-secondary')
             }
             style={({ isActive }) =>
-              isActive ? { background: '#7B1F1F' } : {}
+              isActive ? { background: 'var(--ember-red)' } : {}
             }
           >
             <i className={`bi ${item.icon}`}></i>
 
-            <span style={{ fontSize: 14 }}>
+            <span style={{ fontSize: 'var(--text-body-sm)' }}>
               {item.label}
             </span>
           </NavLink>
@@ -63,12 +64,12 @@ export default function Sidebar() {
       <div
         style={{
           padding: '15px 10px 35px 10px',
-          borderTop: '1px solid #AAAAAA'
+          borderTop: '1px solid var(--ember-border)'
         }}
       >
         <NavLink
           to='/'
-          className='primary-button text-decoration-none'
+          className='btn btn-ember text-decoration-none w-100'
         >
           ← Salir
         </NavLink>

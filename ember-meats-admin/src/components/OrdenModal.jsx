@@ -19,14 +19,14 @@ export default function OrdenModal({
             tabIndex="-1"
             role="dialog"
             style={{
-                backgroundColor: "rgba(0,0,0,0.5)"
+                backgroundColor: "var(--ember-overlay-mid)"
             }}
         >
             <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div className="modal-content">
+                <div className="modal-content card border-0 shadow-lg">
 
                     <div className="modal-header">
-                        <h5 className="modal-title">
+                        <h5 className="modal-title fw-bold text-ember-dark">
                             {ordenEditando ? "Editar orden" : "Nueva orden"}
                         </h5>
 
@@ -169,12 +169,7 @@ export default function OrdenModal({
 
                                 <button
                                     type="button"
-                                    className="btn me-2"
-                                    style={{
-                                        backgroundColor: "#7B1F1F",
-                                        borderColor: "#7B1F1F",
-                                        color: "white"
-                                    }}
+                                    className="btn btn-outline-secondary me-2"
                                     onClick={limpiarFormulario}
                                     disabled={loading}
                                 >
@@ -183,7 +178,7 @@ export default function OrdenModal({
 
                                 <button
                                     type="button"
-                                    className="btn btn-secondary me-2"
+                                    className="btn btn-outline-secondary me-2"
                                     onClick={onClose}
                                     disabled={loading}
                                 >
@@ -192,12 +187,7 @@ export default function OrdenModal({
 
                                 <button
                                     type="submit"
-                                    className="btn"
-                                    style={{
-                                        backgroundColor: "#7B1F1F",
-                                        borderColor: "#7B1F1F",
-                                        color: "white"
-                                    }}
+                                    className="btn btn-ember"
                                     disabled={loading}
                                 >
                                     {loading

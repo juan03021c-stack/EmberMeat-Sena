@@ -360,3 +360,23 @@ export async function consultarEstadoPedido(numeroPedido, pedidoId = null) {
         return { success: false, message: error.message };
     }
 }
+
+
+/* estadisticas*/
+export async function obtenerEstadisticas() {
+    const respuesta = await fetch(
+        `${URL_BASE}/Dashboard/Estadisticas.php`
+    );
+
+    if (!respuesta.ok) {
+        throw new Error("Error al consultar las estadísticas");
+    }
+
+    const datos = await respuesta.json();
+
+    if (!datos.success) {
+        throw new Error(datos.mensaje || "Error del servidor");
+    }
+
+    return datos;
+}

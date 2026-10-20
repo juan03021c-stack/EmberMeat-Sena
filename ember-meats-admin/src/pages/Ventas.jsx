@@ -20,7 +20,7 @@ function Avatar({ cliente }) {
     return (
         <div
             className='rounded-circle d-flex align-items-center justify-content-center text-white fw-medium'
-            style={{ width: 36, height: 36, background: '#7B1F1F', fontSize: 13 }}
+            style={{ width: 36, height: 36, background: 'var(--ember-red)', fontSize: 'var(--text-body-sm)' }}
         >
             {initials}
         </div>
@@ -191,42 +191,44 @@ export default function Ventas() {
     <div className="p-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 className="mb-0">Ventas</h2>
+          <h2 className="mb-0 fw-bold">Ventas</h2>
           <small className="text-secondary">
             {d.length} clientes registrados
           </small>
         </div>
-        <button className="btn btn-danger" onClick={abrirModal}>
-          + Nueva venta
+        <button className="btn btn-ember" onClick={abrirModal}>
+          <i className="bi bi-plus-lg me-1"></i>
+          Nueva venta
         </button>
       </div>
 
       <div className="card p-3 mb-4">
-        <h5>Productos disponibles</h5>
+        <h5 className="fw-bold mb-3">Productos disponibles</h5>
         {productos.length === 0 ? (
           <p className="text-secondary">No hay productos cargados.</p>
         ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Imagen</th>
-                <th>Descripción</th>
-                <th>Stock</th>
-                <th>Precio</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productos.map((p) => (
-                <tr key={p.id}>
-                  <td> <div className='d-flex align-items-center gap-3'>
-                        {p.imagen_url ? (
-                          <img
-                            src={`${URL_BASE}/${p.imagen_url}`}
-                            style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8 }}
-                          />
-                        ) : (
-                          <div style={{ width: 48, height: 48, background: '#eee', borderRadius: 8 }} />
-                        )}
+          <div className="table-responsive">
+            <table className="table table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Imagen</th>
+                  <th>Descripción</th>
+                  <th>Stock</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productos.map((p) => (
+                  <tr key={p.id}>
+                    <td> <div className='d-flex align-items-center gap-3'>
+                          {p.imagen_url ? (
+                            <img
+                              src={`${URL_BASE}/${p.imagen_url}`}
+                              style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 'var(--ember-radius-sm)' }}
+                            />
+                          ) : (
+                            <div style={{ width: 48, height: 48, background: 'var(--ember-product-placeholder-bg)', borderRadius: 'var(--ember-radius-sm)' }} />
+                          )}
                         <div>
                           <div className='fw-semibold'>{p.nombre}</div>
                           <div className='text-muted small'>{p.presentacion || '-'}</div>
@@ -241,6 +243,7 @@ export default function Ventas() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
@@ -273,7 +276,7 @@ export default function Ventas() {
                     <td>{v.canal}</td>
                     <td>{v.metodo_pago}</td>
                     <td>{v.productos ? v.productos.length : 0} Productos</td>
-                    <td className="fw-semibold text-danger">
+                    <td className="fw-semibold text-ember-red">
                       ${precioSeguro(v.total).toLocaleString()}
                     </td>
                     <td className="text-secondary">
@@ -292,11 +295,11 @@ export default function Ventas() {
       {modalAbierto && (
         <div
           className="modal d-block"
-          style={{ background: "rgba(0,0,0,0.5)" }}
+          style={{ background: "var(--ember-overlay-mid)" }}
           onClick={(e) => e.target === e.currentTarget && cerrarModal()}
         >
           <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content p-3">
+            <div className="modal-content card border-0 shadow-lg p-3">
               {paso === "exito" ? (
                 <div className="text-center py-4">
                   <div
