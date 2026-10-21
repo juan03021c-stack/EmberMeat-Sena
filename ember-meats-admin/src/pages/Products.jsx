@@ -288,10 +288,10 @@ export default function Products() {
                     <td><InsigniaStock stock={Number(producto.stock)} /></td>
                     <td><InsigniaActivo activo={producto.activo} /></td>
                     <td className='text-end'>
-                      <button className='btn btn-sm btn-outline-secondary me-2' onClick={() => abrirModalEdicion(producto)}>
+                      <button className='btn btn-sm ember-btn-terciario me-2' onClick={() => abrirModalEdicion(producto)}>
                         Editar
                       </button>
-                      <button className='btn btn-sm btn-outline-danger' onClick={() => eliminar(producto.id)}>
+                      <button className='btn btn-sm ember-btn-terciario' onClick={() => eliminar(producto.id)}>
                         Eliminar
                       </button>
                     </td>

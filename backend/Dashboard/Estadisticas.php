@@ -45,6 +45,34 @@ try {
         "SELECT COUNT(*) FROM productos WHERE stock <= 5"
     )->fetchColumn();
 
+    $ventasPorDia = $pdo->query(
+        "SELECT
+    DATE(p.created_at) AS date,
+    SUM(p.total) AS sales
+    FROM pedidos p
+    WHERE p.created_at >= CURRENT_DATE - INTERVAL 29 DAY
+    AND p.created_at < CURRENT_DATE + INTERVAL 1 DAY
+    GROUP BY DATE(p.created_at)
+    ORDER BY DATE(p.created_at);"
+    )->fetchAll(PDO::FETCH_ASSOC);
+
+    $pedidosRecientes = $pdo->query(
+        "SELECT
+    p.id,
+    p.numero_pedido AS numero,
+    u.nombre AS customer,
+    p.created_at AS date,
+    p.total,
+    p.estado AS status
+    FROM pedidos p
+    INNER JOIN usuarios u
+        ON p.cliente_id = u.id
+    ORDER BY p.created_at DESC
+    LIMIT 5;"
+    )->fetchAll(PDO::FETCH_ASSOC);
+
+
+
     echo json_encode([
         "success" => true,
         "productos" => $productos,
@@ -55,6 +83,8 @@ try {
         "enviados" => $enviados,
         "entregados" => $entregados,
         "stockBajo" => $stockBajo,
+        "ventasPorDia" => $ventasPorDia,
+        "pedidosRecientes" => $pedidosRecientes
     ]);
 } catch (Throwable $e) {
     echo json_encode([

@@ -201,52 +201,6 @@ export default function Ventas() {
           Nueva venta
         </button>
       </div>
-
-      <div className="card p-3 mb-4">
-        <h5 className="fw-bold mb-3">Productos disponibles</h5>
-        {productos.length === 0 ? (
-          <p className="text-secondary">No hay productos cargados.</p>
-        ) : (
-          <div className="table-responsive">
-            <table className="table table-hover align-middle">
-              <thead>
-                <tr>
-                  <th>Imagen</th>
-                  <th>Descripción</th>
-                  <th>Stock</th>
-                  <th>Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productos.map((p) => (
-                  <tr key={p.id}>
-                    <td> <div className='d-flex align-items-center gap-3'>
-                          {p.imagen_url ? (
-                            <img
-                              src={`${URL_BASE}/${p.imagen_url}`}
-                              style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 'var(--ember-radius-sm)' }}
-                            />
-                          ) : (
-                            <div style={{ width: 48, height: 48, background: 'var(--ember-product-placeholder-bg)', borderRadius: 'var(--ember-radius-sm)' }} />
-                          )}
-                        <div>
-                          <div className='fw-semibold'>{p.nombre}</div>
-                          <div className='text-muted small'>{p.presentacion || '-'}</div>
-                        </div>
-                      </div></td>
-                 
-                  <td>{p.descripcion}</td>
-                  <td>{p.stock}</td>
-                 
-                  <td>${precioSeguro(p.precio).toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
-        )}
-      </div>
-
       <div className="card p-3">
         <h5>Historial de ventas</h5>
         {ventas.length === 0 ? (
