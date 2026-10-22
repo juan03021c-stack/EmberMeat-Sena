@@ -292,7 +292,7 @@ export default function Products() {
                         Editar
                       </button>
                       <button className='btn btn-sm btn-outline-danger' onClick={() => eliminar(producto.id)}>
-                        Eliminar
+                          Desactivar 
                       </button>
                     </td>
                   </tr>
