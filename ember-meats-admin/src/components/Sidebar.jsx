@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: 'bi-speedometer2' },
   { path: '/productos', label: 'Productos', icon: 'bi-box-seam' },
+  { path: '/categorias', label: 'Categorias', icon: 'bi-box-seam' },
   { path: '/ordenes', label: 'Ordenes', icon: 'bi-receipt' },
   { path: '/usuarios', label: 'Usuarios', icon: 'bi-people' },
   { path: '/ventas', label: 'Ventas', icon: 'bi-cash-coin' },

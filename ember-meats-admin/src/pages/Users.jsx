@@ -272,7 +272,7 @@ export default function Users() {
                                                 className='btn btn-sm ember-btn-terciario' type='button'
                                                 onClick={() => eliminarUsuario(u)}
                                             >
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </td>
                                     </tr>

@@ -196,10 +196,10 @@ export default function Ventas() {
             {d.length} clientes registrados
           </small>
         </div>
-        <button className="btn btn-ember" onClick={abrirModal}>
+        {/* <button className="btn btn-ember" onClick={abrirModal}>
           <i className="bi bi-plus-lg me-1"></i>
           Nueva venta
-        </button>
+        </button> */}
       </div>
       <div className="card p-3">
         <h5>Historial de ventas</h5>
@@ -272,7 +272,7 @@ export default function Ventas() {
                 </div>
               ) : (
                 <>
-                  <div className="d-flex justify-content-between align-items-start">
+                  {/* <div className="d-flex justify-content-between align-items-start">
                     <div>
                       <h5 className="mb-0">Nueva venta</h5>
                       <small className="text-secondary">
@@ -284,7 +284,7 @@ export default function Ventas() {
                       onClick={cerrarModal}
                       aria-label="Cerrar"
                     ></button>
-                  </div>
+                  </div> */}
 
                   <div className="d-flex align-items-center justify-content-between my-3">
                     {PASOS.map((p, i) => (

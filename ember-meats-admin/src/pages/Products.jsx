@@ -171,7 +171,7 @@ export default function Products() {
 
   const eliminar = async (id) => {
     if (!window.confirm('¿Eliminar este producto?')) return
-    
+
     setLoading(true)
     setMensaje(null)
     setError(null)
@@ -234,16 +234,17 @@ export default function Products() {
         mensaje={mensaje}
       />
 
-      <div className='mb-3'>
-        <input
-          className='form-control'
-          placeholder='Buscar por nombre o categoría'
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
-      </div>
+
 
       <div className='card p-3'>
+        <div className='mb-3'>
+          <input
+            className='form-control'
+            placeholder='Buscar por nombre o categoría'
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          />
+        </div>
         <div className='table-responsive'>
           <table className='table table-hover align-middle'>
             <thead>
@@ -265,7 +266,7 @@ export default function Products() {
                 </tr>
               ) : (
                 productosFiltrados.map((producto) => (
-                  <tr key={producto.id }>
+                  <tr key={producto.id}>
                     <td>
                       <div className='d-flex align-items-center gap-3'>
                         {producto.imagen_url ? (
