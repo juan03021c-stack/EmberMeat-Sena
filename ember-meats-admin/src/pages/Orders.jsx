@@ -184,11 +184,11 @@ export default function Orders() {
                     </small>
                 </div>
                 <div className='d-flex gap-2'>
-                    <button className='btn btn-outline-secondary' type='button' onClick={cargarDatos} disabled={loading} title='Recargar pedidos'>
+                    <button className='btn ember-btn-terciario' type='button' onClick={cargarDatos} disabled={loading} title='Recargar pedidos'>
                         <i className={`bi bi-arrow-clockwise me-1 ${loading ? 'spinner-border spinner-border-sm' : ''}`}></i>
                         Actualizar
                     </button>
-                    <button className='btn btn-ember' type='button' onClick={abrirModalNuevo}>
+                    <button className='btn ember-btn-terciario' type='button' onClick={abrirModalNuevo}>
                         <i className='bi bi-plus-lg me-1'></i>
                         Crear pedido
                     </button>
@@ -222,21 +222,21 @@ export default function Orders() {
                     <div className='col-md-7 d-flex gap-2 flex-wrap'>
                         <button
                             type='button'
-                            className={`btn btn-sm ${filtroModalidad === 'todas' ? 'btn-ember text-white' : 'btn-outline-secondary'}`}
+                            className={`btn btn-sm ${filtroModalidad === 'todas' ? 'ember-btn-terciario' : 'ember-btn text-white'}`}
                             onClick={() => setFiltroModalidad('todas')}
                         >
                             Todas {pedidos.length}
                         </button>
                         <button
                             type='button'
-                            className={`btn btn-sm ${filtroModalidad === 'recogida_punto' ? 'btn-ember text-white' : 'btn-outline-secondary'}`}
+                            className={`btn btn-sm ${filtroModalidad === 'recogida_punto' ? 'ember-btn-terciario' : 'ember-btn text-white'}`}
                             onClick={() => setFiltroModalidad('recogida_punto')}
                         >
                             Recogida en punto {totalRecogidas}
                         </button>
                         <button
                             type='button'
-                            className={`btn btn-sm ${filtroModalidad === 'domicilio' ? 'btn-ember text-white' : 'btn-outline-secondary'}`}
+                            className={`btn btn-sm ${filtroModalidad === 'domicilio' ? 'ember-btn-terciario' : 'ember-btn text-white'}`}
                             onClick={() => setFiltroModalidad('domicilio')}
                         >
                              Domicilio {totalDomicilios}
@@ -307,10 +307,10 @@ export default function Orders() {
                                             </span>
                                         </td>
                                         <td>
-                                            <button className='btn btn-sm btn-outline-secondary me-2' type='button' onClick={() => abrirModalEdicion(p)}>
+                                            <button className='btn btn-sm ember-btn-terciario me-2' type='button' onClick={() => abrirModalEdicion(p)}>
                                                 Editar
                                             </button>
-                                            <button className='btn btn-sm btn-outline-danger' type='button' onClick={() => eliminar(p.id)}>
+                                            <button className='btn btn-sm ember-btn-terciario' type='button' onClick={() => eliminar(p.id)}>
                                                 Eliminar
                                             </button>
                                         </td>

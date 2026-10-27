@@ -363,6 +363,7 @@ export async function consultarEstadoPedido(numeroPedido, pedidoId = null) {
 
 
 /* estadisticas*/
+
 export async function obtenerEstadisticas() {
     const respuesta = await fetch(
         `${URL_BASE}/Dashboard/Estadisticas.php`
@@ -375,7 +376,9 @@ export async function obtenerEstadisticas() {
     const datos = await respuesta.json();
 
     if (!datos.success) {
-        throw new Error(datos.mensaje || "Error del servidor");
+        throw new Error(
+            datos.mensaje || "Error del servidor"
+        );
     }
 
     return datos;

@@ -27,34 +27,12 @@ function Avatar({ nombre }) {
 }
 
 
-function RoleBadge({ rol }) {
-    const role = (rol || '').toLowerCase()
-
-    switch (role) {
-        case 'administrador':
-        case 'admin' || 'repartidor' && 'vendedor':
-            return <span className='badge' style={{ background: '#6f42c1', color: 'white' }}>Admin</span>
-        case 'cliente':
-            return <span className='badge bg-primary bg-opacity-10 text-primary'>Cliente</span>
-        case 'repartidor':
-            return <span className='badge bg-dark bg-opacity-10 text-secondary'>Repartidor</span>
-        case 'vendedor':
-            return <span className='badge bg-warning bg-opacity-10 text-warning'>Vendedor</span>
-        default:
-            return <span className='badge bg-light text-dark'>{rol || 'Sin rol'}</span>
+function Active(estado) {
+    if (Number(estado) == 1) {
+        return <span className='badge bg-success'>Activo</span>
     }
-}
-
-function Active({ estado }) {
-    switch (estado) {
-        case 1:
-        case '1':
-            return <span className='badge bg-success'>Activo</span>
-        case 2:
-        case '2':
-            return <span className='badge bg-danger'>Inactivo</span>
-        default:
-            return <span className='badge bg-warning text-dark'>Pendiente</span>
+    if (Number(estado) == 0) {
+        return <span className='badge bg-danger'>Inactivo</span>
     }
 }
 
@@ -216,7 +194,7 @@ export default function Users() {
             <div className='d-flex justify-content-between align-items-center mb-4'>
                 <h4 className='mb-0'>Usuarios</h4>
                 <button className='btn btn-ember' onClick={abrirModalNuevo}>
-                     Nuevo usuario
+                    Nuevo usuario
                 </button>
             </div>
 
@@ -252,56 +230,56 @@ export default function Users() {
                 <div className='table-responsive'>
                     <table className='table table-hover align-middle'>
                         <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Email</th>
-                            <th>Correo</th>
-                            <th>Rol</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.length === 0 ? (
                             <tr>
-                                <td colSpan='6' className='text-center text-muted py-4'>
-                                    No hay usuarios registrados
-                                </td>
+                                <th>Usuario</th>
+                                <th>Email</th>
+                                <th>Correo</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
-                        ) : (
-                            items.map((u) => (
-                                <tr key={u.id}>
-                                    <td>
-                                        <div className='d-flex align-items-center gap-2'>
-                                            <Avatar nombre={u.nombre} />
-                                            <span>{u.nombre}</span>
-                                        </div>
-                                    </td>
-                                    <td className='text-muted'>{u.correo}</td>
-                                    <td>{u.telefono || '-'}</td>
-                                    <td className='text-secondary fw-bold'>
-                                         {u.rol_nombre || u.rol || 'cliente'} 
-                                    </td>
-                                    <td><Active estado={u.activo} /></td>
-                                    <td>
-                                        <button
-                                           className='btn btn-sm btn-outline-secondary me-2' type='button'
-                                            onClick={() => abrirModalEdicion(u)}
-                                        >
-                                            Editar
-                                        </button>
-                                        <button
-                                           className='btn btn-sm btn-outline-danger' type='button'
-                                            onClick={() => eliminarUsuario(u)}
-                                        >
-                                            Eliminar
-                                        </button>
+                        </thead>
+                        <tbody>
+                            {items.length === 0 ? (
+                                <tr>
+                                    <td colSpan='6' className='text-center text-muted py-4'>
+                                        No hay usuarios registrados
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                items.map((u) => (
+                                    <tr key={u.id}>
+                                        <td>
+                                            <div className='d-flex align-items-center gap-2'>
+                                                <Avatar nombre={u.nombre} />
+                                                <span>{u.nombre}</span>
+                                            </div>
+                                        </td>
+                                        <td className='text-muted'>{u.correo}</td>
+                                        <td>{u.telefono || '-'}</td>
+                                        <td className='text-secondary fw-bold'>
+                                            {u.rol_nombre || u.rol || 'cliente'}
+                                        </td>
+                                        <td>{Active(u.activo)}</td>
+                                        <td>
+                                            <button
+                                                className='btn btn-sm ember-btn-terciario me-2' type='button'
+                                                onClick={() => abrirModalEdicion(u)}
+                                            >
+                                                Editar
+                                            </button>
+                                            <button
+                                                className='btn btn-sm ember-btn-terciario' type='button'
+                                                onClick={() => eliminarUsuario(u)}
+                                            >
+                                                Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
