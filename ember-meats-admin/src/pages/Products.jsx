@@ -291,8 +291,8 @@ export default function Products() {
                       <button className='btn btn-sm ember-btn-terciario me-2' onClick={() => abrirModalEdicion(producto)}>
                         Editar
                       </button>
-                      <button className='btn btn-sm ember-btn-terciario' onClick={() => eliminar(producto.id)}>
-                        Eliminar
+                      <button className='btn btn-sm btn-outline-danger' onClick={() => eliminar(producto.id)}>
+                          Desactivar 
                       </button>
                     </td>
                   </tr>

@@ -382,4 +382,4 @@ export async function obtenerEstadisticas() {
     }
 
     return datos;
-}
+} 
