@@ -28,6 +28,8 @@ INNER JOIN pedidos pe
 INNER JOIN categorias c
     ON p.categoria_id = c.id
 WHERE pe.estado = 'pendiente'
+  AND p.activo = 1
+  AND c.activa = 1
 GROUP BY
     p.id,
     p.nombre,

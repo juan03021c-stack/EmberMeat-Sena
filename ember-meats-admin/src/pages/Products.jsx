@@ -6,6 +6,7 @@ import {
   crearProducto,
   actualizarProducto,
   eliminarProducto,
+  cambiarEstadoProducto,
   URL_BASE
 } from '../services/Api'
 
@@ -169,23 +170,31 @@ export default function Products() {
     }
   }
 
-  const eliminar = async (id) => {
-    if (!window.confirm('¿Eliminar este producto?')) return
+  const handleToggleEstado = async (producto) => {
+    if (loading) return
+
+    const estaActivo = Number(producto.activo) === 1
+    const accion = estaActivo ? 'inhabilitar' : 'habilitar'
+
+    if (!window.confirm(`¿Estás seguro de que deseas ${accion} este producto?`)) return
 
     setLoading(true)
     setMensaje(null)
     setError(null)
 
     try {
-      const resultado = await eliminarProducto(id)
+      const resultado = await cambiarEstadoProducto(producto.id, !estaActivo)
       if (resultado?.success) {
-        setMensaje(resultado.message || 'Producto eliminado correctamente.')
-        cargarDatos()
+        setMensaje(
+          resultado.message ||
+            `Producto ${estaActivo ? 'inhabilitado' : 'activado'} correctamente.`
+        )
+        await cargarDatos()
       } else {
-        setError(resultado?.message || 'No se pudo eliminar el producto.')
+        setError(resultado?.message || `No se pudo ${accion} el producto.`)
       }
     } catch (err) {
-      console.error('Error eliminando producto:', err)
+      console.error(`Error al ${accion} producto:`, err)
       setError('Ocurrió un error en el servidor.')
     } finally {
       setLoading(false)
@@ -292,8 +301,8 @@ export default function Products() {
                       <button className='btn btn-sm ember-btn-terciario me-2' onClick={() => abrirModalEdicion(producto)}>
                         Editar
                       </button>
-                      <button className='btn btn-sm btn-outline-danger' onClick={() => eliminar(producto.id)}>
-                          Desactivar 
+                      <button className='btn btn-sm ember-btn-terciario' onClick={() => eliminar(producto.id)}>
+                        Desactivar
                       </button>
                     </td>
                   </tr>

@@ -5,7 +5,8 @@ import {
   obtenerCategorias,
   crearCategoria,
   actualizarCategoria,
-  eliminarCategoria,
+  inhabilitarCategoria,
+  cambiarEstadoCategoria,
 } from '../services/Api'
 
 // Plantilla vacía para resetear el formulario
@@ -17,12 +18,12 @@ const estadoInicialFormulario = {
 
 // Muestra el estado de la categoría
 function InsigniActivo({ estado }) {
-     if (Number(estado) == 1) {
-        return <span className='badge bg-success'>Activo</span>
-    }
-    if (Number(estado) == 0) {
-        return <span className='badge bg-danger'>Inactivo</span>
-    }
+  if (Number(estado) == 1) {
+    return <span className='badge bg-success'>Activo</span>
+  }
+  if (Number(estado) == 0) {
+    return <span className='badge bg-danger'>Inactivo</span>
+  }
 }
 export default function Categorias() {
   const [categorias, setCategorias] = useState([])
@@ -175,12 +176,15 @@ export default function Categorias() {
     }
   }
 
-  // Eliminar categoría
-  const eliminar = async (id) => {
+  // Inhabilitar o habilitar categoría
+  const handleToggleEstado = async (categoria) => {
     if (loading) return
 
+    const estaActiva = Number(categoria.activa ?? categoria.activo ?? 1) === 1
+    const accion = estaActiva ? 'inhabilitar' : 'habilitar'
+
     const confirmar = window.confirm(
-      '¿Estás seguro de que deseas eliminar esta categoría?'
+      `¿Estás seguro de que deseas ${accion} esta categoría?`
     )
 
     if (!confirmar) return
@@ -191,22 +195,23 @@ export default function Categorias() {
     try {
       setLoading(true)
 
-      const resultado = await eliminarCategoria(id)
+      const resultado = await cambiarEstadoCategoria(categoria.id, !estaActiva)
 
       if (resultado?.success) {
         setMensaje(
-          resultado.message || 'Categoría eliminada correctamente.'
+          resultado.message ||
+            `Categoría ${estaActiva ? 'inhabilitada' : 'activada'} correctamente.`
         )
 
         await cargarDatos()
       } else {
         setError(
-          resultado?.message || 'No se pudo eliminar la categoría.'
+          resultado?.message || `No se pudo ${accion} la categoría.`
         )
       }
     } catch (err) {
-      console.error('Error eliminando categoría:', err)
-      setError('Ocurrió un error al eliminar la categoría.')
+      console.error(`Error al ${accion} categoría:`, err)
+      setError(`Ocurrió un error al ${accion} la categoría.`)
     } finally {
       setLoading(false)
     }
@@ -356,10 +361,12 @@ export default function Categorias() {
                       <button
                         type='button'
                         className='btn btn-sm ember-btn-terciario'
-                        onClick={() => eliminar(categoria.id)}
+                        onClick={() => handleToggleEstado(categoria)}
                         disabled={loading}
                       >
-                        Eliminar
+                        {Number(categoria.activa ?? categoria.activo ?? 1) === 1
+                          ? 'Inhabilitar'
+                          : 'Habilitar'}
                       </button>
                     </td>
                   </tr>
