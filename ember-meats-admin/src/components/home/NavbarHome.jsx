@@ -2,12 +2,11 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useCarrito } from '../CarritoContext'
 
-const links = [
+const baseLinks = [
     { href: '#inicio', label: 'Inicio', icon: 'bi-house', type: 'internal' },
     { href: '#productos', label: 'Productos', icon: 'bi-box-seam', type: 'internal' },
     { href: '#nosotros', label: 'Nosotros', icon: 'bi-info-circle', type: 'internal' },
     { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
-    { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right', type: 'external' },
     { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
 ]
 
@@ -15,6 +14,7 @@ export default function NavbarHome() {
     const location = useLocation()
     const navigate = useNavigate()
     const { cantidadTotal } = useCarrito()
+    const [usuario, setUsuario] = useState(null)
 
     const isHome = location.pathname === '/' || location.pathname === ''
 
@@ -22,6 +22,30 @@ export default function NavbarHome() {
     const [activeHash, setActiveHash] = useState(
         isHome ? (location.hash || '#inicio') : ''
     )
+
+    // Cargar usuario autenticado
+    useEffect(() => {
+        try {
+            const sesion = localStorage.getItem('usuarioEmber')
+            setUsuario(sesion ? JSON.parse(sesion) : null)
+        } catch {
+            setUsuario(null)
+        }
+    }, [location.pathname])
+
+    const rol = String(usuario?.rol_nombre || '').toLowerCase()
+    const rutaPanel = rol === 'vendedor' ? '/ventas' : rol === 'repartidor' ? '/ordenes' : '/dashboard'
+
+    const links = [
+        { href: '#inicio', label: 'Inicio', icon: 'bi-house', type: 'internal' },
+        { href: '#productos', label: 'Productos', icon: 'bi-box-seam', type: 'internal' },
+        { href: '#nosotros', label: 'Nosotros', icon: 'bi-info-circle', type: 'internal' },
+        { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
+        usuario
+            ? { to: rutaPanel, label: `Panel (${usuario.nombre.split(' ')[0]})`, icon: 'bi-speedometer2', type: 'external' }
+            : { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right', type: 'external' },
+        { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
+    ]
 
     // Sincroniza el estado cuando cambia la URL (navegación, botones del navegador, etc.)
     useEffect(() => {

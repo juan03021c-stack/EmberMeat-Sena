@@ -248,7 +248,8 @@ export default function Users() {
                             <tr>
                                 <th>Usuario</th>
                                 <th>Email</th>
-                                <th>Correo</th>
+                                <th>Telefono</th>
+                                <th>Cedula</th>
                                 <th>Rol</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
@@ -272,6 +273,7 @@ export default function Users() {
                                         </td>
                                         <td className='text-muted'>{u.correo}</td>
                                         <td>{u.telefono || '-'}</td>
+                                        <td>{u.cedula || '-'}</td>
                                         <td className='text-secondary fw-bold'>
                                             {u.rol_nombre || u.rol || 'cliente'}
                                         </td>
