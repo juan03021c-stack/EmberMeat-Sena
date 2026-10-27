@@ -383,3 +383,70 @@ export async function obtenerEstadisticas() {
 
     return datos;
 }
+export async function actualizarCategoria(idOrFormData, datosFormulario) {
+    try {
+        let datos;
+        if (idOrFormData instanceof FormData) {
+            datos = idOrFormData;
+        } else {
+            datos = datosFormulario instanceof FormData
+                ? datosFormulario
+                : new FormData();
+            if (idOrFormData) {
+                datos.set("id", idOrFormData);
+            }
+        }
+
+        const respuesta = await fetch(`${URL_BASE}/Categorias/Actualizar.php`, {
+            method: "POST",
+            body: datos,
+        });
+        const resultado = await respuesta.json().catch(() => null);
+        if (!respuesta.ok || (resultado && resultado.success === false)) {
+            throw new Error(resultado?.message || "Error al actualizar la categoría");
+        }
+        return resultado;
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: error.message };
+    }
+}
+
+export async function crearCategoria(datosFormulario) {
+    try {
+        const respuesta = await fetch(`${URL_BASE}/Categorias/Crear.php`, {
+            method: "POST",
+            body: datosFormulario,
+        });
+        const resultado = await respuesta.json().catch(() => null);
+        if (!respuesta.ok || (resultado && resultado.success === false)) {
+            throw new Error(resultado?.message || "Error al crear la categoría");
+        }
+        return resultado;
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: error.message };
+    }
+}
+
+export async function eliminarCategoria(id) {
+    try {
+        const datos = new FormData();
+        datos.append("id", id);
+
+        const respuesta = await fetch(`${URL_BASE}/Categorias/Eliminar.php`, {
+            method: "POST",
+            body: datos,
+        });
+        const resultado = await respuesta.json().catch(() => null);
+        if (!respuesta.ok || (resultado && resultado.success === false)) {
+            throw new Error(resultado?.message || "Error al eliminar la categoría");
+        }
+        return resultado;
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: error.message };
+    }
+}
+
+ 

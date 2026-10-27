@@ -311,7 +311,7 @@ export default function Orders() {
                                                 Editar
                                             </button>
                                             <button className='btn btn-sm ember-btn-terciario' type='button' onClick={() => eliminar(p.id)}>
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </td>
                                     </tr>

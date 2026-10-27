@@ -52,7 +52,7 @@ export default function NavbarHome() {
 
     const getClassName = (isActive) =>
         `nav-link d-flex align-items-center gap-2 px-3 py-2 ${
-            isActive ? 'text-white rounded' : 'text-secondary'
+            isActive ? 'text-white rounded' : 'text-white'
         }`
 
     const activeStyle = { background: 'var(--ember-red)' }
