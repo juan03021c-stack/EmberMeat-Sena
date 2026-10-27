@@ -111,22 +111,32 @@ export async function actualizarProducto(datosFormulario) {
     }
 }
 
-export async function eliminarProducto(id) {
+export async function cambiarEstadoProducto(id, activo) {
     try {
         const datosFormulario = new FormData();
         datosFormulario.append("id", id);
-        const respuesta = await fetch(`${URL_BASE}/Productos/Eliminar.php`, {
+        datosFormulario.append("activo", activo ? "1" : "0");
+        const respuesta = await fetch(`${URL_BASE}/Productos/Inhabilitar.php`, {
             method: "POST",
             body: datosFormulario,
         });
-        if (!respuesta.ok) {
-            throw new Error("Error al eliminar el producto");
+        const resultado = await respuesta.json().catch(() => null);
+        if (!respuesta.ok || (resultado && resultado.success === false)) {
+            throw new Error(resultado?.message || "Error al cambiar el estado del producto");
         }
-        return await respuesta.json();
+        return resultado;
     } catch (error) {
         console.error(error);
         return { success: false, message: error.message };
     }
+}
+
+export async function inhabilitarProducto(id) {
+    return cambiarEstadoProducto(id, false);
+}
+
+export async function eliminarProducto(id) {
+    return inhabilitarProducto(id);
 }
 
 export async function obtenerRoles() {
@@ -182,22 +192,32 @@ export async function actualizarUsuarios(id, datosFormulario) {
     }
 }
 
-export async function eliminarUsuarios(id) {
+export async function cambiarEstadoUsuario(id, activo) {
     try {
         const datosFormulario = new FormData();
         datosFormulario.append("id", id);
-        const respuesta = await fetch(`${URL_BASE}/Usuarios/Eliminar.php`, {
+        datosFormulario.append("activo", activo ? "1" : "0");
+        const respuesta = await fetch(`${URL_BASE}/Usuarios/Inhabilitar.php`, {
             method: "POST",
             body: datosFormulario,
         });
-        if (!respuesta.ok) {
-            throw new Error("Error al eliminar el usuario");
+        const resultado = await respuesta.json().catch(() => null);
+        if (!respuesta.ok || (resultado && resultado.success === false)) {
+            throw new Error(resultado?.message || "Error al cambiar el estado del usuario");
         }
-        return await respuesta.json();
+        return resultado;
     } catch (error) {
         console.error(error);
         return { success: false, message: error.message };
     }
+}
+
+export async function inhabilitarUsuario(id) {
+    return cambiarEstadoUsuario(id, false);
+}
+
+export async function eliminarUsuarios(id) {
+    return inhabilitarUsuario(id);
 }
 
 export async function login(datos) {
@@ -429,18 +449,19 @@ export async function crearCategoria(datosFormulario) {
     }
 }
 
-export async function eliminarCategoria(id) {
+export async function cambiarEstadoCategoria(id, activa) {
     try {
         const datos = new FormData();
         datos.append("id", id);
+        datos.append("activa", activa ? "1" : "0");
 
-        const respuesta = await fetch(`${URL_BASE}/Categorias/Eliminar.php`, {
+        const respuesta = await fetch(`${URL_BASE}/Categorias/Inhabilitar.php`, {
             method: "POST",
             body: datos,
         });
         const resultado = await respuesta.json().catch(() => null);
         if (!respuesta.ok || (resultado && resultado.success === false)) {
-            throw new Error(resultado?.message || "Error al eliminar la categoría");
+            throw new Error(resultado?.message || "Error al cambiar el estado de la categoría");
         }
         return resultado;
     } catch (error) {
@@ -448,5 +469,10 @@ export async function eliminarCategoria(id) {
         return { success: false, message: error.message };
     }
 }
+
+export async function inhabilitarCategoria(id) {
+    return cambiarEstadoCategoria(id, false);
+}
+
 
  

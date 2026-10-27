@@ -4,7 +4,8 @@ import {
     obtenerRoles,
     crearUsuarios,
     actualizarUsuarios,
-    eliminarUsuarios
+    eliminarUsuarios,
+    cambiarEstadoUsuario,
 } from '../services/Api'
 import UsuarioModal from '../components/UsuarioModal'
 
@@ -165,22 +166,36 @@ export default function Users() {
         }
     }
 
-    const eliminarUsuario = async (usuario) => {
-        if (!window.confirm(`¿Está seguro de eliminar al usuario ${usuario.nombre}?`)) {
+    const handleToggleEstado = async (usuario) => {
+        if (loading) return
+
+        const estaActivo = Number(usuario.activo) === 1
+        const accion = estaActivo ? 'inhabilitar' : 'habilitar'
+
+        if (!window.confirm(`¿Está seguro de que deseas ${accion} al usuario ${usuario.nombre}?`)) {
             return
         }
 
+        setLoading(true)
+        setMensaje(null)
+        setError(null)
+
         try {
-            const resultado = await eliminarUsuarios(usuario.id)
+            const resultado = await cambiarEstadoUsuario(usuario.id, !estaActivo)
             if (resultado?.success) {
-                setMensaje(resultado.message || 'Usuario eliminado correctamente.')
+                setMensaje(
+                    resultado.message ||
+                        `Usuario ${estaActivo ? 'inhabilitado' : 'activado'} correctamente.`
+                )
                 await recargarUsuarios()
             } else {
-                setError(resultado?.message || 'No se pudo eliminar el usuario.')
+                setError(resultado?.message || `No se pudo ${accion} el usuario.`)
             }
         } catch (err) {
-            console.error('Error al eliminar usuario:', err)
-            setError('Error al eliminar el usuario.')
+            console.error(`Error al ${accion} usuario:`, err)
+            setError(`Error al ${accion} el usuario.`)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -270,9 +285,10 @@ export default function Users() {
                                             </button>
                                             <button
                                                 className='btn btn-sm ember-btn-terciario' type='button'
-                                                onClick={() => eliminarUsuario(u)}
+                                                onClick={() => handleToggleEstado(u)}
+                                                disabled={loading}
                                             >
-                                                Desactivar
+                                                {Number(u.activo) === 1 ? 'Inhabilitar' : 'Habilitar'}
                                             </button>
                                         </td>
                                     </tr>

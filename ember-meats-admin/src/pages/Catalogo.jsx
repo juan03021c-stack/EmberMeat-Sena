@@ -212,9 +212,11 @@ export default function Catalogo() {
                   {categorias.length === 0 && loading ? (
                     <p className="text-muted small">Cargando...</p>
                   ) : (
-                    categorias.map((cat) => {
-                      const nombre = cat.nombre ?? cat;
-                      const id = cat.id ?? cat;
+                    categorias
+                      .filter((cat) => cat.activa === undefined || Number(cat.activa) === 1)
+                      .map((cat) => {
+                        const nombre = cat.nombre ?? cat;
+                        const id = cat.id ?? cat;
                       return (
                         <div className="form-check" key={id}>
                           <input

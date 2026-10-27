@@ -24,7 +24,7 @@ if (empty($email) || empty($password)) {
     exit;
 }
 /* se consulta la tabla usuarios*/
-$sql = "SELECT id, rol_id, nombre, correo, contrasena_hash FROM usuarios WHERE correo = ?";
+$sql = "SELECT id, rol_id, nombre, correo, contrasena_hash, activo FROM usuarios WHERE correo = ?";
 /* se ejecuta la consulta*/
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$email]);
@@ -37,6 +37,15 @@ if (!$usuario) {
     echo json_encode([
         "success" => false,
         "message" => "Correo electrónico no registrado."
+    ]);
+    exit;
+}
+
+/* valida que el usuario no esté inactivo/desactivado */
+if ((int)($usuario['activo'] ?? 1) === 0) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Tu cuenta se encuentra inhabilitada. Comunícate con el administrador."
     ]);
     exit;
 }

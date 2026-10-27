@@ -132,22 +132,7 @@ export default function Orders() {
         }
     }
 
-    const eliminar = (id) => {
-        if (!window.confirm('¿Seguro que deseas eliminar esta orden?')) return
-        setLoading(true)
-        setError(null)
-        setMensaje(null)
-        try {
-            setPedidos(prev => prev.filter(o => o.id !== id))
-            setMensaje('Orden eliminada')
-        } catch (deleteError) {
-            console.error(deleteError)
-            setError('Error al eliminar orden')
-        } finally {
-            setLoading(false)
-        }
-    }
-
+    
     // Contadores de modalidad
     const totalRecogidas = pedidos.filter(p => p.modalidad_entrega === 'recogida_punto').length
     const totalDomicilios = pedidos.filter(p => p.modalidad_entrega === 'domicilio').length
@@ -309,9 +294,6 @@ export default function Orders() {
                                         <td>
                                             <button className='btn btn-sm ember-btn-terciario me-2' type='button' onClick={() => abrirModalEdicion(p)}>
                                                 Editar
-                                            </button>
-                                            <button className='btn btn-sm ember-btn-terciario' type='button' onClick={() => eliminar(p.id)}>
-                                                Desactivar
                                             </button>
                                         </td>
                                     </tr>
