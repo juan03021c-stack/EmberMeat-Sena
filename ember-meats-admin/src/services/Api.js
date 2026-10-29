@@ -220,16 +220,34 @@ export async function eliminarUsuarios(id) {
     return inhabilitarUsuario(id);
 }
 
+
 export async function login(datos) {
     const respuesta = await fetch(`${URL_BASE}/Login/Login.php`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "Accept": "application/json",
         },
         body: JSON.stringify(datos),
     });
-    return await respuesta.json();
+
+    let resultado;
+
+    try {
+        resultado = await respuesta.json();
+    } catch {
+        throw new Error("El servidor devolvió una respuesta no válida.");
+    }
+
+    if (!respuesta.ok || !resultado.success) {
+        throw new Error(
+            resultado.message || "No fue posible iniciar sesión."
+        );
+    }
+
+    return resultado;
 }
+
 
 
 /**

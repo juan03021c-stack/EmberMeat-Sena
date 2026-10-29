@@ -1,5 +1,8 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { CarritoProvider } from './components/CarritoContext'
+import ProtectedRoute from './components/ProtectedRoute'
+
 import Dashboard from './pages/Dashboard'
 import Categorias from './pages/Categorias'
 import Products from './pages/Products'
@@ -17,45 +20,61 @@ import Ventas from './pages/Ventas'
 import RespuestaPago from './pages/RespuestaPago'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
-
 export default function App() {
-  return (
-    <>
-      <Router>
-        <CarritoProvider>
-          <ScrollToTop />
+    return (
+        <Router>
+            <CarritoProvider>
+                <ScrollToTop />
 
-          <Routes>
+                <Routes>
+                    {/* Páginas públicas de la tienda */}
+                    <Route element={<AdminNavbarLayout />}>
+                        <Route path="/" element={<Inicio />} />
+                        <Route path="/carrito" element={<Carrito />} />
+                        <Route path="/Catalogo" element={<Catalogo />} />
+                        <Route
+                            path="/respuesta-pago"
+                            element={<RespuestaPago />}
+                        />
+                    </Route>
 
-            <Route element={<AdminNavbarLayout />}>
-            <Route path="/" element={<Inicio />} />
-            <Route path="/carrito" element={<Carrito />} />
-            <Route path="/Catalogo" element={<Catalogo />} />
-            <Route path="/respuesta-pago" element={<RespuestaPago />} />
-          </Route>
-        
-            
-        
+                    {/* Inicio de sesión */}
+                    <Route element={<ContentFooter />}>
+                        <Route path="/login" element={<Login />} />
+                    </Route>
 
+                    {/* Rutas administrativas protegidas */}
+                    <Route element={<ProtectedRoute
+                        rolesPermitidos={['administrador', 'vendedor', 'repartidor']}
+                    />}>
+                        <Route element={<AdminLayout />}>
+                            {/* Solo administrador */}
+                            <Route element={<ProtectedRoute
+                                rolesPermitidos={['administrador']}
+                            />}>
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/categorias" element={<Categorias />} />
+                                <Route path="/productos" element={<Products />} />
+                                <Route path="/usuarios" element={<Users />} />
+                            </Route>
 
-          <Route element={<ContentFooter />}>
-            <Route path="/login" element={<Login />} />
-          </Route>
-          
+                            {/* Administrador y vendedor */}
+                            <Route element={<ProtectedRoute
+                                rolesPermitidos={['administrador', 'vendedor']}
+                            />}>
+                                <Route path="/ventas" element={<Ventas />} />
+                            </Route>
 
-          <Route element={<AdminLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/categorias" element={<Categorias />} />
-            <Route path="/productos" element={<Products />} />
-            <Route path="/ordenes" element={<Orders />} />
-            <Route path="/usuarios" element={<Users />} />
-            <Route path="/ventas" element={<Ventas />} />
-          </Route>
-        </Routes>
-
-        <ScrollToTop />
-      </CarritoProvider>
-    </Router>
-</>
-  )
+                            {/* Administrador y repartidor */}
+                            <Route element={<ProtectedRoute
+                                rolesPermitidos={['administrador', 'repartidor']}
+                            />}>
+                                <Route path="/ordenes" element={<Orders />} />
+                            </Route>
+                        </Route>
+                    </Route>
+                </Routes>
+            </CarritoProvider>
+        </Router>
+    )
 }
