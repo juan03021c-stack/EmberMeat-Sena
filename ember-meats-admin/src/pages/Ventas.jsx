@@ -5,7 +5,7 @@ import {
   obtenerUsuarios, 
   obtenerVentas, 
   crearVenta,
-  URL_BASE } from "../services/Api";
+ } from "../services/Api";
 
 const PASOS = ["Cliente", "Productos", "Pago"];
 // funcion del avatar 

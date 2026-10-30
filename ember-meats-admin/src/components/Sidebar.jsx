@@ -8,6 +8,7 @@ const navItems = [
   { path: '/ordenes', label: 'Órdenes', icon: 'bi-receipt', roles: ['administrador', 'repartidor'] },
   { path: '/usuarios', label: 'Usuarios', icon: 'bi-people', roles: ['administrador'] },
   { path: '/ventas', label: 'Ventas', icon: 'bi-cash-coin', roles: ['administrador', 'vendedor'] },
+  { path: '/MisPedidos', label: 'Mis Pedidos', icon: 'bi-receipt', roles: ['administrador','repartidor'] },
 ]
 
 export default function Sidebar() {

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import Categorias from './pages/Categorias'
 import Products from './pages/Products'
 import Orders from './pages/Orders'
+import MisPedidos from './pages/MisPedidos'
 import Users from './pages/Users'
 import Inicio from './pages/Inicio'
 import ContentFooter from './components/footer/contentFooter'
@@ -70,6 +71,7 @@ export default function App() {
                                 rolesPermitidos={['administrador', 'repartidor']}
                             />}>
                                 <Route path="/ordenes" element={<Orders />} />
+                                <Route path="/MisPedidos" element={<MisPedidos />} />
                             </Route>
                         </Route>
                     </Route>
