@@ -163,9 +163,9 @@ export default function Orders() {
         <div className='p-4'>
             <div className='d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2'>
                 <div>
-                    <h3 className='fw-bold mb-1'>Gestión de pedidos</h3>
+                    <h3 className='fw-bold mb-1'>Gestión de ordenes</h3>
                     <small className='text-muted'>
-                        {pedidos.length} pedidos totales ({totalRecogidas} en punto / {totalDomicilios} a domicilio)
+                        {pedidos.length} ordenes totales ({totalRecogidas} en punto / {totalDomicilios} a domicilio)
                     </small>
                 </div>
                 <div className='d-flex gap-2'>
@@ -175,7 +175,7 @@ export default function Orders() {
                     </button>
                     <button className='btn ember-btn-terciario' type='button' onClick={abrirModalNuevo}>
                         <i className='bi bi-plus-lg me-1'></i>
-                        Crear pedido
+                        Crear orden
                     </button>
                 </div>
             </div>
@@ -184,7 +184,7 @@ export default function Orders() {
             {loading && !mostrarModal && (
                 <div className='text-center py-3 text-muted'>
                     <span className='spinner-border spinner-border-sm text-ember-red me-2' />
-                    Cargando pedidos...
+                    Cargando ordenes...
                 </div>
             )}
 
@@ -256,7 +256,7 @@ export default function Orders() {
                             {pedidosFiltrados.length === 0 ? (
                                 <tr>
                                     <td colSpan='8' className='text-center py-4 text-muted'>
-                                        No se encontraron pedidos con los filtros aplicados
+                                        No se encontraron ordenes con los filtros aplicados
                                     </td>
                                 </tr>
                             ) : (
