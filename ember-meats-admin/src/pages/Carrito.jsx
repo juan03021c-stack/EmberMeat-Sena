@@ -29,6 +29,7 @@ export default function Carrito() {
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState(null)
   const [mensajeExito, setMensajeExito] = useState('')
+  const [comprobante, setComprobante] = useState(null)
   const esperaPagoRef = useRef(null)
   const ventanaWompiRef = useRef(null)
 
@@ -57,6 +58,7 @@ export default function Carrito() {
     setAcepta(false)
     setError(null)
     setMensajeExito('')
+    setComprobante(null)
   }
   /*--------------------funcion para mostrar el modal--------------------*/
   const mostrarModalNueva = () => {
@@ -198,15 +200,21 @@ export default function Carrito() {
     setCargando(true)
     setError(null)
 
-    // Abrirla durante el clic del usuario evita que el navegador bloquee la ventana.
-    const ventanaWompi = window.open('', '_blank', 'width=520,height=760,resizable=yes,scrollbars=yes')
-    if (!ventanaWompi) {
-      setCargando(false)
-      setError('El navegador bloqueó la ventana de pago. Permite las ventanas emergentes e inténtalo de nuevo.')
-      return
+    // Recoger en el local o pagar en el punto: se paga en persona, sin Wompi.
+    const pagoEnPunto = formData.metodoEnvio === 'tienda' || formData.lugarPago === 'punto'
+
+    let ventanaWompi = null
+    if (!pagoEnPunto) {
+      // Abrirla durante el clic del usuario evita que el navegador bloquee la ventana.
+      ventanaWompi = window.open('', '_blank', 'width=520,height=760,resizable=yes,scrollbars=yes')
+      if (!ventanaWompi) {
+        setCargando(false)
+        setError('El navegador bloqueó la ventana de pago. Permite las ventanas emergentes e inténtalo de nuevo.')
+        return
+      }
+      ventanaWompiRef.current = ventanaWompi
+      ventanaWompi.document.write('<p style="font-family: sans-serif; padding: 24px">Preparando la pasarela de pago...</p>')
     }
-    ventanaWompiRef.current = ventanaWompi
-    ventanaWompi.document.write('<p style="font-family: sans-serif; padding: 24px">Preparando la pasarela de pago...</p>')
     /*--------------------Convierte los datos del carrito a JSON--------------------*/
     const productosPedido = carrito.map((p) => ({
       id: p.id,
@@ -220,6 +228,19 @@ export default function Carrito() {
       const response = await crearPedido(formData, productosPedido)
 
       if (response.success) {
+        if (pagoEnPunto) {
+          setComprobante({
+            numeroPedido: response.numero_pedido,
+            nombre: formData.nombre,
+            cedula: formData.cedula,
+            fecha: new Date().toLocaleString('es-CO'),
+            productos: productosPedido,
+            total: Number(response.total)
+          })
+          vaciarCarrito()
+          return
+        }
+
         setMensajeExito(response.message || '¡Pedido realizado con éxito!')
 
         // Si el backend entrega los datos de Wompi, abrimos el widget
@@ -234,11 +255,11 @@ export default function Carrito() {
           }, 2500)
         }
       } else {
-        ventanaWompi.close()
+        ventanaWompi?.close()
         setError(response.message || 'Error al procesar el pedido')
       }
     } catch (err) {
-      ventanaWompi.close()
+      ventanaWompi?.close()
       setError(err.message || 'Error al procesar el pedido')
     } finally {
       setCargando(false)
@@ -384,6 +405,7 @@ export default function Carrito() {
         setForm={setFormData}
         aceptaTerminos={acepta}
         setAceptaTerminos={setAcepta}
+        comprobante={comprobante}
       />
     </div>
   )

@@ -27,7 +27,9 @@ export default function RegisterForm({
   /** aceptaTerminos es un booleano que indica si el usuario acepta los terminos y condiciones */
   aceptaTerminos,
   /** setAceptaTerminos es una funcion que actualiza el estado de aceptaTerminos */
-  setAceptaTerminos
+  setAceptaTerminos,
+  /** comprobante: datos del pedido que se paga en el punto; si existe, se muestra en vez del formulario */
+  comprobante
 }){
 const [buscando, setBuscando] = useState(false);
 
@@ -84,7 +86,7 @@ const handleCedulaBlur = async (e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="modal-dialog modal-dialog-centered" role="document">
+      <div className="modal-dialog modal-dialog-centered" role="document" style={{ maxWidth: 640 }}>
         <div className="modal-content border-0 shadow-lg">
 
           {/* Header */}
@@ -99,6 +101,57 @@ const handleCedulaBlur = async (e) => {
           </div>
 
           <div className="modal-body p-4 pt-2">
+            {comprobante ? (
+              /* Comprobante: el pedido se paga en el punto, sin pasarela */
+              <div>
+                <div className="text-center mb-4">
+                  <h1 className="h3 fw-bold text-dark">Comprobante de pedido</h1>
+                  <p className="text-muted mb-0 small">
+                    Presenta este comprobante en el punto para pagar y recoger tu pedido
+                  </p>
+                </div>
+
+                <div className="border rounded p-3 mb-3">
+                  <div className="d-flex justify-content-between mb-1">
+                    <span className="text-muted">N.º de pedido</span>
+                    <strong>{comprobante.numeroPedido}</strong>
+                  </div>
+                  <div className="d-flex justify-content-between mb-1">
+                    <span className="text-muted">Cliente</span>
+                    <span>{comprobante.nombre}</span>
+                  </div>
+                  <div className="d-flex justify-content-between mb-1">
+                    <span className="text-muted">Cédula</span>
+                    <span>{comprobante.cedula}</span>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    <span className="text-muted">Fecha</span>
+                    <span>{comprobante.fecha}</span>
+                  </div>
+                  <hr />
+                  {comprobante.productos.map((p) => (
+                    <div key={p.id} className="d-flex justify-content-between small mb-1">
+                      <span>{p.cantidad} × {p.nombre}</span>
+                      <span>${p.subtotal.toLocaleString('es-CO')}</span>
+                    </div>
+                  ))}
+                  <hr />
+                  <div className="d-flex justify-content-between fw-bold">
+                    <span>Total a pagar</span>
+                    <span className="text-ember-red">${comprobante.total.toLocaleString('es-CO')}</span>
+                  </div>
+                </div>
+
+                <div className="alert alert-warning py-2 small">
+                  Pago en el punto: efectivo o transferencia.
+                </div>
+
+                <button type="button" onClick={onClose} className="btn-comprar">
+                  Listo
+                </button>
+              </div>
+            ) : (
+            <>
             {/* Título */}
             <div className="text-center mb-4">
               <h1 className="h3 fw-bold text-dark">Información personal</h1>
@@ -314,6 +367,8 @@ const handleCedulaBlur = async (e) => {
                 Cancelar
               </button>
             </form>
+            </>
+            )}
           </div>
         </div>
       </div>
