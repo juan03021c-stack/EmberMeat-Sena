@@ -9,6 +9,7 @@ import {
   Home,
   IdCard,
   Truck,
+  Wallet,
   Loader2
 } from 'lucide-react';
 
@@ -211,7 +212,22 @@ const handleCedulaBlur = async (e) => {
                 />
               </div>
 
-             
+              {/* Confirmar dirección: sin autocompletado para que el cliente la escriba de nuevo */}
+              <div className="input-group mb-3">
+                <span className="input-group-text bg-white border-end-0">
+                  <Home size={18} strokeWidth={1.8} className="text-muted" />
+                </span>
+                <input
+                  type="text"
+                  name="confirmarDireccion"
+                  className="form-control border-start-0"
+                  placeholder="Confirmar dirección"
+                  value={form.confirmarDireccion || ''}
+                  onChange={handleChange}
+                  autoComplete="off"
+                  required
+                />
+              </div>
 
               {/* Método de envío */}
               <div className="input-group mb-3">
@@ -228,6 +244,24 @@ const handleCedulaBlur = async (e) => {
                   <option value="" disabled>Seleccione un método de envío</option>
                   <option value="domicilio"> Domicilio</option>
                   <option value="tienda"> Recoger en tienda</option>
+                </select>
+              </div>
+
+              {/* Lugar de pago */}
+              <div className="input-group mb-3">
+                <span className="input-group-text bg-white border-end-0">
+                  <Wallet size={18} strokeWidth={1.8} className="text-muted" />
+                </span>
+                <select
+                  name="lugarPago"
+                  className="form-select border-start-0"
+                  value={form.lugarPago || ''}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" disabled>Seleccione dónde va a pagar</option>
+                  <option value="punto"> Pagar en el punto local</option>
+                  <option value="domicilio"> Pagar en el domicilio</option>
                 </select>
               </div>
 

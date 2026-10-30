@@ -18,8 +18,10 @@ export default function Carrito() {
     email: '',
     telefono: '',
     direccion: '',
+    confirmarDireccion: '',
     cedula: '',
-    metodoEnvio: ''
+    metodoEnvio: '',
+    lugarPago: ''
   })
 
   /*--------------------Estado de las variables--------------------*/
@@ -47,8 +49,10 @@ export default function Carrito() {
       email: '',
       telefono: '',
       direccion: '',
+      confirmarDireccion: '',
       cedula: '',
-      metodoEnvio: ''
+      metodoEnvio: '',
+      lugarPago: ''
     })
     setAcepta(false)
     setError(null)
@@ -178,6 +182,11 @@ export default function Carrito() {
 
     if (!acepta) {
       setError('Debes aceptar los términos y condiciones')
+      return
+    }
+
+    if (formData.direccion.trim() !== formData.confirmarDireccion.trim()) {
+      setError('Las direcciones no coinciden')
       return
     }
 
