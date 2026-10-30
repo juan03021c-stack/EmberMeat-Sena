@@ -63,6 +63,28 @@ export async function obtenerPedidos() {
     }
 }
 
+
+export const obtenerPedidosRepartidor = async () => {
+    try {
+        const respuesta = await fetch(
+            `${URL_BASE}/Pedidos/Repartidor.php`
+        );
+
+        const data = await respuesta.json();
+
+        if (!respuesta.ok || !data.success) {
+            throw new Error(data.mensaje || 'Error al obtener pedidos repartidor');
+        }
+
+        return data.pedidos;
+
+    } catch (error) {
+        console.error('Error al obtener pedidos:', error);
+        throw error;
+    }
+};
+
+
 export async function obtenerProductosDestacados() {
     try {
         const respuesta = await fetch(`${URL_BASE}/Productos/ProductosDestacados.php`);
