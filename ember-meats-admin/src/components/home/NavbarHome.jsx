@@ -36,16 +36,24 @@ export default function NavbarHome() {
     const rol = String(usuario?.rol_nombre || '').toLowerCase()
     const rutaPanel = rol === 'vendedor' ? '/ventas' : rol === 'repartidor' ? '/MisPedidos' : '/dashboard'
 
-    const links = [
-        { href: '#inicio', label: 'Inicio', icon: 'bi-house', type: 'internal' },
-        { href: '#productos', label: 'Productos', icon: 'bi-box-seam', type: 'internal' },
-        { href: '#nosotros', label: 'Nosotros', icon: 'bi-info-circle', type: 'internal' },
-        { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
-        usuario
-            ? { to: rutaPanel, label: `Panel (${usuario.nombre.split(' ')[0]})`, icon: 'bi-speedometer2', type: 'external' }
-            : { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right', type: 'external' },
-        { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
-    ]
+    const links = rol === 'vendedor'
+        ? [
+            { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
+            usuario
+                ? { to: rutaPanel, label: `Panel (${usuario.nombre.split(' ')[0]})`, icon: 'bi-speedometer2', type: 'external' }
+                : { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right', type: 'external' },
+            { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
+        ]
+        : [
+            { href: '#inicio', label: 'Inicio', icon: 'bi-house', type: 'internal' },
+            { href: '#productos', label: 'Productos', icon: 'bi-box-seam', type: 'internal' },
+            { href: '#nosotros', label: 'Nosotros', icon: 'bi-info-circle', type: 'internal' },
+            { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
+            usuario
+                ? { to: rutaPanel, label: `Panel (${usuario.nombre.split(' ')[0]})`, icon: 'bi-speedometer2', type: 'external' }
+                : { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right', type: 'external' },
+            { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
+        ]
 
     // Sincroniza el estado cuando cambia la URL (navegación, botones del navegador, etc.)
     useEffect(() => {

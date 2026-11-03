@@ -90,6 +90,15 @@ export default function Catalogo() {
   const [categoriasSel, setCategoriasSel] = useState([]);
   const [orden, setOrden] = useState("relevancia");
 
+  const rol = (() => {
+    try {
+      const sesion = localStorage.getItem('usuarioEmber');
+      return sesion ? String(JSON.parse(sesion)?.rol_nombre || '').toLowerCase() : '';
+    } catch {
+      return '';
+    }
+  })();
+
   // Cargar productos y categorías desde la API
   useEffect(() => {
     let cancelado = false;
@@ -236,7 +245,11 @@ export default function Catalogo() {
                 </div>
 
                 <div className="mb-4">
-                  <NavLink to="/" className="btn btn-secondary me-2">Regresar al inicio</NavLink>
+                  {rol === 'vendedor' ? (
+                    <NavLink to="/ventas" className="btn btn-secondary me-2">Volver al panel</NavLink>
+                  ) : (
+                    <NavLink to="/" className="btn btn-secondary me-2">Regresar al inicio</NavLink>
+                  )}
                 </div>
               </div>
             </div>
