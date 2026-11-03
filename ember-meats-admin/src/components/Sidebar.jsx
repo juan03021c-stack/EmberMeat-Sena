@@ -5,10 +5,10 @@ const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: 'bi-speedometer2', roles: ['administrador'] },
   { path: '/productos', label: 'Productos', icon: 'bi-box-seam', roles: ['administrador'] },
   { path: '/categorias', label: 'Categorías', icon: 'bi-tag', roles: ['administrador'] },
-  { path: '/ordenes', label: 'Órdenes', icon: 'bi-receipt', roles: ['administrador', 'repartidor'] },
+  { path: '/ordenes', label: 'Órdenes', icon: 'bi-receipt', roles: ['administrador'] },
   { path: '/usuarios', label: 'Usuarios', icon: 'bi-people', roles: ['administrador'] },
   { path: '/ventas', label: 'Ventas', icon: 'bi-cash-coin', roles: ['administrador', 'vendedor'] },
-  { path: '/MisPedidos', label: 'Mis Pedidos', icon: 'bi-receipt', roles: ['administrador','repartidor'] },
+  { path: '/MisPedidos', label: 'Mis Pedidos', icon: 'bi-receipt', roles: ['administrador', 'repartidor'] },
 ]
 
 export default function Sidebar() {
@@ -102,14 +102,16 @@ export default function Sidebar() {
           </div>
         )}
 
-        <NavLink
-          to='/'
-          className='btn btn-outline-secondary btn-sm w-100 mb-2 d-flex align-items-center justify-content-center gap-1'
-          style={{ fontSize: 'var(--text-body-sm)' }}
-        >
-          <i className='bi bi-shop'></i>
-          <span>Ver tienda</span>
-        </NavLink>
+        {rolUsuario !== 'repartidor' && (
+          <NavLink
+            to='/'
+            className='btn btn-outline-secondary btn-sm w-100 mb-2 d-flex align-items-center justify-content-center gap-1'
+            style={{ fontSize: 'var(--text-body-sm)' }}
+          >
+            <i className='bi bi-shop'></i>
+            <span>Ver tienda</span>
+          </NavLink>
+        )}
 
         <button
           type='button'

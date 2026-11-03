@@ -57,6 +57,7 @@ export default function App() {
                                 <Route path="/categorias" element={<Categorias />} />
                                 <Route path="/productos" element={<Products />} />
                                 <Route path="/usuarios" element={<Users />} />
+                                <Route path="/ordenes" element={<Orders />} />
                             </Route>
 
                             {/* Administrador y vendedor */}
@@ -70,7 +71,6 @@ export default function App() {
                             <Route element={<ProtectedRoute
                                 rolesPermitidos={['administrador', 'repartidor']}
                             />}>
-                                <Route path="/ordenes" element={<Orders />} />
                                 <Route path="/MisPedidos" element={<MisPedidos />} />
                             </Route>
                         </Route>

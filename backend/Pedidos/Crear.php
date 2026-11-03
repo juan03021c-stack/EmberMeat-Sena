@@ -235,7 +235,7 @@ try {
     }
 
     /* --- Insertar en tabla `pedidos` ---*/
-    $observacionEntrega = !empty($cedula) ? "Cédula: {$cedula}" : null;
+    $observacionEntrega = null;
     $direccionTexto = $modalidadEntrega === 'domicilio' ? $direccion : 'Recogida en tienda';
 
     $stmtPedido = $pdo->prepare(

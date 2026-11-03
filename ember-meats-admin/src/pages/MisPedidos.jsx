@@ -1,7 +1,10 @@
 
 import { useEffect, useState, useCallback } from "react";
 import "../assets/Mispedidos.css";
-import { obtenerPedidosRepartidor } from "../services/Api";
+import {
+    actualizarEstadoPedidoRepartidor,
+    obtenerPedidosRepartidor,
+} from "../services/Api";
 
 /* =====================================================
    CONFIGURACIÓN
@@ -38,6 +41,10 @@ const BADGES = {
     listo_para_entrega: {
         texto: "Listo para entrega",
         clase: "mp-badge--pendiente",
+    },
+    intento_fallido: {
+        texto: "Intento fallido",
+        clase: "mp-badge--cancelado",
     },
 };
 
@@ -239,6 +246,7 @@ function PedidoCard({
     onMarcarEnCamino,
     onConfirmar,
     onFallido,
+    actualizando,
 }) {
     const badge = BADGES[pedido.estado] || {
         texto: pedido.estado,
@@ -324,14 +332,15 @@ function PedidoCard({
                 Total: {formatoCOP(pedido.total)}
             </p>
 
-            {pedido.estado === "pendiente" ? (
+            {["pendiente", "listo_para_entrega", "intento_fallido"].includes(pedido.estado) ? (
 
                 <button
                     type="button"
                     className="mp-btn mp-btn--primary"
                     onClick={() => onMarcarEnCamino(pedido.id)}
+                    disabled={actualizando}
                 >
-                    Marcar en camino
+                    {pedido.estado === "intento_fallido" ? "Reintentar entrega" : "Marcar en camino"}
                 </button>
 
             ) : pedido.estado === "en_camino" ? (
@@ -342,6 +351,7 @@ function PedidoCard({
                         type="button"
                         className="mp-btn mp-btn--success"
                         onClick={() => onConfirmar(pedido.id)}
+                        disabled={actualizando}
                     >
                         Confirmar entrega
                     </button>
@@ -350,6 +360,7 @@ function PedidoCard({
                         type="button"
                         className="mp-btn mp-btn--danger-outline"
                         onClick={() => onFallido(pedido.id)}
+                        disabled={actualizando}
                     >
                         Registrar intento fallido
                     </button>
@@ -508,6 +519,8 @@ export default function MisPedidos() {
 
     const [tab, setTab] = useState("pendientes");
     const [pedidoFallido, setPedidoFallido] = useState(null);
+    const [actualizandoId, setActualizandoId] = useState(null);
+    const [errorAccion, setErrorAccion] = useState("");
 
     /* ---------------------------------------------
        CONSULTAR PEDIDOS
@@ -547,7 +560,7 @@ export default function MisPedidos() {
     }, []);
 
     useEffect(() => {
-        cargarPedidos();
+        void Promise.resolve().then(cargarPedidos);
     }, [cargarPedidos]);
 
     /* ---------------------------------------------
@@ -562,66 +575,65 @@ export default function MisPedidos() {
         (p) => p.estado === "entregado"
     );
 
-    /* ---------------------------------------------
-       ACTUALIZAR ESTADO LOCAL
-    --------------------------------------------- */
+    const guardarEstado = async (id, estado, motivo = "") => {
+        setActualizandoId(id);
+        setErrorAccion("");
 
-    const actualizar = (id, cambios) => {
+        try {
+            const usuario = JSON.parse(localStorage.getItem("usuarioEmber") || "null");
+            const repartidorId = Number(usuario?.id);
+            if (
+                usuario?.rol_nombre !== "repartidor" ||
+                !Number.isInteger(repartidorId) ||
+                repartidorId <= 0
+            ) {
+                throw new Error("No se pudo identificar al repartidor de esta sesión.");
+            }
 
-        setPedidos((prev) =>
-            prev.map((p) =>
-                String(p.id) === String(id)
-                    ? { ...p, ...cambios }
-                    : p
-            )
-        );
-
+            const resultado = await actualizarEstadoPedidoRepartidor({
+                pedido_id: id,
+                repartidor_id: repartidorId,
+                estado,
+                motivo,
+            });
+            setPedidos((prev) =>
+                prev.map((pedido) =>
+                    String(pedido.id) === String(id)
+                        ? { ...pedido, estado: resultado.estado }
+                        : pedido
+                )
+            );
+            void cargarPedidos();
+            return true;
+        } catch (error) {
+            console.error("Error al actualizar el pedido:", error);
+            setErrorAccion(error.message || "No se pudo actualizar el pedido.");
+            return false;
+        } finally {
+            setActualizandoId(null);
+        }
     };
 
     /* ---------------------------------------------
        MARCAR EN CAMINO
     --------------------------------------------- */
 
-    const marcarEnCamino = (id) => {
-
-        actualizar(id, {
-            estado: "en_camino",
-        });
-
-    };
+    const marcarEnCamino = (id) => guardarEstado(id, "en_camino");
 
     /* ---------------------------------------------
        CONFIRMAR ENTREGA
     --------------------------------------------- */
 
-    const confirmarEntrega = (id) => {
-
-        actualizar(id, {
-            estado: "entregado",
-            entregadoA: new Date().toLocaleTimeString("es-CO", {
-                hour: "2-digit",
-                minute: "2-digit",
-            }),
-        });
-
-    };
+    const confirmarEntrega = (id) => guardarEstado(id, "entregado");
 
     /* ---------------------------------------------
        REGISTRAR INTENTO FALLIDO
     --------------------------------------------- */
 
-    const registrarFallido = (motivo) => {
-
-        console.log("Intento fallido:", {
-            pedidoId: pedidoFallido,
-            motivo,
-        });
-
-        // Por ahora solo cerramos el modal.
-        // La actualización real debe hacerse mediante una API.
-
-        setPedidoFallido(null);
-
+    const registrarFallido = async (motivo) => {
+        if (await guardarEstado(pedidoFallido, "intento_fallido", motivo)) {
+            setPedidoFallido(null);
+        }
     };
 
     /* =================================================
@@ -645,6 +657,12 @@ export default function MisPedidos() {
                     </p>
 
                 </header>
+
+                {errorAccion && (
+                    <div className="alert alert-danger" role="alert">
+                        {errorAccion}
+                    </div>
+                )}
 
                 {/* PESTAÑAS */}
 
@@ -711,6 +729,7 @@ export default function MisPedidos() {
                                     onMarcarEnCamino={marcarEnCamino}
                                     onConfirmar={confirmarEntrega}
                                     onFallido={setPedidoFallido}
+                                    actualizando={String(actualizandoId) === String(pedido.id)}
                                 />
 
                             ))

@@ -43,7 +43,7 @@ export default function LoginForm() {
             const rutasPorRol = {
                 administrador: '/dashboard',
                 vendedor: '/ventas',
-                repartidor: '/ordenes',
+                repartidor: '/MisPedidos',
             };
 
             const ruta = rutasPorRol[rol];

@@ -9,7 +9,8 @@ export default function OrdenModal({
     loading,
     limpiarFormulario,
     error,
-    mensaje
+    mensaje,
+    clientes = []
 }) {
     if (!show) return null;
 
@@ -60,14 +61,20 @@ export default function OrdenModal({
                                         Cliente
                                     </label>
 
-                                    <input
+                                    <select
                                         name="cliente"
                                         value={formulario.cliente ?? ""}
                                         onChange={cambiarCampo}
-                                        className="form-control"
-                                        placeholder="Nombre del cliente"
+                                        className="form-select"
                                         required
-                                    />
+                                    >
+                                        <option value="">Seleccione un cliente</option>
+                                        {clientes.map((cliente) => (
+                                            <option key={cliente.id} value={cliente.id}>
+                                                {cliente.nombre} ({cliente.correo})
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div className="col-md-6">
@@ -100,6 +107,20 @@ export default function OrdenModal({
                                         className="form-control"
                                         placeholder="0.00"
                                         required
+                                    />
+                                </div>
+
+                                <div className="col-md-6">
+                                    <label className="form-label">
+                                        Dirección de entrega
+                                    </label>
+
+                                    <input
+                                        name="direccion_entrega"
+                                        value={formulario.direccion_entrega ?? ""}
+                                        onChange={cambiarCampo}
+                                        className="form-control"
+                                        placeholder="Dirección del pedido"
                                     />
                                 </div>
 
@@ -147,6 +168,10 @@ export default function OrdenModal({
 
                                         <option value="listo_para_entrega">
                                             Listo para entrega
+                                        </option>
+
+                                        <option value="intento_fallido">
+                                            Intento fallido
                                         </option>
 
                                         <option value="en_camino">

@@ -5,6 +5,7 @@
 header('Content-Type: application/json; charset=UTF-8');
 
 require_once __DIR__ . "/../Database.php";
+require_once __DIR__ . "/RegistrarVentaPedido.php";
 
 /* Recibir el evento enviado por Wompi */
 $bodyRaw = file_get_contents('php://input');
@@ -97,62 +98,80 @@ if (strpos($metodoRaw, 'CARD') !== false) {
 }
 
 try {
-    $pedidoId = null;
+    if ($referencia === '' || $wompiId === '') {
+        throw new RuntimeException('La transacción no contiene referencia o identificador.');
+    }
+
+    $pdo->beginTransaction();
 
     /* Buscar y actualizar pedido por número de pedido / referencia*/
-    if (!empty($referencia)) {
-        $stmtBuscarPedido = $pdo->prepare("SELECT id FROM pedidos WHERE numero_pedido = :referencia LIMIT 1");
-        $stmtBuscarPedido->execute([':referencia' => $referencia]);
-        $pedidoRow = $stmtBuscarPedido->fetch(PDO::FETCH_ASSOC);
-        /* si encuentra el pedido, actualiza el estado*/
-        if ($pedidoRow) {
-            $pedidoId = (int)$pedidoRow['id'];
-            $stmtUpdatePedido = $pdo->prepare("UPDATE pedidos SET estado = :estado WHERE id = :id");
-            $stmtUpdatePedido->execute([
-                ':estado' => $estadoPedido,
-                ':id'     => $pedidoId
-            ]);
-        }
+    $stmtBuscarPedido = $pdo->prepare(
+        'SELECT id, total FROM pedidos WHERE numero_pedido = :referencia LIMIT 1 FOR UPDATE'
+    );
+    $stmtBuscarPedido->execute([':referencia' => $referencia]);
+    $pedidoRow = $stmtBuscarPedido->fetch(PDO::FETCH_ASSOC);
+
+    if (!$pedidoRow) {
+        throw new RuntimeException('No se encontró el pedido asociado a la transacción.');
     }
+    $pedidoId = (int)$pedidoRow['id'];
+
+    if ($status === 'APPROVED' && abs((float)$pedidoRow['total'] - $montoPesos) > 0.01) {
+        throw new RuntimeException('El monto aprobado no coincide con el total del pedido.');
+    }
+
+    $stmtUpdatePedido = $pdo->prepare("UPDATE pedidos SET estado = :estado WHERE id = :id");
+    $stmtUpdatePedido->execute([
+        ':estado' => $estadoPedido,
+        ':id'     => $pedidoId
+    ]);
 
     /* Registrar o actualizar en tabla `transacciones` si tenemos el pedido*/
-    if ($pedidoId) {
-        $stmtCheckTrans = $pdo->prepare("SELECT id FROM transacciones WHERE referencia = :ref OR wompi_transaction_id = :wid LIMIT 1");
-        $stmtCheckTrans->execute([':ref' => $referencia, ':wid' => $wompiId]);
-        $transRow = $stmtCheckTrans->fetch(PDO::FETCH_ASSOC);
+    $stmtCheckTrans = $pdo->prepare(
+        'SELECT id FROM transacciones
+         WHERE referencia = :ref OR wompi_transaction_id = :wid
+         LIMIT 1
+         FOR UPDATE'
+    );
+    $stmtCheckTrans->execute([':ref' => $referencia, ':wid' => $wompiId]);
+    $transRow = $stmtCheckTrans->fetch(PDO::FETCH_ASSOC);
 
-        /* si encuentra la transaccion, actualiza el estado*/
-        if ($transRow) {
-            $stmtUpTrans = $pdo->prepare("
-                UPDATE transacciones 
-                SET wompi_transaction_id = :wid, estado = :estado, metodo_pago = :metodo, monto = :monto, moneda = 'COP'
-                WHERE id = :id
-            ");
-            /* ejecuta la consulta*/
-            $stmtUpTrans->execute([
-                ':wid'    => $wompiId,
-                ':estado' => $estadoTransaccion,
-                ':metodo' => $metodoPagoDb,
-                ':monto'  => $montoPesos,
-                ':id'     => $transRow['id']
-            ]);
-        } else {
-            /* si no encuentra la transaccion, inserta una nueva*/
-            $stmtInTrans = $pdo->prepare("
-                INSERT INTO transacciones (pedido_id, wompi_transaction_id, metodo_pago, monto, estado, referencia, moneda)
-                VALUES (:pedido_id, :wid, :metodo, :monto, :estado, :referencia, 'COP')
-            ");
-            /* ejecuta la consulta*/
-            $stmtInTrans->execute([
-                ':pedido_id'   => $pedidoId,
-                ':wid'         => $wompiId,
-                ':metodo'      => $metodoPagoDb,
-                ':monto'       => $montoPesos,
-                ':estado'      => $estadoTransaccion,
-                ':referencia'  => $referencia
-            ]);
-        }
+    if ($transRow) {
+        $stmtUpTrans = $pdo->prepare("
+            UPDATE transacciones
+            SET wompi_transaction_id = :wid, estado = :estado,
+                metodo_pago = :metodo, monto = :monto, moneda = 'COP'
+            WHERE id = :id
+        ");
+        $stmtUpTrans->execute([
+            ':wid' => $wompiId,
+            ':estado' => $estadoTransaccion,
+            ':metodo' => $metodoPagoDb,
+            ':monto' => $montoPesos,
+            ':id' => $transRow['id']
+        ]);
+    } else {
+        $stmtInTrans = $pdo->prepare("
+            INSERT INTO transacciones (pedido_id, wompi_transaction_id, metodo_pago, monto, estado, referencia, moneda)
+            VALUES (:pedido_id, :wid, :metodo, :monto, :estado, :referencia, 'COP')
+        ");
+        $stmtInTrans->execute([
+            ':pedido_id' => $pedidoId,
+            ':wid' => $wompiId,
+            ':metodo' => $metodoPagoDb,
+            ':monto' => $montoPesos,
+            ':estado' => $estadoTransaccion,
+            ':referencia' => $referencia
+        ]);
     }
+
+    $ventaId = null;
+    if ($status === 'APPROVED') {
+        $ventaId = registrarVentaPedido($pdo, $pedidoId, $metodoPagoDb);
+    }
+
+    $pdo->commit();
+
     /* responde a wompi*/
     http_response_code(200);
     echo json_encode([
@@ -160,10 +179,15 @@ try {
         'message' => 'Transacción procesada correctamente',
         'referencia' => $referencia,
         'estado_pedido' => $estadoPedido,
-        'estado_transaccion' => $estadoTransaccion
+        'estado_transaccion' => $estadoTransaccion,
+        'venta_id' => $ventaId
     ]);
     
-} catch (PDOException $e) {
+} catch (Throwable $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     http_response_code(500);
-    echo json_encode(['error' => 'Error de base de datos: ' . $e->getMessage()]);
+    error_log('Error procesando webhook de Wompi: ' . $e->getMessage());
+    echo json_encode(['error' => 'No se pudo guardar la transacción y su venta asociada.']);
 }
