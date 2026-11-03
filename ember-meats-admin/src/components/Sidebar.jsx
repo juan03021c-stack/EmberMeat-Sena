@@ -28,9 +28,8 @@ export default function Sidebar() {
 
   const rolUsuario = String(usuario?.rol_nombre || '').toLowerCase()
 
-  // Filtrar links según el rol del usuario autenticado
   const linksVisibles = navItems.filter(item =>
-    !item.roles || item.roles.includes(rolUsuario)
+    item.roles.includes(rolUsuario)
   )
 
   const handleCerrarSesion = () => {
@@ -48,7 +47,6 @@ export default function Sidebar() {
       }}
       className='d-flex flex-column'
     >
-      {/* Logo */}
       <div className='p-3 mb-2'>
         <strong className='text-ember-dark'>EMBER MEATS</strong>
         <div style={{ fontSize: 'var(--text-micro)', color: 'var(--ember-text-muted)' }}>
@@ -56,13 +54,11 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Nav links */}
       <nav className='flex-grow-1'>
         {linksVisibles.map(item => (
           <NavLink
             key={item.path}
             to={item.path}
-            end={item.path === '/'}
             className={({ isActive }) =>
               'nav-link d-flex align-items-center gap-2 px-3 py-2 ' +
               (isActive
@@ -81,7 +77,6 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Información del usuario y botón de cerrar sesión */}
       <div
         style={{
           padding: '15px 12px 25px 12px',
@@ -93,23 +88,23 @@ export default function Sidebar() {
             <div className='fw-semibold text-truncate' style={{ fontSize: 'var(--text-body-sm)' }}>
               {usuario.nombre}
             </div>
-            <span
-              className='badge bg-danger bg-opacity-10 text-danger text-capitalize mt-1'
-              style={{ fontSize: 'var(--text-micro)' }}
-            >
+
+            <span className='badge bg-danger bg-opacity-10 text-danger text-capitalize mt-1'>
               {usuario.rol_nombre}
             </span>
           </div>
         )}
 
-        {rolUsuario !== 'repartidor' && (
+    
+        {/* Ver catálogo para vendedor */}
+        {rolUsuario === 'vendedor' && (
           <NavLink
-            to='/'
+            to='/Catalogo'
             className='btn btn-outline-secondary btn-sm w-100 mb-2 d-flex align-items-center justify-content-center gap-1'
             style={{ fontSize: 'var(--text-body-sm)' }}
           >
             <i className='bi bi-shop'></i>
-            <span>Ver tienda</span>
+            <span>Ver catálogo</span>
           </NavLink>
         )}
 
@@ -117,7 +112,6 @@ export default function Sidebar() {
           type='button'
           onClick={handleCerrarSesion}
           className='btn btn-ember btn-sm w-100 d-flex align-items-center justify-content-center gap-1'
-          style={{ fontSize: 'var(--text-body-sm)' }}
         >
           <i className='bi bi-box-arrow-right'></i>
           <span>Cerrar sesión</span>

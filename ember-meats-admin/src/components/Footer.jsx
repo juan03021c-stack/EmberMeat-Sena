@@ -3,6 +3,17 @@ import { MapPin, Phone, Mail, Flame } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 
 export default function Footer() {
+    let rol = '';
+    try {
+        const sesion = localStorage.getItem('usuarioEmber');
+        if (sesion) {
+            const usuario = JSON.parse(sesion);
+            rol = String(usuario?.rol_nombre || '').trim().toLowerCase();
+        }
+    } catch {
+        rol = '';
+    }
+
     return (
         <footer className='footer-container' style={{ backgroundColor: 'var(--ember-dark-bg)', color: 'var(--ember-text-muted)' }}>
             <div className="container py-5">
@@ -39,9 +50,11 @@ export default function Footer() {
                     <div className="col-12 col-md-4">
                         <h4 className="text-white mb-4 fs-6 fw-bold">Links rápidos</h4>
                         <ul className="list-unstyled fs-6">
-                            <li className="mb-2">
-                                <NavLink to="" className="footer-link">Inicio</NavLink>
-                            </li>
+                            {rol !== 'vendedor' && (
+                                <li className="mb-2">
+                                    <NavLink to="" className="footer-link">Inicio</NavLink>
+                                </li>
+                            )}
                             <li className="mb-2">
                                 <NavLink to="/catalogo" className="footer-link">Catálogo</NavLink>
                             </li>
