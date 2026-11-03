@@ -95,6 +95,22 @@ export async function actualizarPedido(pedido) {
     );
 }
 
+export async function enviarCodigoRecuperacion(email) {
+    return enviarPedido(
+        "/Login/EnviarCodigo.php",
+        { email },
+        "No fue posible enviar el código"
+    );
+}
+
+export async function cambiarContrasena(datos) {
+    return enviarPedido(
+        "/Login/CambiarContrasena.php",
+        datos,
+        "No fue posible cambiar la contraseña"
+    );
+}
+
 export async function actualizarEstadoPedidoRepartidor(pedido) {
     return enviarPedido(
         "/Pedidos/ActualizarEstadoRepartidor.php",

@@ -302,6 +302,24 @@ try {
 
     $pdo->commit();
 
+    /* --- Avisar al cliente por correo; si falla, el pedido igual queda guardado --- */
+    require_once __DIR__ . '/../Config/EnviarCorreo.php';
+    $filas = '';
+    foreach ($itemsValidados as $item) {
+        $filas .= '<li>' . $item['cantidad'] . ' × ' . htmlspecialchars($item['nombre_producto'])
+            . ' — $' . number_format($item['subtotal'], 0, ',', '.') . '</li>';
+    }
+    enviarCorreo(
+        $correo,
+        $nombre,
+        "Recibimos tu pedido $numeroPedido",
+        '<h2>¡Gracias por tu compra, ' . htmlspecialchars($nombre) . '!</h2>'
+            . "<p>Número de pedido: <strong>$numeroPedido</strong></p>"
+            . "<ul>$filas</ul>"
+            . '<p><strong>Total: $' . number_format($totalCalculado, 0, ',', '.') . '</strong></p>'
+            . '<p>Entrega: ' . htmlspecialchars($direccionTexto) . '</p>'
+    );
+
     /* --- Preparar datos de pago para Wompi con firma de integridad SHA256 --- */
     $montoCentavos = (int)round($totalCalculado * 100);
     $moneda = defined('WOMPI_CURRENCY') ? WOMPI_CURRENCY : 'COP';

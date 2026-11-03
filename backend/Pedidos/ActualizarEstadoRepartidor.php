@@ -169,6 +169,34 @@ try {
 
     $pdo->commit();
 
+    /* --- Avisar al cliente del nuevo estado; si falla, el estado igual queda guardado --- */
+    $stmtCliente = $pdo->prepare(
+        'SELECT p.numero_pedido, u.nombre, u.correo
+         FROM pedidos p
+         INNER JOIN usuarios u ON u.id = p.cliente_id
+         WHERE p.id = :id'
+    );
+    $stmtCliente->execute([':id' => $pedidoId]);
+    $cliente = $stmtCliente->fetch(PDO::FETCH_ASSOC);
+
+    if ($cliente && $cliente['correo']) {
+        require_once __DIR__ . '/../Config/EnviarCorreo.php';
+        $mensajes = [
+            'en_camino' => 'Tu pedido va en camino. ¡Pronto llega!',
+            'entregado' => 'Tu pedido fue entregado. ¡Gracias por comprar en EmberMeat!',
+            'intento_fallido' => 'No pudimos entregar tu pedido. Motivo: ' . htmlspecialchars($motivo)
+                . '. Te contactaremos para volver a intentarlo.'
+        ];
+        enviarCorreo(
+            $cliente['correo'],
+            $cliente['nombre'],
+            'Tu pedido ' . $cliente['numero_pedido'] . ' cambió de estado',
+            '<h2>Hola, ' . htmlspecialchars($cliente['nombre']) . '</h2>'
+                . '<p>Pedido: <strong>' . $cliente['numero_pedido'] . '</strong></p>'
+                . '<p>' . $mensajes[$estadoNuevo] . '</p>'
+        );
+    }
+
     echo json_encode([
         'success' => true,
         'message' => 'Estado del pedido actualizado correctamente.',
