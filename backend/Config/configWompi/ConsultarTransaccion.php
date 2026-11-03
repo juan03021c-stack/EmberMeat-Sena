@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . "/../Database.php";
+require_once __DIR__ . "/RegistrarVentaPedido.php";
 
 /* Obtener el ID de la transacción o la referencia */
 $transactionId = $_GET['id'] ?? null;
@@ -127,66 +128,86 @@ if (strpos($metodoRaw, 'CARD') !== false) {
 /* Actualizar en base de datos si el pedido existe */
 $baseDatosSincronizada = false;
 $errorBaseDatos = null;
+$ventaId = null;
 if (!empty($referencia)) {
     try {
+        $pdo->beginTransaction();
+
         /* Consultar el pedido local */
-        $stmtBuscarPedido = $pdo->prepare("SELECT id FROM pedidos WHERE numero_pedido = :referencia LIMIT 1");
+        $stmtBuscarPedido = $pdo->prepare(
+            'SELECT id, total FROM pedidos WHERE numero_pedido = :referencia LIMIT 1 FOR UPDATE'
+        );
         $stmtBuscarPedido->execute([':referencia' => $referencia]);
         $pedidoRow = $stmtBuscarPedido->fetch(PDO::FETCH_ASSOC);
 
-        /* Actualizar estado del pedido */
-        if ($pedidoRow) {
-            $pedidoId = (int)$pedidoRow['id'];
-            $stmtUpdatePedido = $pdo->prepare("UPDATE pedidos SET estado = :estado WHERE id = :id");
-            $stmtUpdatePedido->execute([
-                ':estado' => $estadoPedido,
-                ':id'     => $pedidoId
-            ]);
-
-            /* verificar si existe el registro de la transacción */
-            $stmtCheckTrans = $pdo->prepare("SELECT id FROM transacciones WHERE referencia = :ref OR wompi_transaction_id = :wid LIMIT 1");
-            $stmtCheckTrans->execute([':ref' => $referencia, ':wid' => $transaction['id']]);
-            $transRow = $stmtCheckTrans->fetch(PDO::FETCH_ASSOC);
-
-            /* si existe actualiza el registro*/
-            if ($transRow) {
-                $stmtUpTrans = $pdo->prepare("
-                    UPDATE transacciones 
-                    SET wompi_transaction_id = :wid, estado = :estado, metodo_pago = :metodo, monto = :monto, moneda = 'COP'
-                    WHERE id = :id
-                ");
-
-                /* Ejecutar la actualización */
-                $stmtUpTrans->execute([
-                    ':wid'    => $transaction['id'],
-                    ':estado' => $estadoTransaccion,
-                    ':metodo' => $metodoPagoDb,
-                    ':monto'  => $montoPesos,
-                    ':id'     => $transRow['id']
-                ]);
-                $baseDatosSincronizada = true;
-            /* si no existe, creamos el registro nuevo*/
-            } else {
-                $stmtInTrans = $pdo->prepare("
-                    INSERT INTO transacciones (pedido_id, wompi_transaction_id, metodo_pago, monto, estado, referencia, moneda)
-                    VALUES (:pedido_id, :wid, :metodo, :monto, :estado, :referencia, 'COP')
-                ");
-                $stmtInTrans->execute([
-                    ':pedido_id'   => $pedidoId,
-                    ':wid'         => $transaction['id'],
-                    ':metodo'      => $metodoPagoDb,
-                    ':monto'       => $montoPesos,
-                    ':estado'      => $estadoTransaccion,
-                    ':referencia'  => $referencia
-                ]);
-                $baseDatosSincronizada = true;
-            }
-        } else {
-            $errorBaseDatos = 'No se encontró un pedido con la referencia recibida.';
+        if (!$pedidoRow) {
+            throw new RuntimeException('No se encontró un pedido con la referencia recibida.');
         }
-    } catch (Exception $e) {
+        $pedidoId = (int)$pedidoRow['id'];
+
+        if ($status === 'APPROVED' && abs((float)$pedidoRow['total'] - $montoPesos) > 0.01) {
+            throw new RuntimeException('El monto aprobado no coincide con el total del pedido.');
+        }
+
+        $stmtUpdatePedido = $pdo->prepare("UPDATE pedidos SET estado = :estado WHERE id = :id");
+        $stmtUpdatePedido->execute([
+            ':estado' => $estadoPedido,
+            ':id' => $pedidoId
+        ]);
+
+        $stmtCheckTrans = $pdo->prepare(
+            'SELECT id FROM transacciones
+             WHERE referencia = :ref OR wompi_transaction_id = :wid
+             LIMIT 1
+             FOR UPDATE'
+        );
+        $stmtCheckTrans->execute([
+            ':ref' => $referencia,
+            ':wid' => $transaction['id']
+        ]);
+        $transRow = $stmtCheckTrans->fetch(PDO::FETCH_ASSOC);
+
+        if ($transRow) {
+            $stmtUpTrans = $pdo->prepare("
+                UPDATE transacciones
+                SET wompi_transaction_id = :wid, estado = :estado,
+                    metodo_pago = :metodo, monto = :monto, moneda = 'COP'
+                WHERE id = :id
+            ");
+            $stmtUpTrans->execute([
+                ':wid' => $transaction['id'],
+                ':estado' => $estadoTransaccion,
+                ':metodo' => $metodoPagoDb,
+                ':monto' => $montoPesos,
+                ':id' => $transRow['id']
+            ]);
+        } else {
+            $stmtInTrans = $pdo->prepare("
+                INSERT INTO transacciones (pedido_id, wompi_transaction_id, metodo_pago, monto, estado, referencia, moneda)
+                VALUES (:pedido_id, :wid, :metodo, :monto, :estado, :referencia, 'COP')
+            ");
+            $stmtInTrans->execute([
+                ':pedido_id' => $pedidoId,
+                ':wid' => $transaction['id'],
+                ':metodo' => $metodoPagoDb,
+                ':monto' => $montoPesos,
+                ':estado' => $estadoTransaccion,
+                ':referencia' => $referencia
+            ]);
+        }
+
+        if ($status === 'APPROVED') {
+            $ventaId = registrarVentaPedido($pdo, $pedidoId, $metodoPagoDb);
+        }
+
+        $pdo->commit();
+        $baseDatosSincronizada = true;
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         error_log('Error sincronizando transacción Wompi: ' . $e->getMessage());
-        $errorBaseDatos = 'La transacción fue consultada, pero no se pudo guardar en la base de datos.';
+        $errorBaseDatos = $e->getMessage();
     }
 }
 
@@ -204,6 +225,7 @@ echo json_encode([
         'created_at'          => $transaction['created_at'] ?? '',
         'status_message'      => $transaction['status_message'] ?? null,
         'database_synced'     => $baseDatosSincronizada,
-        'database_error'      => $errorBaseDatos
+        'database_error'      => $errorBaseDatos,
+        'venta_id'            => $ventaId
     ]
 ]);

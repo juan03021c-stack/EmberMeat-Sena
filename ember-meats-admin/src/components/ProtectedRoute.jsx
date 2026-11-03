@@ -47,7 +47,15 @@ export default function ProtectedRoute({ rolesPermitidos = [] }) {
     );
 
     if (roles.length > 0 && !roles.includes(rol)) {
-        return <Navigate to="/" replace />;
+        const rutaRedireccion =
+            rol === 'repartidor'
+                ? '/MisPedidos'
+                : rol === 'vendedor'
+                ? '/ventas'
+                : rol === 'administrador'
+                ? '/dashboard'
+                : '/login';
+        return <Navigate to={rutaRedireccion} replace />;
     }
 
     // Usuario autorizado

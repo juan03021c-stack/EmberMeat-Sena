@@ -34,7 +34,7 @@ export default function NavbarHome() {
     }, [location.pathname])
 
     const rol = String(usuario?.rol_nombre || '').toLowerCase()
-    const rutaPanel = rol === 'vendedor' ? '/ventas' : rol === 'repartidor' ? '/ordenes' : '/dashboard'
+    const rutaPanel = rol === 'vendedor' ? '/ventas' : rol === 'repartidor' ? '/MisPedidos' : '/dashboard'
 
     const links = [
         { href: '#inicio', label: 'Inicio', icon: 'bi-house', type: 'internal' },

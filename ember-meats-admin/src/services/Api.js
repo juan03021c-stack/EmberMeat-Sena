@@ -49,31 +49,71 @@ export async function obtenerCategorias() {
     }
 }
 export async function obtenerPedidos() {
-    try {
-        const respuesta = await fetch(`${URL_BASE}/Pedidos/Listar.php`);
-        if (!respuesta.ok) {
-            throw new Error("Error al obtener los pedidos");
-        }
-        const datos = await respuesta.json();
-        if (datos && Array.isArray(datos.pedidos)) return datos.pedidos;
-        return [];
-    } catch (error) {
-        console.error(error);
-        return [];
+    const respuesta = await fetch(`${URL_BASE}/Pedidos/Listar.php`);
+    const datos = await respuesta.json();
+    if (!respuesta.ok || !datos.success || !Array.isArray(datos.pedidos)) {
+        throw new Error(datos.message || "Error al obtener los pedidos");
     }
+    return datos.pedidos;
 }
 
+export async function obtenerClientesPedido() {
+    const respuesta = await fetch(`${URL_BASE}/Usuarios/Listar.php?rol=cliente`);
+    const datos = await respuesta.json();
+    if (!respuesta.ok || !datos.success || !Array.isArray(datos.usuarios)) {
+        throw new Error(datos.message || "Error al obtener los clientes");
+    }
+    return datos.usuarios;
+}
+
+async function enviarPedido(url, pedido, mensajeError) {
+    const respuesta = await fetch(`${URL_BASE}${url}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pedido),
+    });
+    const datos = await respuesta.json();
+    if (!respuesta.ok || !datos.success) {
+        throw new Error(datos.message || mensajeError);
+    }
+    return datos;
+}
+
+export async function crearPedidoAdministrativo(pedido) {
+    return enviarPedido(
+        "/Pedidos/CrearManual.php",
+        pedido,
+        "Error al crear el pedido"
+    );
+}
+
+export async function actualizarPedido(pedido) {
+    return enviarPedido(
+        "/Pedidos/Actualizar.php",
+        pedido,
+        "Error al actualizar el pedido"
+    );
+}
+
+export async function actualizarEstadoPedidoRepartidor(pedido) {
+    return enviarPedido(
+        "/Pedidos/ActualizarEstadoRepartidor.php",
+        pedido,
+        "Error al actualizar el estado del pedido"
+    );
+}
 
 export const obtenerPedidosRepartidor = async () => {
     try {
         const respuesta = await fetch(
-            `${URL_BASE}/Pedidos/Repartidor.php`
+            `${URL_BASE}/Pedidos/Repartidor.php`,
+            { cache: "no-store" }
         );
 
         const data = await respuesta.json();
 
         if (!respuesta.ok || !data.success) {
-            throw new Error(data.mensaje || 'Error al obtener pedidos repartidor');
+            throw new Error(data.message || data.mensaje || 'Error al obtener pedidos repartidor');
         }
 
         return data.pedidos;
