@@ -61,6 +61,12 @@ export default function Footer() {
                             <li className="mb-2">
                                 <NavLink to="/login" className="footer-link">Iniciar sesión</NavLink>
                             </li>
+                            <li className="mb-2">
+                                <NavLink to="/terminos" className="footer-link">Términos y condiciones</NavLink>
+                            </li>
+                            <li className="mb-2">
+                                <NavLink to="/tratamiento-datos" className="footer-link">Tratamiento de datos</NavLink>
+                            </li>
                         </ul>
                     </div>
 

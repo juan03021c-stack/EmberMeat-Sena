@@ -20,6 +20,7 @@ import AdminNavbarLayout from './components/home/AdminNavbarLayout'
 import Catalogo from './pages/Catalogo'
 import Ventas from './pages/Ventas'
 import RespuestaPago from './pages/RespuestaPago'
+import TerminosCondiciones from './pages/TerminosCondiciones'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
 export default function App() {
@@ -34,6 +35,8 @@ export default function App() {
                         <Route path="/" element={<Inicio />} />
                         <Route path="/carrito" element={<Carrito />} />
                         <Route path="/Catalogo" element={<Catalogo />} />
+                        <Route path="/terminos" element={<TerminosCondiciones tipo="terminos" />} />
+                        <Route path="/tratamiento-datos" element={<TerminosCondiciones tipo="datos" />} />
                         <Route
                             path="/respuesta-pago"
                             element={<RespuestaPago />}
