@@ -489,11 +489,21 @@ export default function RegisterForm({
                                         >
                                             Acepto los{' '}
 
+                                            {/* target _blank: se abren en otra pestaña para no perder el formulario */}
                                             <NavLink
                                                 to="/terminos"
+                                                target="_blank"
                                                 className="text-ember-red text-decoration-none"
                                             >
                                                 términos y condiciones
+                                            </NavLink>
+                                            {' '}y la{' '}
+                                            <NavLink
+                                                to="/tratamiento-datos"
+                                                target="_blank"
+                                                className="text-ember-red text-decoration-none"
+                                            >
+                                                política de tratamiento de datos
                                             </NavLink>
                                         </label>
                                     </div>
