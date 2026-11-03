@@ -243,7 +243,7 @@ export default function Categorias() {
           disabled={loading}
         >
           <i className='bi bi-plus-lg me-1'></i>
-          Nueva categoría
+         Nueva categoría
         </button>
       </div>
 
