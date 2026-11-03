@@ -13,6 +13,7 @@ import Inicio from './pages/Inicio'
 import ContentFooter from './components/footer/contentFooter'
 
 import Login from './pages/Login'
+import RecuperarContrasena from './pages/RecuperarContrasena'
 import Carrito from './pages/Carrito'
 import AdminLayout from './components/AdminLayout'
 import AdminNavbarLayout from './components/home/AdminNavbarLayout'
@@ -42,6 +43,7 @@ export default function App() {
                     {/* Inicio de sesión */}
                     <Route element={<ContentFooter />}>
                         <Route path="/login" element={<Login />} />
+                        <Route path="/recuperar" element={<RecuperarContrasena />} />
                     </Route>
 
                     {/* Rutas administrativas protegidas */}
