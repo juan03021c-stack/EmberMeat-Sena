@@ -248,6 +248,7 @@ function PedidoCard({
     onConfirmar,
     onFallido,
     actualizando,
+    soloConsulta,
 }) {
     const badge = BADGES[pedido.estado] || {
         texto: pedido.estado,
@@ -333,7 +334,7 @@ function PedidoCard({
                 Total: {formatoCOP(pedido.total)}
             </p>
 
-            {["pendiente", "listo_para_entrega", "intento_fallido"].includes(pedido.estado) ? (
+            {soloConsulta ? null : ["pendiente", "listo_para_entrega", "intento_fallido"].includes(pedido.estado) ? (
 
                 <button
                     type="button"
@@ -523,6 +524,15 @@ export default function MisPedidos() {
     const [actualizandoId, setActualizandoId] = useState(null);
     const [errorAccion, setErrorAccion] = useState("");
 
+    /* Solo el repartidor cambia estados; el administrador consulta y gestiona en Órdenes */
+    const soloConsulta = (() => {
+        try {
+            return JSON.parse(localStorage.getItem("usuarioEmber") || "null")?.rol_nombre !== "repartidor";
+        } catch {
+            return true;
+        }
+    })();
+
     /* ---------------------------------------------
        CONSULTAR PEDIDOS
     --------------------------------------------- */
@@ -677,6 +687,12 @@ export default function MisPedidos() {
 
                 </header>
 
+                {soloConsulta && (
+                    <div className="alert alert-info" role="status">
+                        Vista de consulta: las entregas las actualiza el repartidor. Para cambiar un estado usa Órdenes.
+                    </div>
+                )}
+
                 {errorAccion && (
                     <div className="alert alert-danger" role="alert">
                         {errorAccion}
@@ -745,6 +761,7 @@ export default function MisPedidos() {
                                 <PedidoCard
                                     key={pedido.id}
                                     pedido={pedido}
+                                    soloConsulta={soloConsulta}
                                     onMarcarEnCamino={marcarEnCamino}
                                     onConfirmar={confirmarEntrega}
                                     onFallido={setPedidoFallido}

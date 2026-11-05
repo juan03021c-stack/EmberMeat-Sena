@@ -3,7 +3,7 @@
 function registrarVentaPedido(PDO $pdo, int $pedidoId, string $metodoPago): int
 {
     $stmtPedido = $pdo->prepare(
-        'SELECT p.total, u.nombre AS cliente
+        'SELECT p.total, p.vendedor_id, u.nombre AS cliente
          FROM pedidos p
          INNER JOIN usuarios u ON u.id = p.cliente_id
          WHERE p.id = :pedido_id
@@ -43,21 +43,24 @@ function registrarVentaPedido(PDO $pdo, int $pedidoId, string $metodoPago): int
         static fn(array $item): float => (float)$item['subtotal'],
         $items
     ));
-    $metodoPagoVenta = 'Wompi - ' . strtoupper(str_replace('_', ' ', $metodoPago));
+    $metodoPagoVenta = $metodoPago === 'punto'
+        ? 'Pago en el punto'
+        : 'Wompi - ' . strtoupper(str_replace('_', ' ', $metodoPago));
 
     $stmtVenta = $pdo->prepare(
         'INSERT INTO ventas (
             pedido_id, cliente, vendedor_id, canal, metodo_pago,
             descuento, subtotal, total
          ) VALUES (
-            :pedido_id, :cliente, NULL, :canal, :metodo_pago,
+            :pedido_id, :cliente, :vendedor_id, :canal, :metodo_pago,
             0, :subtotal, :total
          )'
     );
     $stmtVenta->execute([
         ':pedido_id' => $pedidoId,
         ':cliente' => $pedido['cliente'],
-        ':canal' => 'Tienda en línea',
+        ':vendedor_id' => $pedido['vendedor_id'],
+        ':canal' => $pedido['vendedor_id'] ? 'Punto de venta' : 'Tienda en línea',
         ':metodo_pago' => $metodoPagoVenta,
         ':subtotal' => $subtotal,
         ':total' => (float)$pedido['total']

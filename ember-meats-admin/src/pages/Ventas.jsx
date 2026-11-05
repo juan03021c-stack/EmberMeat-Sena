@@ -64,6 +64,7 @@ export default function Ventas() {
                   <thead>
                     <tr>
                       <th>Cliente</th>
+                      <th>Vendedor</th>
                       <th>Canal</th>
                       <th>Método de pago</th>
                       <th>Productos</th>
@@ -80,6 +81,7 @@ export default function Ventas() {
                           <span>{v.cliente}</span>
                         </div>
                       </td>
+                    <td>{v.vendedor || 'Sin vendedor'}</td>
                     <td>{v.canal}</td>
                     <td>{v.metodo_pago}</td>
                     <td>{v.productos ? v.productos.length : 0} Productos</td>

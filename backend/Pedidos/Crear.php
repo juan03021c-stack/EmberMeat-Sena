@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . "/../Config/Database.php";
+require_once __DIR__ . "/../Config/configWompi/RegistrarVentaPedido.php";
 
 /* --- Leer datos (compatible con JSON y con FormData)---*/
 $lectura_informacion = file_get_contents('php://input');
@@ -62,6 +63,9 @@ $modalidadEntrega = (
     strpos($metodoEnvioLower, 'recoger') !== false
 ) ? 'recogida_punto' : 'domicilio';
 
+$vendedorId = filter_var($cliente['vendedor_id'] ?? null, FILTER_VALIDATE_INT) ?: null;
+$pagoEnPunto = $modalidadEntrega === 'recogida_punto' || ($cliente['lugarPago'] ?? '') === 'punto';
+
 /* --- Validaciones básicas ---*/
 if (empty($nombre) || empty($correo)) {
     echo json_encode([
@@ -88,6 +92,23 @@ if (empty($productos) || !is_array($productos)) {
 }
 
 try {
+    /* --- Si viene un vendedor, debe ser un vendedor activo ---*/
+    if ($vendedorId) {
+        $stmtVendedor = $pdo->prepare(
+            "SELECT u.id FROM usuarios u
+             INNER JOIN roles r ON r.id = u.rol_id
+             WHERE u.id = :id AND LOWER(r.nombre) = 'vendedor' AND u.activo = 1"
+        );
+        $stmtVendedor->execute([':id' => $vendedorId]);
+        if (!$stmtVendedor->fetchColumn()) {
+            echo json_encode([
+                "success" => false,
+                "message" => "El usuario no es un vendedor activo."
+            ]);
+            exit;
+        }
+    }
+
     $pdo->beginTransaction();
 
     /* --- Buscar o crear el usuario cliente en la tabla `usuarios` ---*/
@@ -242,6 +263,7 @@ try {
         "INSERT INTO pedidos (
             numero_pedido, 
             cliente_id, 
+            vendedor_id, 
             direccion_id, 
             modalidad_entrega, 
             direccion_entrega, 
@@ -251,6 +273,7 @@ try {
         ) VALUES (
             :numero_pedido, 
             :cliente_id, 
+            :vendedor_id, 
             :direccion_id, 
             :modalidad_entrega, 
             :direccion_entrega, 
@@ -263,6 +286,7 @@ try {
     $stmtPedido->execute([
         ':numero_pedido'       => $numeroPedido,
         ':cliente_id'          => $clienteId,
+        ':vendedor_id'         => $vendedorId,
         ':direccion_id'        => $direccionId,
         ':modalidad_entrega'   => $modalidadEntrega,
         ':direccion_entrega'   => $direccionTexto,
@@ -298,6 +322,11 @@ try {
                 ':id'       => $item['producto_id']
             ]);
         }
+    }
+
+    /* --- El vendedor cobra en el punto: la venta queda registrada de una vez --- */
+    if ($vendedorId && $pagoEnPunto) {
+        registrarVentaPedido($pdo, $pedidoId, 'punto');
     }
 
     $pdo->commit();

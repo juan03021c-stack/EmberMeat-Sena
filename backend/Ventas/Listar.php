@@ -12,7 +12,12 @@ require_once "../Config/Database.php";
 
 try {
     // 1. Traer todas las ventas, de la más reciente a la más antigua
-    $stmt = $pdo->query("SELECT * FROM ventas ORDER BY created_at DESC");
+    $stmt = $pdo->query(
+        "SELECT v.*, u.nombre AS vendedor
+         FROM ventas v
+         LEFT JOIN usuarios u ON u.id = v.vendedor_id
+         ORDER BY v.created_at DESC"
+    );
     $ventas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // 2. Para cada venta, traer sus productos del detalle
