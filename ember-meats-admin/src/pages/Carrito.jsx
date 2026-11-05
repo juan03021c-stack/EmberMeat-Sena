@@ -159,8 +159,6 @@ export default function Carrito() {
 
       const wompiUrl = `https://checkout.wompi.co/p/?${params.toString()}`
 
-      console.log('Redirigiendo a pasarela Wompi:', wompiUrl)
-
       // Vaciar carrito y cerrar modal antes de redirigir
       vaciarCarrito()
       setMostrarModal(false)

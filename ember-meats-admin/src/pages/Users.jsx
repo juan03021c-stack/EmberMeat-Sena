@@ -5,7 +5,6 @@ import {
     obtenerRoles,
     crearUsuarios,
     actualizarUsuarios,
-    eliminarUsuarios,
     cambiarEstadoUsuario,
 } from '../services/Api'
 import UsuarioModal from '../components/UsuarioModal'

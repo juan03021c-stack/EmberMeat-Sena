@@ -6,7 +6,6 @@ import {
   obtenerCategorias,
   crearCategoria,
   actualizarCategoria,
-  inhabilitarCategoria,
   cambiarEstadoCategoria,
 } from '../services/Api'
 
