@@ -1,7 +1,7 @@
+import Swal from 'sweetalert2'
 import { useState, useEffect, useCallback } from 'react'
 import {
     actualizarPedido,
-    crearPedidoAdministrativo,
     obtenerClientesPedido,
     obtenerPedidos
 } from '../services/Api'
@@ -55,14 +55,6 @@ export default function Orders() {
         setFormulario(prev => ({ ...prev, [name]: value }))
     }
 
-    const abrirModalNuevo = () => {
-        setpedidosditando(null)
-        setFormulario(estadoInicialFormulario)
-        setMensaje(null)
-        setError(null)
-        setMostrarModal(true)
-    }
-
     const abrirModalEdicion = (pedidosData) => {
         setpedidosditando(pedidosData)
         setFormulario({
@@ -76,13 +68,6 @@ export default function Orders() {
         setMensaje(null)
         setError(null)
         setMostrarModal(true)
-    }
-
-    const limpiarFormulario = () => {
-        setpedidosditando(null)
-        setFormulario(estadoInicialFormulario)
-        setMensaje(null)
-        setError(null)
     }
 
     const cerrarModal = () => {
@@ -113,13 +98,10 @@ export default function Orders() {
                 direccion_entrega: formulario.direccion_entrega.trim()
             }
 
-            if (ordenEditando) {
-                await actualizarPedido({ ...datosPedido, id: ordenEditando.id })
-            } else {
-                await crearPedidoAdministrativo(datosPedido)
-            }
+            await actualizarPedido({ ...datosPedido, id: ordenEditando.id })
 
             await cargarDatos()
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Orden actualizada', showConfirmButton: false, timer: 2500 })
             cerrarModal()
         } catch (saveError) {
             console.error(saveError)
@@ -170,10 +152,6 @@ export default function Orders() {
                         <i className={`bi bi-arrow-clockwise me-1 ${loading ? 'spinner-border spinner-border-sm' : ''}`}></i>
                         Actualizar
                     </button>
-                    <button className='btn ember-btn-terciario' type='button' onClick={abrirModalNuevo}>
-                        <i className='bi bi-plus-lg me-1'></i>
-                        Crear orden
-                    </button>
                 </div>
             </div>
 
@@ -191,8 +169,6 @@ export default function Orders() {
                 formulario={formulario}
                 cambiarCampo={cambiarCampo}
                 enviarFormulario={enviarFormulario}
-                limpiarFormulario={limpiarFormulario}
-                ordenEditando={ordenEditando}
                 loading={loading}
                 error={error}
                 mensaje={mensaje}

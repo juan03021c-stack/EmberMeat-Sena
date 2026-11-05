@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Mail, Lock, KeyRound } from 'lucide-react';
@@ -37,7 +38,7 @@ export default function RecuperarContrasena() {
         setLoading(true);
         try {
             await cambiarContrasena({ email: email.trim(), codigo: codigo.trim(), password });
-            alert('Contraseña actualizada. Ya puedes iniciar sesión.');
+            await Swal.fire({ icon: 'success', title: 'Contraseña actualizada. Ya puedes iniciar sesión.', confirmButtonColor: '#7B1F1F' });
             navigate('/login', { replace: true });
         } catch (err) {
             setError(err.message);

@@ -5,9 +5,7 @@ export default function OrdenModal({
     formulario,
     cambiarCampo,
     enviarFormulario,
-    ordenEditando,
     loading,
-    limpiarFormulario,
     error,
     mensaje,
     clientes = []
@@ -28,7 +26,7 @@ export default function OrdenModal({
 
                     <div className="modal-header">
                         <h5 className="modal-title fw-bold text-ember-dark">
-                            {ordenEditando ? "Editar orden" : "Nueva orden"}
+                            Editar orden
                         </h5>
 
                         <button
@@ -195,15 +193,6 @@ export default function OrdenModal({
                                 <button
                                     type="button"
                                     className="btn btn-outline-secondary me-2"
-                                    onClick={limpiarFormulario}
-                                    disabled={loading}
-                                >
-                                    Limpiar
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="btn btn-outline-secondary me-2"
                                     onClick={onClose}
                                     disabled={loading}
                                 >
@@ -215,11 +204,7 @@ export default function OrdenModal({
                                     className="btn btn-ember"
                                     disabled={loading}
                                 >
-                                    {loading
-                                        ? "Guardando..."
-                                        : ordenEditando
-                                            ? "Actualizar orden"
-                                            : "Guardar orden"}
+                                    {loading ? "Guardando..." : "Actualizar orden"}
                                 </button>
 
                             </div>

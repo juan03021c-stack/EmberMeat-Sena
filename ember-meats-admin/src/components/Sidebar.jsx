@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
@@ -32,7 +33,17 @@ export default function Sidebar() {
     item.roles.includes(rolUsuario)
   )
 
-  const handleCerrarSesion = () => {
+  const handleCerrarSesion = async () => {
+    const { isConfirmed } = await Swal.fire({
+      icon: 'warning',
+      title: '¿Deseas cerrar sesión?',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#7B1F1F'
+    })
+    if (!isConfirmed) return
+
     localStorage.removeItem('usuarioEmber')
     navigate('/login', { replace: true })
   }

@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { obtenerClientes, obtenerVentas } from "../services/Api";
 
@@ -37,7 +38,10 @@ export default function Ventas() {
 
     obtenerVentas()
       .then(setVentas)
-      .catch(() => setVentas([]));
+      .catch(() => {
+        setVentas([]);
+        Swal.fire({ icon: 'error', title: "No se pudieron cargar las ventas.", confirmButtonColor: '#7B1F1F' });
+      });
   }, []);
 
   return (

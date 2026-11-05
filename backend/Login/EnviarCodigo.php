@@ -38,7 +38,7 @@ try {
         );
         $stmt->execute([$codigo, $usuario["id"]]);
 
-        enviarCorreo(
+        $enviado = enviarCorreo(
             $email,
             $usuario["nombre"],
             "Código para recuperar tu contraseña",
@@ -47,6 +47,12 @@ try {
                 . "<h1>$codigo</h1>"
                 . "<p>Vence en 15 minutos. Si no lo pediste, ignora este correo.</p>"
         );
+
+        if (!$enviado) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "No fue posible enviar el correo con el código. Inténtalo más tarde."]);
+            exit;
+        }
     }
 
     echo json_encode([

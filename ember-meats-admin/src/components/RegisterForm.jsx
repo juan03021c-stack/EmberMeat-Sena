@@ -1,4 +1,5 @@
 
+import Swal from 'sweetalert2';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../assets/EmberMeat.css';
@@ -48,11 +49,11 @@ export default function RegisterForm({
             if (value.length > 10) {
 
                 if (name === 'telefono') {
-                    alert('El teléfono no puede tener más de 10 dígitos');
+                    Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'El teléfono no puede tener más de 10 dígitos', showConfirmButton: false, timer: 2500 });
                 }
 
                 if (name === 'cedula') {
-                    alert('La cédula no puede tener más de 10 dígitos');
+                    Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'La cédula no puede tener más de 10 dígitos', showConfirmButton: false, timer: 2500 });
                 }
 
                 return;

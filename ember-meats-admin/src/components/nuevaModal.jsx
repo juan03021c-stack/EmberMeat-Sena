@@ -1,4 +1,5 @@
 
+import Swal from 'sweetalert2'
 import { useState, useEffect } from 'react'
 import { obtenerClientes, obtenerProductos, crearVenta } from '../services/Api'
 import './../assets/EmberMeat.css'
@@ -65,16 +66,16 @@ export default function NuevaVentaModal({ onClose, onVentaCreada }) {
 
       if (respuesta.success) {
 
-        alert('¡Venta guardada exitosamente!')
+        Swal.fire({ icon: 'success', title: '¡Venta guardada exitosamente!', confirmButtonColor: '#7B1F1F' })
         onVentaCreada?.() // Notificamos a la página padre (para recargar lista)
         onClose()          // Cerramos el modal
       } else {
 
-        alert('Error al guardar la venta')
+        Swal.fire({ icon: 'error', title: 'Error al guardar la venta', confirmButtonColor: '#7B1F1F' })
       }
     } catch (err) {
 
-      alert('Error de conexión con el servidor')
+      Swal.fire({ icon: 'error', title: 'Error de conexión con el servidor', confirmButtonColor: '#7B1F1F' })
     } finally {
       setGuardando(false)
     }
