@@ -79,14 +79,6 @@ async function enviarPedido(url, pedido, mensajeError) {
     return datos;
 }
 
-export async function crearPedidoAdministrativo(pedido) {
-    return enviarPedido(
-        "/Pedidos/CrearManual.php",
-        pedido,
-        "Error al crear el pedido"
-    );
-}
-
 export async function actualizarPedido(pedido) {
     return enviarPedido(
         "/Pedidos/Actualizar.php",
@@ -408,7 +400,7 @@ export async function obtenerVentas() {
         return [];
     } catch (error) {
         console.error(error);
-        return [];
+        throw error;
     }
 }
 

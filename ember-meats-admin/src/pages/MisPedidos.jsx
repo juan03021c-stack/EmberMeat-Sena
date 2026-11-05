@@ -1,4 +1,5 @@
 
+import Swal from "sweetalert2";
 import { useEffect, useState, useCallback } from "react";
 import "../assets/Mispedidos.css";
 import {
@@ -575,6 +576,12 @@ export default function MisPedidos() {
         (p) => p.estado === "entregado"
     );
 
+    const mensajesEstado = {
+        en_camino: "Pedido en camino",
+        entregado: "Pedido entregado",
+        intento_fallido: "Intento fallido registrado",
+    };
+
     const guardarEstado = async (id, estado, motivo = "") => {
         setActualizandoId(id);
         setErrorAccion("");
@@ -604,6 +611,7 @@ export default function MisPedidos() {
                 )
             );
             void cargarPedidos();
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: mensajesEstado[estado], showConfirmButton: false, timer: 2500 });
             return true;
         } catch (error) {
             console.error("Error al actualizar el pedido:", error);
@@ -624,7 +632,18 @@ export default function MisPedidos() {
        CONFIRMAR ENTREGA
     --------------------------------------------- */
 
-    const confirmarEntrega = (id) => guardarEstado(id, "entregado");
+    const confirmarEntrega = async (id) => {
+        const { isConfirmed } = await Swal.fire({
+          icon: 'warning',
+          title: '¿Confirmas que este pedido fue entregado?',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, entregado',
+          cancelButtonText: 'Cancelar',
+          confirmButtonColor: '#7B1F1F'
+        })
+        if (!isConfirmed) return
+        guardarEstado(id, "entregado");
+    };
 
     /* ---------------------------------------------
        REGISTRAR INTENTO FALLIDO

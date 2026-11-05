@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 import { useState, useEffect } from 'react'
 import {
     obtenerUsuarios,
@@ -172,9 +173,15 @@ export default function Users() {
         const estaActivo = Number(usuario.activo) === 1
         const accion = estaActivo ? 'inhabilitar' : 'habilitar'
 
-        if (!window.confirm(`¿Está seguro de que deseas ${accion} al usuario ${usuario.nombre}?`)) {
-            return
-        }
+        const { isConfirmed } = await Swal.fire({
+          icon: 'warning',
+          title: `¿Está seguro de que deseas ${accion} al usuario ${usuario.nombre}?`,
+          showCancelButton: true,
+          confirmButtonText: 'Sí, continuar',
+          cancelButtonText: 'Cancelar',
+          confirmButtonColor: '#7B1F1F'
+        })
+        if (!isConfirmed) return
 
         setLoading(true)
         setMensaje(null)
@@ -252,7 +259,7 @@ export default function Users() {
                                 <th>Cedula</th>
                                 <th>Rol</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th className='text-center'>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -278,7 +285,7 @@ export default function Users() {
                                             {u.rol_nombre || u.rol || 'cliente'}
                                         </td>
                                         <td>{Active(u.activo)}</td>
-                                        <td>
+                                        <td className='text-center text-nowrap'>
                                             <button
                                                 className='btn btn-sm ember-btn-terciario me-2' type='button'
                                                 onClick={() => abrirModalEdicion(u)}

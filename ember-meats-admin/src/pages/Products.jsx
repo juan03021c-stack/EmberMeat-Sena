@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 import { useState, useEffect } from 'react'
 import ProductoModal from '../components/ProductoModal'
 import {
@@ -5,7 +6,6 @@ import {
   obtenerCategorias,
   crearProducto,
   actualizarProducto,
-  eliminarProducto,
   cambiarEstadoProducto,
   URL_BASE
 } from '../services/Api'
@@ -42,7 +42,6 @@ export default function Products() {
   const [busqueda, setBusqueda] = useState('')
   const [formulario, setFormulario] = useState(estadoInicialFormulario)
   const [productoEditando, setProductoEditando] = useState(null)
-  const [mensaje, setMensaje] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [mostrarModal, setMostrarModal] = useState(false)
@@ -65,7 +64,7 @@ export default function Products() {
       setCategorias(cats)
     } catch (err) {
       console.error('Error cargando datos:', err)
-      setError('No se pudieron cargar los productos.')
+      Swal.fire({ icon: 'error', title: 'No se pudieron cargar los productos.', confirmButtonColor: '#7B1F1F' })
     } finally {
       setLoading(false)
     }
@@ -95,7 +94,6 @@ export default function Products() {
       categoria_id: String(producto.categoria_id || ''),
       imagen: null  // La imagen no se carga, solo si el usuario cambia
     })
-    setMensaje(null)
     setError(null)
   }
 
@@ -103,7 +101,6 @@ export default function Products() {
   const limpiarFormulario = () => {
     setProductoEditando(null)
     setFormulario(estadoInicialFormulario)
-    setMensaje(null)
     setError(null)
   }
 
@@ -119,7 +116,6 @@ export default function Products() {
 
   const cerrarModal = () => {
     setMostrarModal(false)
-    setMensaje(null)
     setError(null)
   }
 
@@ -127,7 +123,6 @@ export default function Products() {
   const enviarFormulario = async (e) => {
     e.preventDefault()
     setLoading(true)
-    setMensaje(null)
     setError(null)
 
     if (!formulario.nombre.trim() || !formulario.precio || !formulario.categoria_id) {
@@ -155,7 +150,7 @@ export default function Products() {
         : await crearProducto(datos)
 
       if (resultado?.success) {
-        setMensaje(resultado.message || 'Producto guardado correctamente.')
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: resultado.message || 'Producto guardado correctamente.', showConfirmButton: false, timer: 2500 })
         limpiarFormulario()
         setMostrarModal(false)
         cargarDatos()  // Refresca la lista con los cambios
@@ -176,26 +171,30 @@ export default function Products() {
     const estaActivo = Number(producto.activo) === 1
     const accion = estaActivo ? 'inhabilitar' : 'habilitar'
 
-    if (!window.confirm(`¿Estás seguro de que deseas ${accion} este producto?`)) return
+    const { isConfirmed } = await Swal.fire({
+      icon: 'warning',
+      title: `¿Estás seguro de que deseas ${accion} este producto?`,
+      showCancelButton: true,
+      confirmButtonText: 'Sí, continuar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#7B1F1F'
+    })
+    if (!isConfirmed) return
 
     setLoading(true)
-    setMensaje(null)
     setError(null)
 
     try {
       const resultado = await cambiarEstadoProducto(producto.id, !estaActivo)
       if (resultado?.success) {
-        setMensaje(
-          resultado.message ||
-            `Producto ${estaActivo ? 'inhabilitado' : 'activado'} correctamente.`
-        )
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: resultado.message || `Producto ${estaActivo ? 'inhabilitado' : 'activado'} correctamente.`, showConfirmButton: false, timer: 2500 })
         await cargarDatos()
       } else {
-        setError(resultado?.message || `No se pudo ${accion} el producto.`)
+        Swal.fire({ icon: 'error', title: resultado?.message || `No se pudo ${accion} el producto.`, confirmButtonColor: '#7B1F1F' })
       }
     } catch (err) {
       console.error(`Error al ${accion} producto:`, err)
-      setError('Ocurrió un error en el servidor.')
+      Swal.fire({ icon: 'error', title: 'Ocurrió un error en el servidor.', confirmButtonColor: '#7B1F1F' })
     } finally {
       setLoading(false)
     }
@@ -215,7 +214,7 @@ export default function Products() {
           <small className='text-muted'>{productos.length} productos</small>
         </div>
         <button className='btn btn-ember' onClick={abrirModalNuevo}>
-          <i className='bi bi-plus-lg me-1'></i>
+          <i className='bi bi-plus-lg me-1'></i> 
           Nuevo producto
         </button>
       </div>
@@ -240,7 +239,6 @@ export default function Products() {
         categorias={categorias}
         limpiarFormulario={limpiarFormulario}
         error={error}
-        mensaje={mensaje}
       />
 
 
@@ -301,8 +299,8 @@ export default function Products() {
                       <button className='btn btn-sm ember-btn-terciario me-2' onClick={() => abrirModalEdicion(producto)}>
                         Editar
                       </button>
-                      <button className='btn btn-sm ember-btn-terciario' onClick={() => eliminar(producto.id)}>
-                        Desactivar
+                      <button className='btn btn-sm ember-btn-terciario' onClick={() => handleToggleEstado(producto)}>
+                        {Number(producto.activo) === 1 ? 'Inhabilitar' : 'Activar'}
                       </button>
                     </td>
                   </tr>

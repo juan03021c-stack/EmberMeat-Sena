@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 import { useState, useEffect } from 'react'
 import CategoriaModal from '../components/CategoriaModal'
 
@@ -183,11 +184,16 @@ export default function Categorias() {
     const estaActiva = Number(categoria.activa ?? categoria.activo ?? 1) === 1
     const accion = estaActiva ? 'inhabilitar' : 'habilitar'
 
-    const confirmar = window.confirm(
-      `¿Estás seguro de que deseas ${accion} esta categoría?`
-    )
+    const { isConfirmed } = await Swal.fire({
+      icon: 'warning',
+      title: `¿Estás seguro de que deseas ${accion} esta categoría?`,
+      showCancelButton: true,
+      confirmButtonText: 'Sí, continuar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#7B1F1F'
+    })
 
-    if (!confirmar) return
+    if (!isConfirmed) return
 
     setMensaje(null)
     setError(null)

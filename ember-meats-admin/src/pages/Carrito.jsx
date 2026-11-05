@@ -1,4 +1,5 @@
 
+import Swal from 'sweetalert2'
 import '../assets/EmberMeat.css'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -266,10 +267,29 @@ export default function Carrito() {
     }
   }
 
+  /*--------------------quitar productos del carrito--------------------*/
+  const quitarProducto = (producto) => {
+    eliminarDelCarrito(producto.id)
+    Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `${producto.nombre} eliminado del carrito`, showConfirmButton: false, timer: 2500 })
+  }
+
+  const confirmarVaciar = async () => {
+    const { isConfirmed } = await Swal.fire({
+      icon: 'warning',
+      title: '¿Deseas vaciar el carrito?',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, vaciar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#7B1F1F'
+    })
+    if (!isConfirmed) return
+    vaciarCarrito()
+  }
+
   /*--------------------funcion para comprar--------------------*/
   const handleComprar = () => {
     if (carrito.length === 0) {
-      return alert('Tu carrito está vacío')
+      return Swal.fire({ icon: 'warning', title: 'Tu carrito está vacío', confirmButtonColor: '#7B1F1F' })
     } else {
       mostrarModalNueva()
     }
@@ -344,7 +364,7 @@ export default function Carrito() {
                   </strong>
                   <button
                     className="eliminar-producto"
-                    onClick={() => eliminarDelCarrito(producto.id)}
+                    onClick={() => quitarProducto(producto)}
                   >
                     <Trash2 size={20} strokeWidth={1.5} />
                   </button>
@@ -382,7 +402,7 @@ export default function Carrito() {
               Continuar con la compra
             </button>
 
-            <button className="btn-vaciar" onClick={vaciarCarrito}>
+            <button className="btn-vaciar" onClick={confirmarVaciar}>
               Vaciar carrito
             </button>
           </div>
