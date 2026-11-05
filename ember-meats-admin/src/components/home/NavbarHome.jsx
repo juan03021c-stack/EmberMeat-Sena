@@ -2,14 +2,6 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useCarrito } from '../CarritoContext'
 
-const baseLinks = [
-    { href: '#inicio', label: 'Inicio', icon: 'bi-house', type: 'internal' },
-    { href: '#productos', label: 'Productos', icon: 'bi-box-seam', type: 'internal' },
-    { href: '#nosotros', label: 'Nosotros', icon: 'bi-info-circle', type: 'internal' },
-    { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
-    { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
-]
-
 export default function NavbarHome() {
     const location = useLocation()
     const navigate = useNavigate()

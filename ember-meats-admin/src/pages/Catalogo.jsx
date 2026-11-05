@@ -115,7 +115,7 @@ export default function Catalogo() {
           setProductos(prodData || []);
           setCategorias(catData || []);
         }
-      } catch (err) {
+      } catch {
         if (!cancelado) {
           setError('Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
         }

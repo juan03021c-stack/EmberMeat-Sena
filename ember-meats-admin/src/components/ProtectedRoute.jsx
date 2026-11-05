@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 export default function ProtectedRoute({ rolesPermitidos = [] }) {
     const location = useLocation();
-    let usuario = null;
+    let usuario;
 
     try {
         const sesion = localStorage.getItem('usuarioEmber');
@@ -20,7 +20,7 @@ export default function ProtectedRoute({ rolesPermitidos = [] }) {
 
         usuario = JSON.parse(sesion);
 
-    } catch (error) {
+    } catch {
         localStorage.removeItem('usuarioEmber');
 
         return <Navigate to="/login" replace />;

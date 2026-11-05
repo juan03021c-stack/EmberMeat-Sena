@@ -339,29 +339,6 @@ export async function obtenerClientes() {
     }
 }
 
-/**
- * Crea una nueva venta en la base de datos.
- * Endpoint: POST backend/Ventas/Crear.php
- */
-export async function crearVenta(venta) {
-    try {
-        const respuesta = await fetch(`${URL_BASE}/Ventas/Crear.php`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(venta),
-        });
-        if (!respuesta.ok) {
-            throw new Error("Error al crear la venta");
-        }
-        return await respuesta.json();
-    } catch (error) {
-        console.error("Error al crear la venta:", error);
-        return { success: false, message: error.message };
-    }
-}
-
-
-
 export async function crearPedido(datoCliente, productosPedido) {
 
     try {

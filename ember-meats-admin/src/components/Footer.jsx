@@ -1,6 +1,6 @@
 // Solo importa los de lucide que SÍ funcionan
-import { MapPin, Phone, Mail, Flame } from 'lucide-react';
-import { Link, NavLink } from 'react-router-dom';
+import { MapPin, Phone, Mail } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 export default function Footer() {
     let rol = '';
