@@ -7,8 +7,7 @@ export default function OrdenModal({
     enviarFormulario,
     loading,
     error,
-    mensaje,
-    clientes = []
+    mensaje
 }) {
     if (!show) return null;
 
@@ -53,26 +52,21 @@ export default function OrdenModal({
 
                         <form id="orden-form" onSubmit={enviarFormulario}>
                             <div className="row g-3">
-
                                 <div className="col-md-6">
                                     <label className="form-label">
                                         Cliente
                                     </label>
 
-                                    <select
-                                        name="cliente"
-                                        value={formulario.cliente ?? ""}
+                                    <input
+                                        name="nombre_cliente"
+                                        type="text"
+                                        value={formulario.nombre_cliente ?? ""}
                                         onChange={cambiarCampo}
-                                        className="form-select"
+                                        className="form-control"
+                                        maxLength={255}
+                                        placeholder="Nombre del cliente"
                                         required
-                                    >
-                                        <option value="">Seleccione un cliente</option>
-                                        {clientes.map((cliente) => (
-                                            <option key={cliente.id} value={cliente.id}>
-                                                {cliente.nombre} ({cliente.correo})
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
                                 </div>
 
                                 <div className="col-md-6">
@@ -135,11 +129,11 @@ export default function OrdenModal({
                                         required
                                     >
                                         <option value="domicilio">
-                                            🏠 Domicilio
+                                            Domicilio
                                         </option>
 
                                         <option value="recogida_punto">
-                                            🏬 Recogida en punto
+                                            Recogida en punto
                                         </option>
                                     </select>
                                 </div>

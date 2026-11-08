@@ -167,7 +167,9 @@ export default function LoginForm() {
                     >
                         ¿Olvidaste tu contraseña?
                     </NavLink>
-
+                    <div className="ember-divider">
+                        <span className="ember-divider-line"></span>
+                    </div>
                     <button
                         type="submit"
                         className="ember-btn-primary w-100"
@@ -183,11 +185,7 @@ export default function LoginForm() {
                         Regresar al inicio
                     </NavLink>
 
-                    <div className="ember-divider">
-                        <span className="ember-divider-line"></span>
-                        <span className="ember-divider-text">o</span>
-                        <span className="ember-divider-line"></span>
-                    </div>
+
                 </form>
             </div>
         </div>

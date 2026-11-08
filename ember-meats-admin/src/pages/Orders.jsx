@@ -2,13 +2,12 @@ import Swal from 'sweetalert2'
 import { useState, useEffect, useCallback } from 'react'
 import {
     actualizarPedido,
-    obtenerClientesPedido,
     obtenerPedidos
 } from '../services/Api'
 import OrdenModal from '../components/OrdenModal'
 
 const estadoInicialFormulario = {
-    cliente: '',
+    nombre_cliente: '',
     fecha: '',
     total: '',
     estado: 'pendiente',
@@ -18,7 +17,6 @@ const estadoInicialFormulario = {
 
 export default function Orders() {
     const [pedidos, setPedidos] = useState([])
-    const [clientes, setClientes] = useState([])
     const [formulario, setFormulario] = useState(estadoInicialFormulario)
     const [mensaje, setMensaje] = useState(null)
     const [error, setError] = useState(null)
@@ -32,12 +30,8 @@ export default function Orders() {
         try {
             setLoading(true)
             setError(null)
-            const [pedidosData, clientesData] = await Promise.all([
-                obtenerPedidos(),
-                obtenerClientesPedido()
-            ])
+            const pedidosData = await obtenerPedidos()
             setPedidos(pedidosData)
-            setClientes(clientesData)
         } catch (err) {
             console.error('Error al cargar datos:', err)
             setError(err.message || 'Error al cargar datos')
@@ -55,20 +49,25 @@ export default function Orders() {
         setFormulario(prev => ({ ...prev, [name]: value }))
     }
 
-    const abrirModalEdicion = (pedidosData) => {
-        setpedidosditando(pedidosData)
-        setFormulario({
-            cliente: String(pedidosData.cliente_id || ''),
-            fecha: pedidosData.created_at ? pedidosData.created_at.split(' ')[0] : '',
-            total: pedidosData.total || pedidosData.monto_total || '',
-            estado: pedidosData.estado || 'pendiente',
-            modalidad_entrega: pedidosData.modalidad_entrega || 'domicilio',
-            direccion_entrega: pedidosData.direccion_entrega || ''
-        })
-        setMensaje(null)
-        setError(null)
-        setMostrarModal(true)
-    }
+const abrirModalEdicion = (pedidosData) => {
+    setpedidosditando(pedidosData);
+
+    setFormulario({
+        nombre_cliente: pedidosData.cliente || '',
+        cliente_id: String(pedidosData.cliente_id || ''),
+        fecha: pedidosData.created_at
+            ? pedidosData.created_at.split(' ')[0]
+            : '',
+        total: pedidosData.total || pedidosData.monto_total || '',
+        estado: pedidosData.estado || 'pendiente',
+        modalidad_entrega: pedidosData.modalidad_entrega || 'domicilio',
+        direccion_entrega: pedidosData.direccion_entrega || ''
+    });
+
+    setMensaje(null);
+    setError(null);
+    setMostrarModal(true);
+};
 
     const cerrarModal = () => {
         setMostrarModal(false)
@@ -82,7 +81,7 @@ export default function Orders() {
         setLoading(true)
         setError(null)
         setMensaje(null)
-        if (!formulario.cliente || formulario.total === '') {
+        if (!formulario.cliente_id || !formulario.nombre_cliente?.trim() || formulario.total === '') {
             setError('Todos los campos son obligatorios')
             setLoading(false)
             return
@@ -90,7 +89,8 @@ export default function Orders() {
 
         try {
             const datosPedido = {
-                cliente_id: Number(formulario.cliente),
+                nombre_cliente: formulario.nombre_cliente.trim(),
+                cliente_id: Number(formulario.cliente_id),
                 fecha: formulario.fecha,
                 total: Number(formulario.total),
                 estado: formulario.estado,
@@ -172,7 +172,6 @@ export default function Orders() {
                 loading={loading}
                 error={error}
                 mensaje={mensaje}
-                clientes={clientes}
             />
 
             {error && !mostrarModal && (

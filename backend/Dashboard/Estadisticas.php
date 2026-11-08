@@ -21,8 +21,7 @@ try {
 
     $pedidos = $pdo->query(
         "SELECT COUNT(*) FROM pedidos 
-        WHERE estado = 'en_preparacion' 
-        OR estado = 'pendiente';"
+        WHERE estado = 'pendiente' OR estado = 'en_preparacion' OR estado = 'listo_para_entrega' OR estado = 'en_camino' OR  estado = 'intento_fallido' ;"
     )->fetchColumn();
 
     $totalVentas = $pdo->query(

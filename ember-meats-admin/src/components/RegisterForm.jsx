@@ -459,15 +459,15 @@ export default function RegisterForm({
                                             required
                                         >
                                             <option value="" disabled>
-                                                Seleccione dónde va a pagar
+                                                Seleccione el metodo de pago
                                             </option>
 
                                             <option value="punto">
-                                                Pagar en el punto local
+                                                Pagar en efectivo
                                             </option>
 
                                             <option value="domicilio">
-                                                Pagar en el domicilio
+                                                Pagar con transferencia
                                             </option>
                                         </select>
                                     </div>

@@ -27,6 +27,9 @@ if (!is_array($datos)) {
 
 $pedidoId = filter_var($datos['id'] ?? null, FILTER_VALIDATE_INT);
 $clienteId = filter_var($datos['cliente_id'] ?? null, FILTER_VALIDATE_INT);
+$nombreCliente = isset($datos['nombre_cliente']) && is_string($datos['nombre_cliente'])
+    ? trim($datos['nombre_cliente'])
+    : '';
 $total = $datos['total'] ?? null;
 $fecha = $datos['fecha'] ?? '';
 $modalidad = $datos['modalidad_entrega'] ?? '';
@@ -46,6 +49,8 @@ $fechaValida = is_string($fecha) ? DateTime::createFromFormat('!Y-m-d', $fecha) 
 if (
     !$pedidoId ||
     !$clienteId ||
+    $nombreCliente === '' ||
+    strlen($nombreCliente) > 255 ||
     !is_numeric($total) ||
     (float)$total < 0 ||
     !$fechaValida ||
@@ -63,6 +68,8 @@ if (
 $direccion = trim($direccion);
 
 try {
+    $pdo->beginTransaction();
+
     $stmtCliente = $pdo->prepare(
         "SELECT u.id
          FROM usuarios u
@@ -72,10 +79,19 @@ try {
     );
     $stmtCliente->execute([':id' => $clienteId]);
     if (!$stmtCliente->fetchColumn()) {
+        $pdo->rollBack();
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'El cliente seleccionado no es válido.']);
         exit;
     }
+
+    $stmtActualizarNombre = $pdo->prepare(
+        'UPDATE usuarios SET nombre = :nombre WHERE id = :id'
+    );
+    $stmtActualizarNombre->execute([
+        ':nombre' => $nombreCliente,
+        ':id' => $clienteId
+    ]);
 
     $stmtPedido = $pdo->prepare(
         "UPDATE pedidos
@@ -101,14 +117,21 @@ try {
         $stmtExiste = $pdo->prepare('SELECT id FROM pedidos WHERE id = :id');
         $stmtExiste->execute([':id' => $pedidoId]);
         if (!$stmtExiste->fetchColumn()) {
+            $pdo->rollBack();
             http_response_code(404);
             echo json_encode(['success' => false, 'message' => 'El pedido no existe.']);
             exit;
         }
     }
 
+    $pdo->commit();
+
     echo json_encode(['success' => true, 'message' => 'Pedido actualizado correctamente.']);
 } catch (Throwable $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+
     http_response_code(500);
     echo json_encode([
         'success' => false,

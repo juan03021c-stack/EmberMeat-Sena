@@ -1,3 +1,4 @@
+
 <?php
 
 header("Content-Type: application/json");
@@ -13,26 +14,39 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
 require_once __DIR__ . "/../Config/Database.php";
 
 try {
-    $stmt = $pdo->query(
-        /* Consulta para obtener los pedidos con cliente, repartidor y dirección */
-        "SELECT 
+
+    $stmt = $pdo->query("
+        SELECT 
             p.*,
             u.nombre AS cliente,
             rep.nombre AS repartidor,
             dc.direccion AS direccion_del_cliente
+
         FROM pedidos AS p
+
         LEFT JOIN usuarios AS u 
             ON p.cliente_id = u.id
+
         LEFT JOIN usuarios AS rep 
             ON p.repartidor_id = rep.id
+
         LEFT JOIN direcciones_cliente AS dc
             ON p.direccion_id = dc.id
-        ORDER BY p.id DESC;"
-    );
+
+        ORDER BY p.id DESC
+    ");
 
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode(["success" => true, "pedidos" => $pedidos]);
+
+    echo json_encode([
+        "success" => true,
+        "pedidos" => $pedidos
+    ]);
+
 } catch (Throwable $e) {
+
+    http_response_code(500);
+
     echo json_encode([
         "success" => false,
         "message" => "Error al obtener pedidos: " . $e->getMessage()

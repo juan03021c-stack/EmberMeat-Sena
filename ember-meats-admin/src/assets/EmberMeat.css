@@ -839,7 +839,7 @@ body {
   overflow: hidden;
   box-shadow: var(--ember-shadow-card);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  height: 42vh;
+  height: 50vh;
 }
 
 .product-card:hover {
