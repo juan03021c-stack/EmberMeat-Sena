@@ -224,7 +224,11 @@ export default function Carrito() {
     }))
 
     try {
-      const response = await crearPedido(formData, productosPedido)
+      // Si quien vende es un vendedor con sesión, el pedido queda a su nombre
+      const sesion = JSON.parse(localStorage.getItem('usuarioEmber') || 'null')
+      const vendedorId = sesion?.rol_nombre === 'vendedor' ? sesion.id : null
+
+      const response = await crearPedido({ ...formData, vendedor_id: vendedorId }, productosPedido)
 
       if (response.success) {
         if (pagoEnPunto) {

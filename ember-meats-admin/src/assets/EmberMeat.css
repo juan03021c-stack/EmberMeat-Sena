@@ -2048,3 +2048,58 @@ hr {
   background: #d1d5db;
   border-radius: 3px;
 }
+/* ---------- PANEL ADMIN RESPONSIVE ---------- */
+.admin-sidebar {
+  width: 210px;
+  flex-shrink: 0;
+  min-height: 100vh;
+  background: var(--ember-white);
+  border-right: 1px solid var(--ember-border);
+}
+
+.admin-sidebar-pie {
+  padding: 15px 12px 25px 12px;
+  border-top: 1px solid var(--ember-border);
+}
+
+/* En celular la barra pasa arriba y el menú se desliza de lado */
+@media (max-width: 767.98px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    min-height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--ember-border);
+  }
+
+  .admin-sidebar-nav {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .admin-sidebar-nav .nav-link {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .admin-sidebar-pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .admin-sidebar-pie > * {
+    margin-bottom: 0 !important;
+  }
+
+  .admin-sidebar-pie .btn,
+  .admin-sidebar-pie > a {
+    width: auto !important;
+  }
+}
