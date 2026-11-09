@@ -49,15 +49,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div
-      style={{
-        width: 210,
-        background: 'var(--ember-white)',
-        minHeight: '100vh',
-        borderRight: '1px solid var(--ember-border)'
-      }}
-      className='d-flex flex-column'
-    >
+    <div className='admin-sidebar d-flex flex-column'>
       <div className='p-3 mb-2'>
         <strong className='text-ember-dark'>EMBER MEATS</strong>
         <div style={{ fontSize: 'var(--text-micro)', color: 'var(--ember-text-muted)' }}>
@@ -65,7 +57,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className='flex-grow-1'>
+      <nav className='admin-sidebar-nav flex-grow-1'>
         {linksVisibles.map(item => (
           <NavLink
             key={item.path}
@@ -88,12 +80,7 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      <div
-        style={{
-          padding: '15px 12px 25px 12px',
-          borderTop: '1px solid var(--ember-border)'
-        }}
-      >
+      <div className='admin-sidebar-pie'>
         {usuario && (
           <div className='mb-3 px-1'>
             <div className='fw-semibold text-truncate' style={{ fontSize: 'var(--text-body-sm)' }}>

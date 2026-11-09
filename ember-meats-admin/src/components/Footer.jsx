@@ -17,7 +17,7 @@ export default function Footer() {
     return (
         <footer className='footer-container' style={{ backgroundColor: 'var(--ember-dark-bg)', color: 'var(--ember-text-muted)' }}>
             <div className="container py-5">
-                <div className="row g-5">
+                <div className="row gx-4 gy-5">
                     {/* Brand */}
                     <div className="col-12 col-md-4">
                         <div className="d-flex align-items-center gap-2 mb-3">
