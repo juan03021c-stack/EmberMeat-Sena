@@ -4,6 +4,7 @@ import { CarritoProvider } from './components/CarritoContext'
 import ProtectedRoute from './components/ProtectedRoute'
 
 import Dashboard from './pages/Dashboard'
+import ReporteMensual from './pages/ReporteMensual'
 import Categorias from './pages/Categorias'
 import Products from './pages/Products'
 import Orders from './pages/Orders'
@@ -59,6 +60,7 @@ export default function App() {
                                 rolesPermitidos={['administrador']}
                             />}>
                                 <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/reporte" element={<ReporteMensual />} />
                                 <Route path="/categorias" element={<Categorias />} />
                                 <Route path="/productos" element={<Products />} />
                                 <Route path="/usuarios" element={<Users />} />

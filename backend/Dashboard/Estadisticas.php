@@ -49,11 +49,22 @@ try {
     DATE(p.created_at) AS date,
     SUM(p.total) AS sales
     FROM pedidos p
-    WHERE p.created_at >= CURRENT_DATE - INTERVAL 29 DAY
+    WHERE p.created_at >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')
     AND p.created_at < CURRENT_DATE + INTERVAL 1 DAY
     GROUP BY DATE(p.created_at)
     ORDER BY DATE(p.created_at);"
-    )->fetchAll(PDO::FETCH_ASSOC);
+    )->fetchAll(PDO::FETCH_KEY_PAIR);
+
+    /* Gráfica del mes actual: un punto por cada día desde el 1 hasta hoy (0 si no hubo ventas); el mes siguiente arranca de nuevo */
+    $hoy = new DateTime($pdo->query("SELECT CURRENT_DATE")->fetchColumn());
+    $dia = new DateTime($hoy->format('Y-m-01'));
+    $ventasDelMes = [];
+    while ($dia <= $hoy) {
+        $fecha = $dia->format('Y-m-d');
+        $ventasDelMes[] = ['date' => $fecha, 'sales' => (float)($ventasPorDia[$fecha] ?? 0)];
+        $dia->modify('+1 day');
+    }
+    $ventasPorDia = $ventasDelMes;
 
     $pedidosRecientes = $pdo->query(
         "SELECT

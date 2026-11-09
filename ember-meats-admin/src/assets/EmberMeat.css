@@ -2094,6 +2094,26 @@ hr {
   background: #d1d5db;
   border-radius: 3px;
 }
+/* ---------- REPORTE MENSUAL EN PDF ---------- */
+/* Al imprimir (Guardar como PDF) solo sale el reporte */
+@media print {
+  .admin-sidebar,
+  .no-imprimir,
+  .swal2-container {
+    display: none !important;
+  }
+
+  body,
+  .admin-layout > .flex-grow-1 {
+    background: #fff !important;
+  }
+
+  .reporte-seccion {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
+
 /* ---------- PANEL ADMIN RESPONSIVE ---------- */
 .admin-sidebar {
   width: 210px;

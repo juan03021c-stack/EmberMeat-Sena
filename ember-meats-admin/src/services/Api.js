@@ -112,10 +112,10 @@ export async function actualizarEstadoPedidoRepartidor(pedido) {
     );
 }
 
-export const obtenerPedidosRepartidor = async () => {
+export const obtenerPedidosRepartidor = async (repartidorId) => {
     try {
         const respuesta = await fetch(
-            `${URL_BASE}/Pedidos/Repartidor.php`,
+            `${URL_BASE}/Pedidos/Repartidor.php${repartidorId ? `?repartidor_id=${repartidorId}` : ""}`,
             { cache: "no-store" }
         );
 
@@ -469,6 +469,15 @@ export async function obtenerEstadisticas() {
 
     return datos;
 }
+export async function obtenerReporteMensual(mes) {
+    const respuesta = await fetch(`${URL_BASE}/Dashboard/Reporte.php?mes=${mes}`);
+    const datos = await respuesta.json();
+    if (!respuesta.ok || !datos.success) {
+        throw new Error(datos.message || "No se pudo generar el reporte");
+    }
+    return datos;
+}
+
 export async function actualizarCategoria(idOrFormData, datosFormulario) {
     try {
         let datos;

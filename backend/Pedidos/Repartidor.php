@@ -14,8 +14,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
 
 require_once __DIR__ . "/../Config/Database.php";
 
+/* Si llega un repartidor, solo ve los pedidos libres y los suyos; sin él (administrador) se ven todos */
+$repartidorId = filter_var($_GET['repartidor_id'] ?? null, FILTER_VALIDATE_INT) ?: null;
+
 try {
-    $stmt = $pdo->query(
+    $stmt = $pdo->prepare(
         /* Consulta para obtener los pedidos con cliente, repartidor y dirección */
         "SELECT
             p.id,
@@ -68,6 +71,10 @@ try {
         LEFT JOIN pedido_items pi
             ON p.id = pi.pedido_id
 
+        WHERE :repartidor_id IS NULL
+           OR p.repartidor_id IS NULL
+           OR p.repartidor_id = :repartidor_id2
+
         GROUP BY
             p.id,
             p.numero_pedido,
@@ -87,6 +94,10 @@ try {
 
         ORDER BY p.created_at DESC;"
     );
+    $stmt->execute([
+        ':repartidor_id' => $repartidorId,
+        ':repartidor_id2' => $repartidorId
+    ]);
 
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode(["success" => true, "pedidos" => $pedidos]);
