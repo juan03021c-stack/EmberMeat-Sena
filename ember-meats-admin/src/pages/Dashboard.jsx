@@ -160,7 +160,13 @@ export default function Dashboard() {
 
     return (
         <div className='p-4'>
-            <h4 className='mb-4 fw-bold'>Dashboard</h4>
+            <div className='d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4'>
+                <h4 className='mb-0 fw-bold'>Dashboard</h4>
+                <Link to='/reporte' className='btn btn-ember'>
+                    <i className='bi bi-file-earmark-pdf me-1'></i>
+                    Reporte mensual
+                </Link>
+            </div>
 
             {/* Stats Cards */}
             <div className='row g-3 mb-4'>
@@ -208,7 +214,7 @@ export default function Dashboard() {
             {/* Chart */}
             <div className='card p-3 mb-4'>
                 <h6 className='mb-3 fw-bold'>
-                    Ventas — Últimos 30 Días
+                    Ventas de {new Date().toLocaleString('es-CO', { month: 'long', year: 'numeric' })}
                 </h6>
 
                 {ventasPorDia.length > 0 ? (
@@ -221,6 +227,7 @@ export default function Dashboard() {
 
                             <XAxis
                                 dataKey='date'
+                                tickFormatter={(fecha) => Number(fecha.slice(8))}
                                 tick={{
                                     fontSize: 12,
                                     fill: 'var(--ember-text-secondary)'

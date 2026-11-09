@@ -544,7 +544,11 @@ export default function MisPedidos() {
             setLoading(true);
             setError("");
 
-            const respuesta = await obtenerPedidosRepartidor();
+            // El repartidor solo ve los pedidos sin repartidor y los suyos
+            const usuario = JSON.parse(localStorage.getItem("usuarioEmber") || "null");
+            const respuesta = await obtenerPedidosRepartidor(
+                usuario?.rol_nombre === "repartidor" ? usuario.id : null
+            );
 
             // Admite tanto un arreglo como la respuesta
             // { success: true, pedidos: [...] }
@@ -625,6 +629,8 @@ export default function MisPedidos() {
             return true;
         } catch (error) {
             console.error("Error al actualizar el pedido:", error);
+            // Si otro repartidor ya lo tomó, al recargar desaparece de la lista
+            void cargarPedidos();
             setErrorAccion(error.message || "No se pudo actualizar el pedido.");
             return false;
         } finally {
