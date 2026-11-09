@@ -7,6 +7,7 @@ export default function NavbarHome() {
     const navigate = useNavigate()
     const { cantidadTotal } = useCarrito()
     const [usuario, setUsuario] = useState(null)
+    const [menuAbierto, setMenuAbierto] = useState(false)
 
     const isHome = location.pathname === '/' || location.pathname === ''
 
@@ -88,7 +89,25 @@ export default function NavbarHome() {
                 <span>EmberMeat</span>
             </div>
 
-            <div className="home-menu">
+            {/* Botón de menú: solo se ve en celular */}
+            <button
+                type="button"
+                className="home-toggle"
+                aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
+                aria-expanded={menuAbierto}
+                onClick={() => setMenuAbierto(!menuAbierto)}
+            >
+                <i className={`bi ${menuAbierto ? 'bi-x-lg' : 'bi-list'}`} />
+                {!menuAbierto && cantidadTotal > 0 && (
+                    <span className="home-toggle-badge">{cantidadTotal}</span>
+                )}
+            </button>
+
+            {/* Al tocar cualquier enlace se cierra el menú */}
+            <div
+                className={`home-menu ${menuAbierto ? 'abierto' : ''}`}
+                onClick={() => setMenuAbierto(false)}
+            >
                 {links.map((item) => {
                     const isInternal = item.type === 'internal'
                     const isCarrito = item.to === '/carrito'
