@@ -1,5 +1,5 @@
 // En el hosting se toma de .env.production; en XAMPP queda localhost
-const URL_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/proyecto/backend";
+const URL_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8080/proyecto/backend`;
 export { URL_BASE };
 
 export async function obtenerProductos() {

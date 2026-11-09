@@ -1,6 +1,7 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useCarrito } from '../CarritoContext'
+import { Flame } from 'lucide-react'
 
 export default function NavbarHome() {
     const location = useLocation()
@@ -32,20 +33,20 @@ export default function NavbarHome() {
     const links = rol === 'vendedor'
         ? [
             { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
+            { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
             usuario
                 ? { to: rutaPanel, label: `Panel (${usuario.nombre.split(' ')[0]})`, icon: 'bi-speedometer2', type: 'external' }
                 : { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right', type: 'external' },
-            { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
         ]
         : [
             { href: '#inicio', label: 'Inicio', icon: 'bi-house', type: 'internal' },
             { href: '#productos', label: 'Productos', icon: 'bi-box-seam', type: 'internal' },
             { href: '#nosotros', label: 'Nosotros', icon: 'bi-info-circle', type: 'internal' },
             { to: '/catalogo', label: 'Catálogo', icon: 'bi-grid', type: 'external' },
+            { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
             usuario
                 ? { to: rutaPanel, label: `Panel (${usuario.nombre.split(' ')[0]})`, icon: 'bi-speedometer2', type: 'external' }
                 : { to: '/login', label: 'Iniciar sesión', icon: 'bi-box-arrow-in-right', type: 'external' },
-            { to: '/carrito', label: 'Carrito', icon: 'bi-cart3', type: 'external' },
         ]
 
     // Sincroniza el estado cuando cambia la URL (navegación, botones del navegador, etc.)
@@ -75,9 +76,13 @@ export default function NavbarHome() {
         }
     }
 
-    const getClassName = (isActive) =>
-        `nav-link d-flex align-items-center gap-2 px-3 py-2 ${
-            isActive ? 'text-white rounded' : 'text-white'
+    const getClassName = (isActive, isLogin = false) =>
+        `nav-link d-flex align-items-center gap-2 px-3 py-2 fs-6 text-nowrap ${
+            isActive
+                ? 'text-white rounded'
+                : isLogin
+                ? 'text-white border border-light border-opacity-25 rounded'
+                : 'text-white'
         }`
 
     const activeStyle = { background: 'var(--ember-red)' }
@@ -85,9 +90,14 @@ export default function NavbarHome() {
     return (
         <nav className="home-navbar">
 
-            <div className="home-logo">
+            <NavLink
+                to={rol === 'vendedor' ? '/Catalogo' : '/'}
+                className="home-logo d-flex align-items-center text-decoration-none"
+                style={{ color: 'var(--ember-white)' }}
+            >
+                <Flame size={28} className="text-ember-red me-2" fill="currentColor" />
                 <span>EmberMeat</span>
-            </div>
+            </NavLink>
 
             {/* Botón de menú: solo se ve en celular */}
             <button
@@ -111,6 +121,7 @@ export default function NavbarHome() {
                 {links.map((item) => {
                     const isInternal = item.type === 'internal'
                     const isCarrito = item.to === '/carrito'
+                    const isLogin = item.to === '/login'
 
                     /* ── Link interno ── */
                     if (isInternal) {
@@ -120,10 +131,10 @@ export default function NavbarHome() {
                                 key={item.href}
                                 href={item.href}
                                 onClick={(e) => handleScroll(e, item.href)}
-                                className={getClassName(isActive)}
+                                className={getClassName(isActive, false)}
                                 style={isActive ? activeStyle : {}}
                             >
-                                <i className={`bi ${item.icon}`} />
+                                <i className={`bi ${item.icon} fs-5`} />
                                 <span>{item.label}</span>
                             </a>
                         )
@@ -134,10 +145,10 @@ export default function NavbarHome() {
                         <NavLink
                             key={item.to}
                             to={item.to}
-                            className={({ isActive }) => getClassName(isActive)}
+                            className={({ isActive }) => getClassName(isActive, isLogin)}
                             style={({ isActive }) => (isActive ? activeStyle : {})}
                         >
-                            <i className={`bi ${item.icon}`} />
+                            <i className={`bi ${item.icon} fs-5`} />
                             <span>{item.label}</span>
                             {isCarrito && cantidadTotal > 0 && (
                                 <span

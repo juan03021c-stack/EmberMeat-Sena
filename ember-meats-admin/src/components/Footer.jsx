@@ -1,5 +1,5 @@
 // Solo importa los de lucide que SÍ funcionan
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail, Flame } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 export default function Footer() {
@@ -21,7 +21,8 @@ export default function Footer() {
                     {/* Brand */}
                     <div className="col-12 col-md-4">
                         <div className="d-flex align-items-center gap-2 mb-3">
-                            <span className="footer-logo " >
+                            <Flame size={24} className="text-ember-red" fill="currentColor" />
+                            <span className="footer-logo">
                                 EmberMeat
                             </span>
                         </div>

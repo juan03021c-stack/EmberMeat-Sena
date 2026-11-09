@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { Flame} from 'lucide-react';
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: 'bi-speedometer2', roles: ['administrador'] },
@@ -49,13 +50,24 @@ export default function Sidebar() {
   }
 
   return (
-    <div className='admin-sidebar d-flex flex-column'>
-      <div className='p-3 mb-2'>
-        <strong className='text-ember-dark'>EMBER MEATS</strong>
-        <div style={{ fontSize: 'var(--text-micro)', color: 'var(--ember-text-muted)' }}>
-          ADMIN PANEL
+    <div className="admin-sidebar d-flex flex-column">
+    <div className="p-3 mb-2">
+        <div className="d-flex align-items-center gap-2">
+            <Flame size={24} className="text-ember-red" fill="currentColor" />
+            <strong className="text-ember-dark">
+                EMBER MEATS
+            </strong>
         </div>
-      </div>
+
+        <div
+            style={{
+                fontSize: "var(--text-micro)",
+                color: "var(--ember-text-muted)"
+            }}
+        >
+            ADMIN PANEL
+        </div>
+    </div>
 
       <nav className='admin-sidebar-nav flex-grow-1'>
         {linksVisibles.map(item => (

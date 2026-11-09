@@ -64,7 +64,7 @@
   --ember-radius-toggle: 6px;
 
   /* ── Navbar ── */
-  --navbar-height: 70px;
+  --navbar-height: 80px;
 
   /* ── Tipografía (nuevo) ── */
   --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -574,7 +574,7 @@ body {
   position: absolute;
   left: 6%;
   color: var(--ember-white);
-  font-size: 22px;
+  font-size: 26px;
   font-weight: var(--weight-bold);
   font-family: var(--font-display);
   white-space: nowrap;
@@ -585,14 +585,17 @@ body {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 35px;
+  align-items: center;
+  gap: 24px;
 }
 
 .home-menu a {
   color: var(--ember-hero-text);
-  font-size: var(--text-body-sm);
+  font-size: 16px;
+  font-weight: 500;
   font-family: var(--font-ui);
   transition: color 0.2s ease;
+  white-space: nowrap;
 }
 
 .home-toggle {
