@@ -41,12 +41,23 @@ jobs:
 
             npm run build --prefix /opt/embermeat-repo/ember-meats-admin
 
-            # --omit-dir-times: las carpetas del sitio son de otro usuario y no se les puede cambiar la fecha
-            rsync -a --omit-dir-times \
+            # Antes de copiar, confirmar que este usuario puede escribir en el sitio;
+            # si no, se explica cómo arreglarlo en vez de fallar a mitad de camino.
+            for carpeta in /var/www/embermeat.site /var/www/embermeat.site/assets /var/www/embermeat.site/backend; do
+              if [ -d "$carpeta" ] && [ ! -w "$carpeta" ]; then
+                echo "Sin permiso de escritura en $carpeta para el usuario $(whoami)."
+                echo "Arreglo (una sola vez, en el servidor): sudo chown -R $(whoami):www-data /var/www/embermeat.site"
+                exit 1
+              fi
+            done
+
+            # Las carpetas y archivos del sitio pueden ser de otro usuario: solo se copia el contenido
+            # (-rl + --checksum) sin intentar cambiar fechas, permisos ni dueño.
+            rsync -rl --checksum --omit-dir-times \
               /opt/embermeat-repo/ember-meats-admin/dist/ \
               /var/www/embermeat.site/
 
-            rsync -a --omit-dir-times --delete \
+            rsync -rl --checksum --omit-dir-times --delete \
               --exclude='Config/Database.php' \
               --exclude='Config/Correo.php' \
               --exclude='uploads/' \
