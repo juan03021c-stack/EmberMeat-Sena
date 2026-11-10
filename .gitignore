@@ -9,3 +9,8 @@ build/
 
 # Credenciales del correo
 backend/Config/Correo.php
+backend/Config/Database.php
+backend/Config/Correo.php
+.env
+.env.*
+*.sql
