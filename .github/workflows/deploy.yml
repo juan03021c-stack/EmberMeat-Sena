@@ -41,11 +41,12 @@ jobs:
 
             npm run build --prefix /opt/embermeat-repo/ember-meats-admin
 
-            rsync -a \
+            # --omit-dir-times: las carpetas del sitio son de otro usuario y no se les puede cambiar la fecha
+            rsync -a --omit-dir-times \
               /opt/embermeat-repo/ember-meats-admin/dist/ \
               /var/www/embermeat.site/
 
-            rsync -a --delete \
+            rsync -a --omit-dir-times --delete \
               --exclude='Config/Database.php' \
               --exclude='Config/Correo.php' \
               --exclude='uploads/' \
