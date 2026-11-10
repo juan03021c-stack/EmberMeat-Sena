@@ -1,0 +1,55 @@
+name: Deploy EmberMeat
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Preparar conexión SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+
+      - name: Actualizar y publicar el sitio
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          ssh -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" 'bash -s' <<'REMOTE'
+            set -e
+
+            git -C /opt/embermeat-repo pull --ff-only origin main
+
+            npm ci --prefix /opt/embermeat-repo/ember-meats-admin
+
+            npm run build --prefix /opt/embermeat-repo/ember-meats-admin
+
+            rsync -a \
+              /opt/embermeat-repo/ember-meats-admin/dist/ \
+              /var/www/embermeat.site/
+
+            rsync -a --delete \
+              --exclude='Config/Database.php' \
+              --exclude='Config/Correo.php' \
+              --exclude='uploads/' \
+              /opt/embermeat-repo/backend/ \
+              /var/www/embermeat.site/backend/
+          REMOTE
+
