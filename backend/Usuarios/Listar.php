@@ -13,7 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once "../Config/Database.php";
 
 try {
-    $sql = "SELECT u.*, r.nombre AS rol_nombre
+    // Solo columnas públicas: nunca la contraseña cifrada ni el código de recuperación
+    $sql = "SELECT u.id, u.rol_id, u.nombre, u.correo, u.cedula, u.telefono,
+                   u.activo, u.created_at, r.nombre AS rol_nombre
             FROM usuarios u
             LEFT JOIN roles r ON u.rol_id = r.id";
     $params = [];
@@ -29,7 +31,7 @@ try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
 
-    $usuarios = $stmt->fetchAll();
+    $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode(["success" => true, "usuarios" => $usuarios]);
 } catch (Throwable $e) {
     echo json_encode([
