@@ -24,6 +24,7 @@ $id = (int)$id;
 $nombre = trim($_POST['nombre'] ?? '');
 $correo = trim($_POST['correo'] ?? '');
 $telefono = trim($_POST['telefono'] ?? '');
+$cedula = trim($_POST['cedula'] ?? '');
 $rolId = $_POST['rol_id'] ?? '';
 $activo = isset($_POST['activo']) ? (((int)$_POST['activo']) === 0 ? 0 : 1) : 1;
 $nuevaContrasena = trim($_POST['contrasena'] ?? '');
@@ -58,6 +59,14 @@ if ($telefono !== '' && !preg_match('/^\d{10}$/', $telefono)) {
     echo json_encode([
         "success" => false,
         "message" => "El número de teléfono debe tener 10 dígitos"
+    ]);
+    exit;
+}
+
+if ($cedula !== '' && !preg_match('/^\d{5,15}$/', $cedula)) {
+    echo json_encode([
+        "success" => false,
+        "message" => "La cédula solo puede tener números (entre 5 y 15)"
     ]);
     exit;
 }
@@ -108,8 +117,23 @@ try {
         exit;
     }
 
+    // La cédula es única: no puede quedar repetida con otro usuario
+    if ($cedula !== '') {
+        $checkCedula = $pdo->prepare("SELECT id FROM usuarios WHERE cedula = :cedula AND id != :id LIMIT 1");
+        $checkCedula->execute([':cedula' => $cedula, ':id' => $id]);
+        if ($checkCedula->fetch(PDO::FETCH_ASSOC)) {
+            $pdo->rollBack();
+            echo json_encode([
+                "success" => false,
+                "message" => "La cédula ya está registrada en otro usuario"
+            ]);
+            exit;
+        }
+    }
+
     $params = [
         ':nombre' => $nombre,
+        ':cedula' => $cedula !== '' ? $cedula : null,
         ':correo' => $correo,
         ':telefono' => $telefono !== '' ? $telefono : null,
         ':rol_id' => $rolId,
@@ -120,6 +144,7 @@ try {
     $sql = "UPDATE usuarios
         SET nombre = :nombre,
             correo = :correo,
+            cedula = :cedula,
             telefono = :telefono,
             rol_id = :rol_id,
             activo = :activo";
