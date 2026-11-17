@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { Outlet } from "react-router";
 import Swal from "sweetalert2";
@@ -5,7 +6,9 @@ import Sidebar from "./Sidebar";
 
 function AdminLayout() {
     useEffect(() => {
-        const usuario = JSON.parse(localStorage.getItem("usuarioEmber"));
+        const usuario = JSON.parse(
+            localStorage.getItem("usuarioEmber")
+        );
 
         Swal.fire({
             icon: "success",
@@ -19,9 +22,17 @@ function AdminLayout() {
     return (
         <div className="admin-layout d-flex">
             <Sidebar />
-            <div className="flex-grow-1" style={{ background: 'var(--ember-cream)', minHeight: '100vh', minWidth: 0 }}>
+
+            <main
+                className="flex-grow-1"
+                style={{
+                    background: "var(--ember-cream)",
+                    minHeight: "100vh",
+                    minWidth: 0
+                }}
+            >
                 <Outlet />
-            </div>
+            </main>
         </div>
     );
 }
