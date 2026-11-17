@@ -2094,56 +2094,153 @@ hr {
   background: #d1d5db;
   border-radius: 3px;
 }
-/* ---------- REPORTE MENSUAL EN PDF ---------- */
-/* Al imprimir (Guardar como PDF) solo sale el reporte */
-@media print {
-  .admin-sidebar,
-  .no-imprimir,
-  .swal2-container {
-    display: none !important;
-  }
 
-  body,
-  .admin-layout > .flex-grow-1 {
-    background: #fff !important;
-  }
+/* ==========================================
+   PANEL ADMINISTRATIVO - EMBER MEATS
+========================================== */
 
-  .reporte-seccion {
-    break-inside: avoid;
-    box-shadow: none !important;
-  }
+/* ---------- DISTRIBUCIÓN GENERAL ---------- */
+
+.admin-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--ember-cream);
 }
 
-/* ---------- PANEL ADMIN RESPONSIVE ---------- */
+/* ---------- BARRA LATERAL ---------- */
+
 .admin-sidebar {
   width: 210px;
-  flex-shrink: 0;
+  height: 100vh;
   min-height: 100vh;
+  max-height: 100vh;
+
+  flex: 0 0 210px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
   background: var(--ember-white);
   border-right: 1px solid var(--ember-border);
+
+  z-index: 1000;
 }
+
+/* ---------- ENCABEZADO SIDEBAR ---------- */
+
+.admin-sidebar > div:first-child {
+  flex-shrink: 0;
+}
+
+/* ---------- NAVEGACIÓN ---------- */
+
+.admin-sidebar-nav {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-bottom: 10px;
+}
+
+/* Personalización del scroll */
+
+.admin-sidebar-nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb {
+  background: var(--ember-border);
+  border-radius: 10px;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--ember-red);
+}
+
+/* Enlaces del menú */
+
+.admin-sidebar-nav .nav-link {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* ---------- PIE DE SIDEBAR ---------- */
 
 .admin-sidebar-pie {
+  flex-shrink: 0;
+
   padding: 15px 12px 25px 12px;
+
   border-top: 1px solid var(--ember-border);
+  background: var(--ember-white);
 }
 
-/* En celular la barra pasa arriba y el menú se desliza de lado */
+/* ---------- CONTENIDO PRINCIPAL ---------- */
+
+.admin-layout > .flex-grow-1 {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 100vh;
+
+  margin-left: 210px;
+
+  background: var(--ember-cream);
+}
+
+/* ---------- RESPONSIVE: TABLETS Y CELULARES ---------- */
+
 @media (max-width: 767.98px) {
+
+  /* Distribución vertical */
+
   .admin-layout {
     flex-direction: column;
   }
 
+  /* Sidebar vuelve al flujo normal */
+
   .admin-sidebar {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
     width: 100%;
+    height: auto;
     min-height: auto;
+    max-height: none;
+
+    flex: none;
+
     border-right: 0;
     border-bottom: 1px solid var(--ember-border);
+
+    overflow: visible;
   }
+
+  /* Navegación horizontal */
 
   .admin-sidebar-nav {
     display: flex;
+
+    flex: none;
+    min-height: auto;
+
     overflow-x: auto;
+    overflow-y: hidden;
+
     padding-bottom: 8px;
   }
 
@@ -2152,11 +2249,15 @@ hr {
     white-space: nowrap;
   }
 
+  /* Pie de sidebar */
+
   .admin-sidebar-pie {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+
     gap: 8px;
+
     padding: 10px 12px;
   }
 
@@ -2167,5 +2268,39 @@ hr {
   .admin-sidebar-pie .btn,
   .admin-sidebar-pie > a {
     width: auto !important;
+  }
+
+  /* Contenido principal */
+
+  .admin-layout > .flex-grow-1 {
+    margin-left: 0;
+    min-height: 100vh;
+  }
+}
+
+/* ---------- REPORTE MENSUAL EN PDF ---------- */
+
+@media print {
+
+  .admin-sidebar,
+  .no-imprimir,
+  .swal2-container {
+    display: none !important;
+  }
+
+  body,
+  .admin-layout,
+  .admin-layout > .flex-grow-1 {
+    background: #fff !important;
+  }
+
+  .admin-layout > .flex-grow-1 {
+    margin-left: 0 !important;
+    min-height: auto !important;
+  }
+
+  .reporte-seccion {
+    break-inside: avoid;
+    box-shadow: none !important;
   }
 }
