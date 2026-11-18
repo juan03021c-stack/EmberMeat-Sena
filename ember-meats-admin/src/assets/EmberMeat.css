@@ -1053,7 +1053,26 @@ body {
   transform: translateY(-1px);
 }
 
+/* ---------- DISTRIBUCIÓN TIENDA (PÁGINAS PÚBLICAS) ---------- */
+.tienda-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--ember-cream);
+}
+
+.tienda-layout > main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
 /* ---------- FOOTER ---------- */
+.footer-container {
+  width: 100%;
+  margin-top: auto;
+}
+
 .footer-logo {
   color: var(--ember-white);
   font-size: 30px;
