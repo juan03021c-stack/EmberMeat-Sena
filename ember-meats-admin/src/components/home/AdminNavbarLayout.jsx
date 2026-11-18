@@ -33,10 +33,10 @@ export default function AdminNavbarLayout() {
     }
 
     return (
-        <div className="admin-layout" style={{ minHeight: '100vh' }}>
+        <div className="tienda-layout d-flex flex-column" style={{ minHeight: '100vh', width: '100%' }}>
             <NavbarHome />
 
-            <main style={{ paddingTop: 'var(--navbar-height)' }}>
+            <main className="flex-grow-1" style={{ paddingTop: 'var(--navbar-height)', width: '100%' }}>
                 <Outlet />
             </main>
 
