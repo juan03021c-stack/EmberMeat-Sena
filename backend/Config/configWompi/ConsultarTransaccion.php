@@ -135,7 +135,7 @@ if (!empty($referencia)) {
 
         /* Consultar el pedido local */
         $stmtBuscarPedido = $pdo->prepare(
-            'SELECT id, total FROM pedidos WHERE numero_pedido = :referencia LIMIT 1 FOR UPDATE'
+            'SELECT id, total, estado FROM pedidos WHERE numero_pedido = :referencia LIMIT 1 FOR UPDATE'
         );
         $stmtBuscarPedido->execute([':referencia' => $referencia]);
         $pedidoRow = $stmtBuscarPedido->fetch(PDO::FETCH_ASSOC);
@@ -201,6 +201,12 @@ if (!empty($referencia)) {
         }
 
         $pdo->commit();
+
+        /* Solo cuando el pago pasa de pendiente a aprobado, para no repetir el aviso */
+        if ($pedidoRow['estado'] === 'pendiente' && $estadoPedido === 'en_preparacion') {
+            require_once __DIR__ . '/../AvisarRepartidores.php';
+            avisarRepartidores($pdo, $pedidoId);
+        }
         $baseDatosSincronizada = true;
     } catch (Throwable $e) {
         if ($pdo->inTransaction()) {

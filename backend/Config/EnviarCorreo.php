@@ -6,7 +6,7 @@ require_once __DIR__ . '/PHPMailer/SMTP.php';
 
 /* Envía un correo desde el Gmail de la tienda (Config/Correo.php).
    Si falla solo deja el error en el log, para no dañar el pedido. */
-function enviarCorreo($para, $nombre, $asunto, $html)
+function enviarCorreo($para, $nombre, $asunto, $html, $copiasOcultas = [])
 {
     $configCorreo = __DIR__ . '/Correo.php';
     if (!file_exists($configCorreo)) {
@@ -28,6 +28,9 @@ function enviarCorreo($para, $nombre, $asunto, $html)
 
         $mail->setFrom(MAIL_USER, 'EmberMeat');
         $mail->addAddress($para, $nombre);
+        foreach ($copiasOcultas as $correo) {
+            $mail->addBCC($correo);
+        }
         $mail->isHTML(true);
         $mail->Subject = $asunto;
         $mail->Body    = $html;
