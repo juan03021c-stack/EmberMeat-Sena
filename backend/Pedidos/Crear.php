@@ -349,6 +349,13 @@ try {
             . '<p>Entrega: ' . htmlspecialchars($direccionTexto) . '</p>'
     );
 
+    /* --- Pago en efectivo a domicilio: el pedido ya está disponible para los repartidores.
+           Si se paga con Wompi, el aviso sale cuando se aprueba el pago. --- */
+    if ($pagoEnPunto && $modalidadEntrega === 'domicilio') {
+        require_once __DIR__ . '/../Config/AvisarRepartidores.php';
+        avisarRepartidores($pdo, $pedidoId);
+    }
+
     /* --- Preparar datos de pago para Wompi con firma de integridad SHA256 --- */
     $montoCentavos = (int)round($totalCalculado * 100);
     $moneda = defined('WOMPI_CURRENCY') ? WOMPI_CURRENCY : 'COP';
