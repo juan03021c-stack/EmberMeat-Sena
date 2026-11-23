@@ -3,7 +3,7 @@
 require_once __DIR__ . '/EnviarCorreo.php';
 
 /* Avisa por correo a los repartidores activos que hay un pedido a domicilio disponible.
-   Se manda un solo correo con los repartidores en copia oculta. Si falla, el pedido no se afecta. */
+   El correo va a embermeat2@gmail.com y a cada repartidor activo en copia oculta. Si falla, el pedido no se afecta. */
 function avisarRepartidores(PDO $pdo, int $pedidoId)
 {
     if (!file_exists(__DIR__ . '/Correo.php')) {
@@ -35,17 +35,13 @@ function avisarRepartidores(PDO $pdo, int $pedidoId)
         );
         $correos = $stmtRepartidores->fetchAll(PDO::FETCH_COLUMN);
 
-        if (!$correos) {
-            return false;
-        }
-
         $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $enlace = $protocolo . '://' . ($_SERVER['HTTP_HOST'] ?? 'embermeat.site') . '/MisPedidos';
         $direccion = htmlspecialchars(trim($pedido['direccion'] . ($pedido['barrio'] ? ', ' . $pedido['barrio'] : '')));
         $numero = htmlspecialchars($pedido['numero_pedido']);
 
         return enviarCorreo(
-            MAIL_USER,
+            'embermeat2@gmail.com',
             'Repartidores EmberMeat',
             "Nuevo pedido disponible: $numero",
             '<h2>Hay un pedido disponible para entregar</h2>'
