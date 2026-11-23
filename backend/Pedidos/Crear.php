@@ -349,8 +349,9 @@ try {
             . '<p>Entrega: ' . htmlspecialchars($direccionTexto) . '</p>'
     );
 
-    /* --- Pedido a domicilio pendiente: se avisa a los repartidores al crearlo --- */
-    if ($modalidadEntrega === 'domicilio') {
+    /* --- Pago en efectivo a domicilio: el pedido ya está disponible para los repartidores.
+           Si se paga con Wompi, el aviso sale cuando se aprueba el pago. --- */
+    if ($pagoEnPunto && $modalidadEntrega === 'domicilio') {
         require_once __DIR__ . '/../Config/AvisarRepartidores.php';
         avisarRepartidores($pdo, $pedidoId);
     }
