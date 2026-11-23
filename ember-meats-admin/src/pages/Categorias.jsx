@@ -354,25 +354,27 @@ export default function Categorias() {
                     </td>
 
                     <td className='text-end'>
-                      <button
-                        type='button'
-                        className='btn btn-sm ember-btn-terciario me-2'
-                        onClick={() => abrirModalEdicion(categoria)}
-                        disabled={loading}
-                      >
-                        Editar
-                      </button>
+                      <div className='d-flex flex-column gap-2 align-items-end' style={{ minWidth: '130px', marginLeft: 'auto' }}>
+                        <button
+                          type='button'
+                          className='btn btn-sm ember-btn-terciario w-100'
+                          onClick={() => abrirModalEdicion(categoria)}
+                          disabled={loading}
+                        >
+                          Editar
+                        </button>
 
-                      <button
-                        type='button'
-                        className='btn btn-sm ember-btn-terciario'
-                        onClick={() => handleToggleEstado(categoria)}
-                        disabled={loading}
-                      >
-                        {Number(categoria.activa ?? categoria.activo ?? 1) === 1
-                          ? 'Inhabilitar'
-                          : 'Habilitar'}
-                      </button>
+                        <button
+                          type='button'
+                          className='btn btn-sm ember-btn-terciario w-100'
+                          onClick={() => handleToggleEstado(categoria)}
+                          disabled={loading}
+                        >
+                          {Number(categoria.activa ?? categoria.activo ?? 1) === 1
+                            ? 'Inhabilitar'
+                            : 'Habilitar'}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
