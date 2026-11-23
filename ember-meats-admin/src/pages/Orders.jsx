@@ -116,6 +116,13 @@ const abrirModalEdicion = (pedidosData) => {
     const totalRecogidas = pedidos.filter(p => p.modalidad_entrega === 'recogida_punto').length
     const totalDomicilios = pedidos.filter(p => p.modalidad_entrega === 'domicilio').length
 
+    // Orden por estado: en preparación primero, luego el resto del flujo
+    const ordenEstado = ['en_preparacion', 'pendiente', 'listo_para_entrega', 'en_camino', 'intento_fallido', 'entregado', 'cancelado']
+    const rangoEstado = (estado) => {
+        const i = ordenEstado.indexOf(estado)
+        return i === -1 ? ordenEstado.length : i
+    }
+
     const pedidosFiltrados = pedidos.filter(o => {
         // Filtro por modalidad
         if (filtroModalidad === 'recogida_punto' && o.modalidad_entrega !== 'recogida_punto') return false
@@ -136,7 +143,7 @@ const abrirModalEdicion = (pedidosData) => {
             String(o.created_at ?? '').toLowerCase().includes(termino) ||
             String(o.estado ?? '').toLowerCase().includes(termino)
         )
-    })
+    }).sort((a, b) => rangoEstado(a.estado) - rangoEstado(b.estado))
 
     return (
         <div className='p-4'>
