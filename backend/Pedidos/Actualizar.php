@@ -85,6 +85,10 @@ try {
         exit;
     }
 
+    $stmtEstadoAnterior = $pdo->prepare('SELECT estado FROM pedidos WHERE id = :id');
+    $stmtEstadoAnterior->execute([':id' => $pedidoId]);
+    $estadoAnterior = $stmtEstadoAnterior->fetchColumn();
+
     $stmtActualizarNombre = $pdo->prepare(
         'UPDATE usuarios SET nombre = :nombre WHERE id = :id'
     );
@@ -125,6 +129,12 @@ try {
     }
 
     $pdo->commit();
+
+    /* Solo se avisa al cliente si el administrador cambió el estado */
+    if ($estadoAnterior !== false && $estadoAnterior !== $estado) {
+        require_once __DIR__ . '/../Config/NotificarEstado.php';
+        notificarEstadoPedido($pdo, $pedidoId, $estado);
+    }
 
     echo json_encode(['success' => true, 'message' => 'Pedido actualizado correctamente.']);
 } catch (Throwable $e) {

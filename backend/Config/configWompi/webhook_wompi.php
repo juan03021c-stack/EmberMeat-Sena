@@ -178,6 +178,12 @@ try {
         avisarRepartidores($pdo, $pedidoId);
     }
 
+    /* Avisar al cliente si el pago cambió el estado (aprobado o rechazado) */
+    if ($pedidoRow['estado'] !== $estadoPedido) {
+        require_once __DIR__ . '/../NotificarEstado.php';
+        notificarEstadoPedido($pdo, $pedidoId, $estadoPedido);
+    }
+
     /* responde a wompi*/
     http_response_code(200);
     echo json_encode([
