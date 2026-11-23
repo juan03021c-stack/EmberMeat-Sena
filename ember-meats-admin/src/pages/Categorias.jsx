@@ -354,10 +354,11 @@ export default function Categorias() {
                     </td>
 
                     <td className='text-end'>
-                      <div className='d-flex flex-column gap-2 align-items-end' style={{ minWidth: '130px', marginLeft: 'auto' }}>
+                      <div className='d-flex justify-content-end gap-2 flex-nowrap'>
                         <button
                           type='button'
-                          className='btn btn-sm ember-btn-terciario w-100'
+                          className='btn btn-sm ember-btn-terciario'
+                          style={{ minWidth: '110px' }}
                           onClick={() => abrirModalEdicion(categoria)}
                           disabled={loading}
                         >
@@ -366,7 +367,8 @@ export default function Categorias() {
 
                         <button
                           type='button'
-                          className='btn btn-sm ember-btn-terciario w-100'
+                          className='btn btn-sm ember-btn-terciario'
+                          style={{ minWidth: '110px' }}
                           onClick={() => handleToggleEstado(categoria)}
                           disabled={loading}
                         >
