@@ -207,6 +207,11 @@ if (!empty($referencia)) {
             require_once __DIR__ . '/../AvisarRepartidores.php';
             avisarRepartidores($pdo, $pedidoId);
         }
+        /* Avisar al cliente si el pago cambió el estado (aprobado o rechazado) */
+        if ($pedidoRow['estado'] !== $estadoPedido) {
+            require_once __DIR__ . '/../NotificarEstado.php';
+            notificarEstadoPedido($pdo, $pedidoId, $estadoPedido);
+        }
         $baseDatosSincronizada = true;
     } catch (Throwable $e) {
         if ($pdo->inTransaction()) {
