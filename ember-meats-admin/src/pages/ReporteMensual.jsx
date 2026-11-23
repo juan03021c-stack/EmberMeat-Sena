@@ -44,6 +44,8 @@ function Tabla({ titulo, columnas, filas, vacio }) {
 export default function ReporteMensual() {
     const [params, setParams] = useSearchParams();
     const mes = params.get('mes') || new Date().toISOString().slice(0, 7);
+    /* Mes actual en hora local: no se pueden consultar meses anteriores */
+    const mesMinimo = new Date().toLocaleDateString('en-CA').slice(0, 7);
     const [reporte, setReporte] = useState(null);
     const [error, setError] = useState(null);
 
@@ -73,6 +75,7 @@ export default function ReporteMensual() {
                 <input
                     type='month'
                     className='form-control w-auto'
+                    min={mesMinimo}
                     value={mes}
                     onChange={(e) => e.target.value && setParams({ mes: e.target.value })}
                     aria-label='Mes del reporte'

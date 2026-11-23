@@ -11,6 +11,9 @@ export default function OrdenModal({
 }) {
     if (!show) return null;
 
+    /* Fecha de hoy en formato yyyy-mm-dd (hora local): no se puede elegir un día anterior */
+    const hoy = new Date().toLocaleDateString('en-CA');
+
     return (
         <div
             className="modal fade show d-block"
@@ -77,6 +80,7 @@ export default function OrdenModal({
                                     <input
                                         name="fecha"
                                         type="date"
+                                        min={hoy}
                                         value={formulario.fecha ?? ""}
                                         onChange={cambiarCampo}
                                         className="form-control"
